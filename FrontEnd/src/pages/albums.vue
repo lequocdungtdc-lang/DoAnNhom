@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { getCategories, deleteCategory, type Category } from "../services/category";
+import { getCategories, deleteCategory,type Category } from "../services/category";
 
 // import {
 //   getCategories,
@@ -44,7 +44,7 @@ onMounted(loadData);
         class="px-4 py-2 bg-black text-white rounded-lg hover:opacity-80
                dark:bg-white dark:text-black"
       >
-        + Add Category
+        + Add 
       </router-link>
     </div>
 
@@ -69,7 +69,7 @@ onMounted(loadData);
             :key="item.id"
             class="border-t dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900 transition"
           >
-            <td class="p-3 font-medium text-gray-900 dark:text-white">{{ index + 1 }}</td>
+            <td class="p-3">{{ index + 1 }}</td>
 
             <td class="p-3 font-medium text-gray-900 dark:text-white">
               {{ item.tentheloai }}
