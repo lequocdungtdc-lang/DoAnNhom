@@ -1,6 +1,8 @@
 <?php 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CategoriesController;
+
 
 // 🔹 USER ROUTES
 Route::prefix('user')->group(function () {
@@ -16,6 +18,9 @@ Route::prefix('user')->group(function () {
             Route::get('/profile', 'profile');
             Route::post('/update-profile', 'updateProfile');
             Route::post('/logout', 'logout');
+        });
+        Route::controller(CategoriesController::class)->group(function () {
+            Route::get('/categories', 'index');
         });
     });
 });
