@@ -59,6 +59,7 @@ export function registerIcons(app: App) {
   app.component('IconFolder', Folder)
   app.component('IconMusic', Album)
   
+  
 }
 
 

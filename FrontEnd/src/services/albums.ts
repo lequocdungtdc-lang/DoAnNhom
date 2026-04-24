@@ -41,16 +41,16 @@ export const getAlbums = () =>
 
 // 📌 Lấy chi tiết Album
 export const getAlbum = (id: number) =>
-  api.get<AlbumResponse>(`/admin/albums/${id}`);
+  api.get<AlbumResponse>(`/user/albums/${id}`);
 
 // 📌 Thêm mới Album
 export const createAlbum = (data: AlbumPayload) =>
-  api.post<AlbumResponse>("/admin/albums", data);
+  api.post<AlbumResponse>("/user/albums", data);
 
 // 📌 Cập nhật Album
 export const updateAlbum = (id: number, data: AlbumPayload) =>
-  api.put<AlbumResponse>(`/admin/albums/${id}`, data);
+  api.put<AlbumResponse>(`/user/albums/${id}`, data);
 
 // 📌 Xoá Album
 export const deleteAlbum = (id: number) =>
-  api.delete(`/admin/albums/${id}`);
+  api.delete(`/user/albums/${id}`);

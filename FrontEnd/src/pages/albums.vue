@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { getCategories, type Category } from "../services/category";
+import { getCategories, deleteCategory,type Category } from "../services/category";
 
 // import {
 //   getCategories,
@@ -21,12 +21,12 @@ const loadData = async () => {
   }
 };
 
-// const handleDelete = async (id: number) => {
-//   if (!confirm("Xoá category này?")) return;
+const handleDelete = async (id: number) => {
+  if (!confirm("Xoá category này?")) return;
 
-//   await deleteCategory(id);
-//   categories.value = categories.value.filter(c => c.id !== id);
-// };
+  await deleteCategory(id);
+  categories.value = categories.value.filter(c => c.id !== id);
+};
 
 onMounted(loadData);
 </script>
@@ -44,7 +44,7 @@ onMounted(loadData);
         class="px-4 py-2 bg-black text-white rounded-lg hover:opacity-80
                dark:bg-white dark:text-black"
       >
-        + Add Category
+        + Add 
       </router-link>
     </div>
 
@@ -98,12 +98,12 @@ onMounted(loadData);
                 Edit
               </router-link>
 
-              <!-- <button
+              <button
                 @click="handleDelete(item.id)"
                 class="px-2 py-1 text-xs bg-red-600 text-white rounded"
               >
                 Delete
-              </button> -->
+              </button>
             </td>
           </tr>
 
