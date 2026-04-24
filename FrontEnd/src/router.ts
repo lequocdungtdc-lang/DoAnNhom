@@ -41,6 +41,10 @@ const routes = [
          {
             path: 'profile',
             component: () => import('./pages/Profile.vue') // nếu admin dùng chung
+         },
+         {
+            path: 'categories',
+            component: () => import('./pages/categories.vue') // nếu admin dùng chung
          }
       ]
    }
