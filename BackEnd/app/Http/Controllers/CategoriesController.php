@@ -20,6 +20,16 @@ class CategoriesController extends Controller
         );
     }
 
+    //Delete
+    public function delete($id)
+    {
+        $data = Categories::find($id);
+        $data->delete();
+        return response()->json([
+            'message' => 'Xóa danh sách thành công!'
+        ]);
+    }
+
     // form create
     // public function create()
     // {

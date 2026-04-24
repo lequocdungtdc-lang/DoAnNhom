@@ -21,6 +21,8 @@ Route::prefix('user')->group(function () {
         });
         Route::controller(CategoriesController::class)->group(function () {
             Route::get('/categories', 'index');
+            //Xóa danh mục
+            Route::delete('/categories/{id}', 'delete');
         });
     });
 });
