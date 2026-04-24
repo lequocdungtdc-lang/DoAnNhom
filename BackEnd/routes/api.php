@@ -2,7 +2,6 @@
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoriesController;
-use App\Http\Controllers\SongController;
 
 
 // 🔹 USER ROUTES
@@ -27,6 +26,10 @@ Route::prefix('user')->group(function () {
         });
         Route::controller(SongController::class)->group(function () {
             Route::get('/song', 'index');
+        });
+
+        Route::controller(AlbumController::class)->group(function () {
+            Route::get('/albums', 'index');
         });
     });
 });
