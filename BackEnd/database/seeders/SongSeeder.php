@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use App\Models\Categories; // Import the Category model
+use App\Models\Song; // Import the Song model
 
 class SongSeeder extends Seeder
 {
@@ -146,7 +146,7 @@ class SongSeeder extends Seeder
 
             $data[] = [
                 'tenbaihat' => $randomName,
-                'nghesi' => rand(1, 100,),
+                'nghesi' => rand(1, 100),
                 'theloai' => $randomCategoryId, // Use the ID here
                 'anh_daidien' => $randomImagePath,
                 'file_amthanh' => $randomAudioSongs,
