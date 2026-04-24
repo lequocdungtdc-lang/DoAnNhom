@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { getCategories, type Category } from "../services/category";
+import { getCategories, deleteCategory, type Category } from "../services/category";
 
 // import {
 //   getCategories,
@@ -21,12 +21,12 @@ const loadData = async () => {
   }
 };
 
-// const handleDelete = async (id: number) => {
-//   if (!confirm("Xoá category này?")) return;
+const handleDelete = async (id: number) => {
+  if (!confirm("Xoá category này?")) return;
 
-//   await deleteCategory(id);
-//   categories.value = categories.value.filter(c => c.id !== id);
-// };
+  await deleteCategory(id);
+  categories.value = categories.value.filter(c => c.id !== id);
+};
 
 onMounted(loadData);
 </script>
@@ -69,7 +69,7 @@ onMounted(loadData);
             :key="item.id"
             class="border-t dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900 transition"
           >
-            <td class="p-3">{{ index + 1 }}</td>
+            <td class="p-3 font-medium text-gray-900 dark:text-white">{{ index + 1 }}</td>
 
             <td class="p-3 font-medium text-gray-900 dark:text-white">
               {{ item.tentheloai }}
@@ -98,12 +98,12 @@ onMounted(loadData);
                 Edit
               </router-link>
 
-              <!-- <button
+              <button
                 @click="handleDelete(item.id)"
                 class="px-2 py-1 text-xs bg-red-600 text-white rounded"
               >
                 Delete
-              </button> -->
+              </button>
             </td>
           </tr>
 
