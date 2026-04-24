@@ -45,6 +45,10 @@ const routes = [
          {
             path: 'categories',
             component: () => import('./pages/categories.vue') // nếu admin dùng chung
+         },
+         {
+            path: 'song',
+            component: () => import('./pages/song.vue') // nếu admin dùng chung
          }
       ]
    }
