@@ -5,8 +5,10 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [
     vue(),
-    tailwindcss({
-      config: './tailwind.config.js' // 👈 thêm dòng này
-    })
+    tailwindcss()
   ],
+  build: {
+    outDir: 'public/build',
+    emptyOutDir: true,
+  }
 })
