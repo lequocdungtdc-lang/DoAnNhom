@@ -1,32 +1,29 @@
 import api from "./api";
 
-// ✅ Model Album
+// ✅ Model Album - Khớp hoàn toàn với Laravel Backend
 export interface Album {
   id: number;
-  tenalbum: string;       // Đổi từ tentheloai -> tenalbum
-  casi_id?: number;       // Thêm trường ID ca sĩ (nếu có)
-  image?: string;
-  description?: string;
+  ten_album: string;   // Đã sửa cho khớp Backend
+  nghe_si: string;     // Thay casi_id bằng nghe_si (dạng string/id tùy DB của bạn)
+  anh_bia?: string;    // Thay image bằng anh_bia
   status: boolean;
   created_at?: string;
   updated_at?: string;
 }
 
-// ✅ Payload Create/Update
+// ✅ Payload khi gửi lên (Create/Update)
 export interface AlbumPayload {
-  tenalbum: string;
-  casi_id?: number;
-  image?: string;
-  description?: string;
+  ten_album: string;
+  nghe_si: string;
+  anh_bia?: string;
   status?: boolean;
 }
 
-// ✅ Response List
+// ✅ Các Interface Response giữ nguyên cấu trúc
 export interface AlbumListResponse {
   data: Album[];
 }
 
-// ✅ Response Single
 export interface AlbumResponse {
   data: Album;
 }
@@ -39,18 +36,20 @@ export interface AlbumResponse {
 export const getAlbums = () =>
   api.get<AlbumListResponse>("/user/albums");
 
+
+
 // 📌 Lấy chi tiết Album
-export const getAlbum = (id: number) =>
-  api.get<AlbumResponse>(`/admin/albums/${id}`);
+export const getAlbum = (id: number | string) =>
+  api.get<AlbumResponse>(`/user/albums/${id}`);
 
 // 📌 Thêm mới Album
 export const createAlbum = (data: AlbumPayload) =>
-  api.post<AlbumResponse>("/admin/albums", data);
+  api.post<AlbumResponse>("/user/albums", data);
 
 // 📌 Cập nhật Album
-export const updateAlbum = (id: number, data: AlbumPayload) =>
-  api.put<AlbumResponse>(`/admin/albums/${id}`, data);
+export const updateAlbum = (id: number | string, data: AlbumPayload) =>
+  api.put<AlbumResponse>(`/user/albums/${id}`, data);
 
 // 📌 Xoá Album
-export const deleteAlbum = (id: number) =>
-  api.delete(`/admin/albums/${id}`);
+export const deleteAlbum = (id: number | string) =>
+  api.delete(`/user/albums/${id}`);

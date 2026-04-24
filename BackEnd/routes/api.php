@@ -2,6 +2,7 @@
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\AlbumController;
 
 
 // 🔹 USER ROUTES
@@ -21,6 +22,10 @@ Route::prefix('user')->group(function () {
         });
         Route::controller(CategoriesController::class)->group(function () {
             Route::get('/categories', 'index');
+        });
+
+        Route::controller(AlbumController::class)->group(function () {
+            Route::get('/albums', 'index');
         });
     });
 });

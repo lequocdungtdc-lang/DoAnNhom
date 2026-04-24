@@ -2,21 +2,28 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Album extends Model
 {
-     use HasFactory;
+    use HasFactory;
 
+    // Chỉ định chính xác tên bảng trong Database
+    protected $table = 'albums';
+
+    // Các cột được phép nạp dữ liệu hàng loạt
     protected $fillable = [
         'ten_album',
-        'artist_id',  // thêm artist_id vào fillable
+        'nghe_si',
         'anh_bia',
+        'status',
     ];
 
-    // Quan hệ với Artist
-    public function artist()
-    {
-        return $this->belongsTo(Artist::class, 'artist_id');
-    }
+    // Ép kiểu dữ liệu khi lấy ra từ DB (rất quan trọng cho Vue.js)
+    protected $casts = [
+        'status' => 'boolean',
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s',
+    ];
 }
