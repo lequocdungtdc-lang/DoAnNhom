@@ -52,5 +52,5 @@ export const getCategories = () =>
 //   api.put<CategoryResponse>(`/categories/${id}`, data);
 
 // // 📌 Xoá
-// export const deleteCategory = (id: number) =>
-//   api.delete(`/categories/${id}`);
+export const deleteCategory = (id: number) =>
+  api.delete(`/user/categories/${id}`);
