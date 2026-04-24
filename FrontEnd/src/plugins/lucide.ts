@@ -24,7 +24,9 @@ import {
   MessageSquare,
   Calendar,
   LogOut,
-  Folder
+  Folder,
+  Album,
+  
 
 
 } from 'lucide-vue-next'
@@ -55,6 +57,8 @@ export function registerIcons(app: App) {
   app.component('IconCalendar', Calendar)
   app.component('IconLogOut', LogOut)
   app.component('IconFolder', Folder)
+  app.component('IconMusic', Album)
+  
 }
 
 
