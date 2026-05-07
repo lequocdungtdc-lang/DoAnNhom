@@ -44,7 +44,11 @@ const routes = [
          },
          {
             path: 'categories',
-            component: () => import('./pages/categories.vue') // nếu admin dùng chung
+            component: () => import('./pages/admin/categories/categories.vue') // nếu admin dùng chung
+         },
+         {
+            path: 'categories/create',
+            component: () => import('./pages/admin/categories/create.vue') // nếu admin dùng chung
          },
 
 

@@ -23,6 +23,8 @@ Route::prefix('user')->group(function () {
             Route::get('/categories', 'index');
             //Xóa danh mục
             Route::delete('/categories/{id}', 'delete');
+            //Thêm danh mục
+            Route::post('/categories/create', 'create');
         });
         Route::controller(SongController::class)->group(function () {
             Route::get('/song', 'index');
