@@ -1,12 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { getCategories, deleteCategory, type Category } from "../services/category";
+import { getCategories, deleteCategory, type Category } from "../../../services/category";
 
-// import {
-//   getCategories,
-//   createCategory,
-//   deleteCategory,
-// } from "../services/category";
 
 const categories = ref<Category[]>([]);
 const loading = ref(false);

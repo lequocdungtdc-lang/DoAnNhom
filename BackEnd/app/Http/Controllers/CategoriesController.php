@@ -30,26 +30,29 @@ class CategoriesController extends Controller
         ]);
     }
 
-    // form create
-    // public function create()
-    // {
-    //     return view('categories.create');
-    // }
+
 
     // lưu dữ liệu
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'tentheloai' => 'required',
-    //     ]);
-
-    //     Categories::create([
-    //         'tentheloai' => $request->tentheloai,
-    //         'nhom' => $request->nhom,
-    //         'image' => $request->image,
-    //         'description' => $request->description,
-    //         'status' => $request->status ?? 1,
-    //     ]);
-
-    // }
+    public function create(Request $request)
+    {
+        // id: number;
+        // tentheloai: string;
+        // nhom?: string;
+        // image?: string;
+        // description?: string;
+        // status: boolean;
+        // created_at?: string;
+        // updated_at?: string;
+        // vue js 
+        $data = new Categories();
+        $data->tentheloai = $request->tentheloai;
+        $data->nhom = $request->nhom;
+        $data->image = $request->image;
+        $data->description = $request->description;
+        $data->status = $request->status;
+        $data->save();
+        return response()->json([
+            'message' => 'Them danh sach thanh cong'
+        ]);
+    }
 }

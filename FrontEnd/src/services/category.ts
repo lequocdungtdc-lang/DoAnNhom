@@ -40,16 +40,16 @@ export const getCategories = () =>
   api.get<CategoryListResponse>("/user/categories");
 
 // 📌 Lấy chi tiết
-// export const getCategory = (id: number) =>
-//   api.get<CategoryResponse>(`/categories/${id}`);
+export const getCategory = (id: number) =>
+  api.get<CategoryResponse>(`/user/categories/${id}`);
 
-// // 📌 Thêm mới
-// export const createCategory = (data: CategoryPayload) =>
-//   api.post<CategoryResponse>("/categories", data);
+// 📌 Thêm mới
+export const createCategory = (data: CategoryPayload) =>
+  api.post<CategoryResponse>("/user/categories/create", data);
 
-// // 📌 Cập nhật
-// export const updateCategory = (id: number, data: CategoryPayload) =>
-//   api.put<CategoryResponse>(`/categories/${id}`, data);
+// 📌 Cập nhật
+export const updateCategory = (id: number, data: CategoryPayload) =>
+  api.put<CategoryResponse>(`/user/categories/${id}`, data);
 
 // // 📌 Xoá
 export const deleteCategory = (id: number) =>

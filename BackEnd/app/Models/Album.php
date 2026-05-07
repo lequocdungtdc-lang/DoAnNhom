@@ -7,12 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Album extends Model
 {
-    use HasFactory;
+     use HasFactory;
 
-    // Chỉ định chính xác tên bảng trong Database
-    protected $table = 'albums';
-
-    // Các cột được phép nạp dữ liệu hàng loạt
     protected $fillable = [
         'ten_album',
         'nghe_si',
