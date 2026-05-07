@@ -55,4 +55,26 @@ class CategoriesController extends Controller
             'message' => 'Them danh sach thanh cong'
         ]);
     }
+    // edit
+    public function edit($id)
+    {
+        $data = Categories::find($id);
+        return response()->json([
+            'data' => $data
+        ]);
+    }
+    // update
+    public function update(Request $request, $id)
+    {
+        $data = Categories::find($id);
+        $data->tentheloai = $request->tentheloai;
+        $data->nhom = $request->nhom;
+        $data->image = $request->image;
+        $data->description = $request->description;
+        $data->status = $request->status;
+        $data->save();
+        return response()->json([
+            'message' => 'Sua danh sach thanh cong'
+        ]);
+    }
 }

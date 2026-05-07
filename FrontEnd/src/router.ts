@@ -51,6 +51,12 @@ const routes = [
             component: () => import('./pages/admin/categories/create.vue') // nếu admin dùng chung
          },
 
+         // http://localhost:5173/admin/categories/edit/7
+         {
+            path: 'categories/edit/:id',
+            component: () => import('./pages/admin/categories/create.vue') // nếu admin dùng chung
+         },
+
 
          {
             path: 'albums',

@@ -1,16 +1,22 @@
 <script setup lang="ts">
-import { reactive, ref } from "vue";
-import { useRouter } from "vue-router";
+import { reactive, ref, computed, onMounted } from "vue";
+import { useRouter, useRoute } from "vue-router";
 
 import {
   createCategory,
+  updateCategory,
+  getCategory,
   type CategoryPayload,
 } from "../../../services/category";
 
 const router = useRouter();
+const route = useRoute();
 
 const loading = ref(false);
 const errors = ref<Record<string, string[]>>({});
+
+const id = computed(() => Number(route.params.id));
+const isEdit = computed(() => !!route.params.id);
 
 const form = reactive<CategoryPayload>({
   tentheloai: "",
@@ -20,12 +26,32 @@ const form = reactive<CategoryPayload>({
   status: true,
 });
 
+// 📌 load data edit
+const loadData = async () => {
+  if (!isEdit.value) return;
+
+  loading.value = true;
+
+  try {
+    const res = await getCategory(id.value);
+
+    Object.assign(form, res.data.data);
+  } finally {
+    loading.value = false;
+  }
+};
+
+// 📌 submit
 const handleSubmit = async () => {
   loading.value = true;
   errors.value = {};
 
   try {
-    await createCategory(form);
+    if (isEdit.value) {
+      await updateCategory(id.value, form);
+    } else {
+      await createCategory(form);
+    }
 
     router.push("/admin/categories");
   } catch (err: any) {
@@ -36,18 +62,25 @@ const handleSubmit = async () => {
     loading.value = false;
   }
 };
+
+onMounted(loadData);
 </script>
 
 <template>
   <div class="p-6 max-w-4xl">
+
     <!-- Header -->
     <div class="mb-6">
       <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">
-        Create Category
+        {{ isEdit ? "Edit Category" : "Create Category" }}
       </h1>
 
       <p class="text-sm text-gray-500 mt-1">
-        Thêm category mới
+        {{
+          isEdit
+            ? "Cập nhật category"
+            : "Thêm category mới"
+        }}
       </p>
     </div>
 
@@ -177,7 +210,7 @@ const handleSubmit = async () => {
           </select>
         </div>
 
-        <!-- Buttons -->
+        <!-- Actions -->
         <div class="flex items-center gap-3 pt-2">
 
           <button
@@ -190,7 +223,13 @@ const handleSubmit = async () => {
                    transition
                    dark:bg-white dark:text-black"
           >
-            {{ loading ? "Saving..." : "Create Category" }}
+            {{
+              loading
+                ? "Saving..."
+                : isEdit
+                  ? "Update Category"
+                  : "Create Category"
+            }}
           </button>
 
           <router-link

@@ -25,6 +25,12 @@ Route::prefix('user')->group(function () {
             Route::delete('/categories/{id}', 'delete');
             //Thêm danh mục
             Route::post('/categories/create', 'create');
+            // Sửa danh mục
+            //  get http://127.0.0.1:8000/api/user/categories/7
+            Route::get('/categories/{id}', 'edit');
+            // post http://127.0.0.1:8000/api/user/categories/7
+            Route::put('/categories/{id}', 'update');
+            
         });
         Route::controller(SongController::class)->group(function () {
             Route::get('/song', 'index');
