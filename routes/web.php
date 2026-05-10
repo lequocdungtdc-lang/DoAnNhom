@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AlbumController;
+use App\Http\Controllers\ArtistsController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\HomeController;
@@ -69,6 +70,17 @@ Route::prefix('admin')
                 Route::get('/{id}/edit', [SongController::class, 'edit'])->name('edit');
                 Route::put('/{id}', [SongController::class, 'update'])->name('update');
                 Route::delete('/{id}', [SongController::class, 'delete'])->name('delete');
+            });
+
+        Route::prefix('artists')
+            ->name('artists.')
+            ->group(function () {
+                Route::get('/', [ArtistsController::class, 'index'])->name('index');
+                Route::get('/create', [ArtistsController::class, 'create'])->name('create');
+                Route::post('/', [ArtistsController::class, 'store'])->name('store');
+                Route::get('/{id}/edit', [ArtistsController::class, 'edit'])->name('edit');
+                Route::put('/{id}', [ArtistsController::class, 'update'])->name('update');
+                Route::delete('/{id}', [ArtistsController::class, 'delete'])->name('delete');
             });
 
         Route::prefix('albums')

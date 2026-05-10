@@ -24,8 +24,14 @@
                         @error('tenbaihat') <p class="mt-2 text-sm text-red-300">{{ $message }}</p> @enderror
                     </div>
                     <div>
-                        <label class="mb-2 block text-sm text-[#cfd5df]">ID nghệ sĩ</label>
-                        <input name="nghesi" value="{{ old('nghesi', $song->nghesi) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
+                        <label class="mb-2 block text-sm text-[#cfd5df]">Nghệ sĩ</label>
+                        <select name="nghesi" class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-[#10a37f]">
+                            <option value="">Chọn nghệ sĩ</option>
+                            @foreach ($artists as $artist)
+                                <option value="{{ $artist->id }}" @selected((string) old('nghesi', $song->nghesi) === (string) $artist->id)>{{ $artist->name_artist }}</option>
+                            @endforeach
+                        </select>
+                        @error('nghesi') <p class="mt-2 text-sm text-red-300">{{ $message }}</p> @enderror
                     </div>
                 </div>
 

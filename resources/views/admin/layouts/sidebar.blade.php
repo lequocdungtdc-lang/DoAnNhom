@@ -47,6 +47,15 @@
                 <span>Bài hát</span>
             </a>
 
+            <a href="{{ route('admin.artists.index') }}" class="admin-nav-link {{ request()->routeIs('admin.artists.*') ? 'admin-nav-link-active' : '' }}">
+                <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-black/20">
+                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 21v-2.5a3.5 3.5 0 0 0-3.5-3.5h-3A3.5 3.5 0 0 0 7 18.5V21m10-11a5 5 0 1 1-10 0a5 5 0 0 1 10 0Z"/>
+                    </svg>
+                </span>
+                <span>Nghệ sĩ</span>
+            </a>
+
             <a href="{{ route('admin.albums.index') }}" class="admin-nav-link {{ request()->routeIs('admin.albums.*') ? 'admin-nav-link-active' : '' }}">
                 <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-black/20">
                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">

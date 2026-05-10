@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Artist;
 use App\Models\Categories;
 use App\Models\Song;
 use Illuminate\Http\RedirectResponse;
@@ -13,7 +14,7 @@ class SongController extends Controller
     public function index(): View
     {
         return view('admin.songs.index', [
-            'songs' => Song::latest()->paginate(10),
+            'songs' => Song::with(['artist', 'category'])->latest()->paginate(10),
         ]);
     }
 
@@ -21,6 +22,7 @@ class SongController extends Controller
     {
         return view('admin.songs.form', [
             'song' => new Song(),
+            'artists' => Artist::orderBy('name_artist')->get(),
             'categories' => Categories::orderBy('tentheloai')->get(),
             'isEdit' => false,
         ]);
@@ -30,7 +32,7 @@ class SongController extends Controller
     {
         $validated = $request->validate([
             'tenbaihat' => ['required', 'string', 'max:255'],
-            'nghesi' => ['nullable', 'integer'],
+            'nghesi' => ['nullable', 'exists:artists,id'],
             'theloai' => ['required', 'exists:categories,id'],
             'file_amthanh' => ['required', 'string', 'max:255'],
             'anh_daidien' => ['nullable', 'string', 'max:255'],
@@ -46,6 +48,7 @@ class SongController extends Controller
     {
         return view('admin.songs.form', [
             'song' => Song::findOrFail($id),
+            'artists' => Artist::orderBy('name_artist')->get(),
             'categories' => Categories::orderBy('tentheloai')->get(),
             'isEdit' => true,
         ]);
@@ -55,7 +58,7 @@ class SongController extends Controller
     {
         $validated = $request->validate([
             'tenbaihat' => ['required', 'string', 'max:255'],
-            'nghesi' => ['nullable', 'integer'],
+            'nghesi' => ['nullable', 'exists:artists,id'],
             'theloai' => ['required', 'exists:categories,id'],
             'file_amthanh' => ['required', 'string', 'max:255'],
             'anh_daidien' => ['nullable', 'string', 'max:255'],
