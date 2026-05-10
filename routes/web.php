@@ -1,0 +1,84 @@
+<?php
+
+use App\Http\Controllers\AlbumController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SongController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
+
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::view('/dashboard', 'web.dashboard')->name('dashboard');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+});
+
+Route::prefix('admin')
+    ->middleware(['auth', 'role:admin'])
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/', function () {
+            return view('admin.dashboard');
+        })->name('dashboard');
+
+        Route::get('/dashboard', function () {
+            return redirect()->route('admin.dashboard');
+        });
+
+        Route::prefix('users')
+            ->name('users.')
+            ->group(function () {
+                Route::get('/', [UserController::class, 'index'])->name('index');
+                Route::get('/create', [UserController::class, 'create'])->name('create');
+                Route::post('/', [UserController::class, 'store'])->name('store');
+                Route::get('/{id}/edit', [UserController::class, 'edit'])->name('edit');
+                Route::put('/{id}', [UserController::class, 'update'])->name('update');
+                Route::delete('/{id}', [UserController::class, 'delete'])->name('delete');
+            });
+
+        Route::prefix('categories')
+            ->name('categories.')
+            ->group(function () {
+                Route::get('/', [CategoriesController::class, 'index'])->name('index');
+                Route::get('/create', [CategoriesController::class, 'create'])->name('create');
+                Route::post('/', [CategoriesController::class, 'store'])->name('store');
+                Route::get('/{id}/edit', [CategoriesController::class, 'edit'])->name('edit');
+                Route::put('/{id}', [CategoriesController::class, 'update'])->name('update');
+                Route::delete('/{id}', [CategoriesController::class, 'delete'])->name('delete');
+            });
+
+        Route::prefix('songs')
+            ->name('songs.')
+            ->group(function () {
+                Route::get('/', [SongController::class, 'index'])->name('index');
+                Route::get('/create', [SongController::class, 'create'])->name('create');
+                Route::post('/', [SongController::class, 'store'])->name('store');
+                Route::get('/{id}/edit', [SongController::class, 'edit'])->name('edit');
+                Route::put('/{id}', [SongController::class, 'update'])->name('update');
+                Route::delete('/{id}', [SongController::class, 'delete'])->name('delete');
+            });
+
+        Route::prefix('albums')
+            ->name('albums.')
+            ->group(function () {
+                Route::get('/', [AlbumController::class, 'index'])->name('index');
+                Route::get('/create', [AlbumController::class, 'create'])->name('create');
+                Route::post('/', [AlbumController::class, 'store'])->name('store');
+                Route::get('/{id}/edit', [AlbumController::class, 'edit'])->name('edit');
+                Route::put('/{id}', [AlbumController::class, 'update'])->name('update');
+                Route::delete('/{id}', [AlbumController::class, 'delete'])->name('delete');
+            });
+    });
