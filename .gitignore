@@ -1,3 +1,28 @@
-node_modules
-dist
-# .env
+/vendor
+/node_modules
+/public/build
+/public/hot
+/storage/*.key
+/storage/debugbar
+/bootstrap/cache/*.php
+.env
+.env.*
+!.env.example
+
+# IDE
+/.idea
+/.vscode
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log
+yarn-error.log
+
+# Build
+/dist
+
+# Laravel IDE Helper
+/vendor/_laravel_ide
