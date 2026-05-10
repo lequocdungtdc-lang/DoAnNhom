@@ -36,7 +36,10 @@ class SongController extends Controller
             'theloai' => ['required', 'exists:categories,id'],
             'file_amthanh' => ['required', 'string', 'max:255'],
             'anh_daidien' => ['nullable', 'string', 'max:255'],
+            'status' => ['nullable', 'boolean'],
         ]);
+
+        $validated['status'] = $request->boolean('status');
 
         Song::create($validated);
 
@@ -62,7 +65,10 @@ class SongController extends Controller
             'theloai' => ['required', 'exists:categories,id'],
             'file_amthanh' => ['required', 'string', 'max:255'],
             'anh_daidien' => ['nullable', 'string', 'max:255'],
+            'status' => ['nullable', 'boolean'],
         ]);
+
+        $validated['status'] = $request->boolean('status');
 
         Song::findOrFail($id)->update($validated);
 

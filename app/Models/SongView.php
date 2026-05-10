@@ -6,5 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class SongView extends Model
 {
-    //
+    protected $fillable = [
+        'status',
+    ];
+
+    protected $casts = [
+        'status' => 'boolean',
+    ];
 }

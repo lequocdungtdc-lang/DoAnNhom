@@ -52,7 +52,11 @@
                 <div class="grid gap-5 md:grid-cols-2">
                     <div>
                         <label class="mb-2 block text-sm text-[#cfd5df]">Trạng thái</label>
-                        <input name="status" value="{{ old('status', $userItem->status) }}" placeholder="Hoạt động" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
+                        <select name="status" class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-[#10a37f]">
+                            <option value="active" @selected(old('status', $userItem->status ?: 'active') === 'active')>Hoạt động</option>
+                            <option value="pending" @selected(old('status', $userItem->status) === 'pending')>Chờ duyệt</option>
+                            <option value="inactive" @selected(old('status', $userItem->status) === 'inactive')>Ngưng hoạt động</option>
+                        </select>
                     </div>
                     <div>
                         <label class="mb-2 block text-sm text-[#cfd5df]">{{ $isEdit ? 'Mật khẩu mới (để trống nếu không đổi)' : 'Mật khẩu' }}</label>

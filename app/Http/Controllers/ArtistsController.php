@@ -32,7 +32,10 @@ class ArtistsController extends Controller
             'name_artist' => ['required', 'string', 'max:255'],
             'image_artist' => ['nullable', 'string', 'max:255'],
             'category_id' => ['required', 'exists:categories,id'],
+            'status' => ['nullable', 'boolean'],
         ]);
+
+        $validated['status'] = $request->boolean('status');
 
         Artist::create($validated);
 
@@ -55,7 +58,10 @@ class ArtistsController extends Controller
             'name_artist' => ['required', 'string', 'max:255'],
             'image_artist' => ['nullable', 'string', 'max:255'],
             'category_id' => ['required', 'exists:categories,id'],
+            'status' => ['nullable', 'boolean'],
         ]);
+
+        $validated['status'] = $request->boolean('status');
 
         Artist::findOrFail($id)->update($validated);
 

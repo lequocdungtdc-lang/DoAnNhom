@@ -35,10 +35,13 @@
                     <input name="anh_bia" value="{{ old('anh_bia', $album->anh_bia) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
                 </div>
 
-                <label class="flex items-center gap-3 text-sm text-white">
-                    <input type="checkbox" name="status" value="1" @checked(old('status', $album->status)) class="rounded border-white/10 bg-white/5 text-[#10a37f]">
-                    Hiển thị album
-                </label>
+                <div>
+                    <label class="mb-2 block text-sm text-[#cfd5df]">Trạng thái</label>
+                    <select name="status" class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-[#10a37f]">
+                        <option value="1" @selected((string) old('status', (int) $album->status) === '1')>Hiển thị</option>
+                        <option value="0" @selected((string) old('status', (int) $album->status) === '0')>Ẩn</option>
+                    </select>
+                </div>
 
                 <button type="submit" class="rounded-2xl bg-[#10a37f] px-5 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">
                     {{ $isEdit ? 'Lưu thay đổi' : 'Tạo album' }}
