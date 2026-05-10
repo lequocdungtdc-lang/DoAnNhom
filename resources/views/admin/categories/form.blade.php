@@ -39,10 +39,13 @@
                     <textarea name="description" rows="4" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">{{ old('description', $category->description) }}</textarea>
                 </div>
 
-                <label class="flex items-center gap-3 text-sm text-white">
-                    <input type="checkbox" name="status" value="1" @checked(old('status', $category->status)) class="rounded border-white/10 bg-white/5 text-[#10a37f]">
-                    Hiển thị thể loại
-                </label>
+                <div>
+                    <label class="mb-2 block text-sm text-[#cfd5df]">Trạng thái</label>
+                    <select name="status" class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-[#10a37f]">
+                        <option value="1" @selected((string) old('status', (int) $category->status) === '1')>Hiển thị</option>
+                        <option value="0" @selected((string) old('status', (int) $category->status) === '0')>Ẩn</option>
+                    </select>
+                </div>
 
                 <button type="submit" class="rounded-2xl bg-[#10a37f] px-5 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">
                     {{ $isEdit ? 'Lưu thay đổi' : 'Tạo thể loại' }}

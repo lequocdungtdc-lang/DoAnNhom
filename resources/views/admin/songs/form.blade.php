@@ -58,6 +58,14 @@
                     <input name="anh_daidien" value="{{ old('anh_daidien', $song->anh_daidien) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
                 </div>
 
+                <div>
+                    <label class="mb-2 block text-sm text-[#cfd5df]">Trạng thái</label>
+                    <select name="status" class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-[#10a37f]">
+                        <option value="1" @selected((string) old('status', (int) $song->status) === '1')>Hiển thị</option>
+                        <option value="0" @selected((string) old('status', (int) $song->status) === '0')>Ẩn</option>
+                    </select>
+                </div>
+
                 <button type="submit" class="rounded-2xl bg-[#10a37f] px-5 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">
                     {{ $isEdit ? 'Lưu thay đổi' : 'Tạo bài hát' }}
                 </button>

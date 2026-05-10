@@ -19,6 +19,7 @@
                             <th class="px-4 py-3">Nghệ sĩ</th>
                             <th class="px-4 py-3">Thể loại</th>
                             <th class="px-4 py-3">Tệp âm thanh</th>
+                            <th class="px-4 py-3">Trạng thái</th>
                             <th class="px-4 py-3 text-right">Thao tác</th>
                         </tr>
                     </thead>
@@ -29,6 +30,7 @@
                                 <td class="px-4 py-4 text-[#a8b1bf]">{{ $song->artist?->name_artist ?: 'Chưa có' }}</td>
                                 <td class="px-4 py-4 text-[#a8b1bf]">{{ $song->category?->tentheloai ?: 'Chưa có' }}</td>
                                 <td class="px-4 py-4 text-[#a8b1bf]">{{ $song->file_amthanh }}</td>
+                                <td class="px-4 py-4">{{ $song->status ? 'Hiển thị' : 'Ẩn' }}</td>
                                 <td class="px-4 py-4">
                                     <div class="flex justify-end gap-2">
                                         <a href="{{ route('admin.songs.edit', $song->id) }}" class="rounded-xl border border-white/10 px-3 py-2 text-xs text-white transition hover:bg-white/5">Sửa</a>
@@ -42,7 +44,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-4 py-10 text-center text-sm text-[#8a93a3]">Chưa có bài hát nào.</td>
+                                <td colspan="6" class="px-4 py-10 text-center text-sm text-[#8a93a3]">Chưa có bài hát nào.</td>
                             </tr>
                         @endforelse
                     </tbody>

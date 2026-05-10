@@ -17,11 +17,11 @@ class Song extends Model
         'theloai',
         'file_amthanh',
         'anh_daidien',
-        // Nếu bạn dùng các trường này, hãy chắc là đã tạo trong migration
-        // 'slug',
-        // 'luotnghe',
-        // 'thoiluong',
-        // 'loibaihat',
+        'status',
+    ];
+
+    protected $casts = [
+        'status' => 'boolean',
     ];
 
     // Quan hệ với nghệ sĩ (Artist)

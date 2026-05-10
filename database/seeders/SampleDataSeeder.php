@@ -90,21 +90,25 @@ class SampleDataSeeder extends Seeder
                 'name_artist' => 'Vũ.',
                 'image_artist' => 'https://picsum.photos/seed/vu/300/300',
                 'category_id' => $categories[3]->id,
+                'status' => true,
             ],
             [
                 'name_artist' => 'Sơn Tùng M-TP',
                 'image_artist' => 'https://picsum.photos/seed/mtp/300/300',
                 'category_id' => $categories[0]->id,
+                'status' => true,
             ],
             [
                 'name_artist' => 'MIN',
                 'image_artist' => 'https://picsum.photos/seed/min/300/300',
                 'category_id' => $categories[1]->id,
+                'status' => true,
             ],
             [
                 'name_artist' => 'Da LAB',
                 'image_artist' => 'https://picsum.photos/seed/dalab/300/300',
                 'category_id' => $categories[2]->id,
+                'status' => true,
             ],
         ])->map(fn ($item) => Artist::create($item));
 
@@ -136,6 +140,7 @@ class SampleDataSeeder extends Seeder
                 'theloai' => $categories[3]->id,
                 'file_amthanh' => 'songs/buoc-qua-nhau.mp3',
                 'anh_daidien' => 'https://picsum.photos/seed/song1/500/300',
+                'status' => true,
             ],
             [
                 'tenbaihat' => 'Nơi Này Có Anh',
@@ -143,6 +148,7 @@ class SampleDataSeeder extends Seeder
                 'theloai' => $categories[0]->id,
                 'file_amthanh' => 'songs/noi-nay-co-anh.mp3',
                 'anh_daidien' => 'https://picsum.photos/seed/song2/500/300',
+                'status' => true,
             ],
             [
                 'tenbaihat' => 'Trên Tình Bạn Dưới Tình Yêu',
@@ -150,6 +156,7 @@ class SampleDataSeeder extends Seeder
                 'theloai' => $categories[1]->id,
                 'file_amthanh' => 'songs/tren-tinh-ban-duoi-tinh-yeu.mp3',
                 'anh_daidien' => 'https://picsum.photos/seed/song3/500/300',
+                'status' => true,
             ],
             [
                 'tenbaihat' => 'Thanh Xuân',
@@ -157,15 +164,17 @@ class SampleDataSeeder extends Seeder
                 'theloai' => $categories[2]->id,
                 'file_amthanh' => 'songs/thanh-xuan.mp3',
                 'anh_daidien' => 'https://picsum.photos/seed/song4/500/300',
+                'status' => true,
             ],
         ])->map(fn ($item) => Song::create($item));
 
         News::insert([
-            ['created_at' => now(), 'updated_at' => now()],
-            ['created_at' => now(), 'updated_at' => now()],
+            ['status' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['status' => true, 'created_at' => now(), 'updated_at' => now()],
         ]);
 
         SongView::insert($songs->map(fn ($song) => [
+            'status' => true,
             'created_at' => now(),
             'updated_at' => now(),
         ])->all());
@@ -178,13 +187,13 @@ class SampleDataSeeder extends Seeder
         ]);
 
         Comment::insert([
-            ['created_at' => now(), 'updated_at' => now()],
-            ['created_at' => now(), 'updated_at' => now()],
+            ['status' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['status' => true, 'created_at' => now(), 'updated_at' => now()],
         ]);
 
         ListeningHistory::insert([
-            ['created_at' => now(), 'updated_at' => now()],
-            ['created_at' => now(), 'updated_at' => now()],
+            ['status' => true, 'created_at' => now(), 'updated_at' => now()],
+            ['status' => true, 'created_at' => now(), 'updated_at' => now()],
         ]);
 
         $this->command?->info('Đã tạo dữ liệu mẫu cho users, categories, artists, albums, songs và các bảng mới.');

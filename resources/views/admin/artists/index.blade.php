@@ -18,6 +18,7 @@
                             <th class="px-4 py-3">Tên nghệ sĩ</th>
                             <th class="px-4 py-3">Thể loại</th>
                             <th class="px-4 py-3">Ảnh đại diện</th>
+                            <th class="px-4 py-3">Trạng thái</th>
                             <th class="px-4 py-3">Cập nhật</th>
                             <th class="px-4 py-3 text-right">Thao tác</th>
                         </tr>
@@ -28,6 +29,7 @@
                                 <td class="px-4 py-4">{{ $artist->name_artist }}</td>
                                 <td class="px-4 py-4 text-[#a8b1bf]">{{ $artist->category?->tentheloai ?: 'Chưa có' }}</td>
                                 <td class="px-4 py-4 text-[#a8b1bf]">{{ $artist->image_artist ?: 'Chưa có' }}</td>
+                                <td class="px-4 py-4">{{ $artist->status ? 'Hiển thị' : 'Ẩn' }}</td>
                                 <td class="px-4 py-4 text-[#a8b1bf]">{{ optional($artist->updated_at)->format('d/m/Y H:i') }}</td>
                                 <td class="px-4 py-4">
                                     <div class="flex justify-end gap-2">
@@ -42,7 +44,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-4 py-10 text-center text-sm text-[#8a93a3]">Chưa có nghệ sĩ nào.</td>
+                                <td colspan="6" class="px-4 py-10 text-center text-sm text-[#8a93a3]">Chưa có nghệ sĩ nào.</td>
                             </tr>
                         @endforelse
                     </tbody>

@@ -13,6 +13,11 @@ class Artist extends Model
         'name_artist',
         'image_artist',
         'category_id',
+        'status',
+    ];
+
+    protected $casts = [
+        'status' => 'boolean',
     ];
 
     public function category()
