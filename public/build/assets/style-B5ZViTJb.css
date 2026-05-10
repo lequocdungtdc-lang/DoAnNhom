@@ -1,0 +1,1 @@
+:root{--brand-web: #f97316;--brand-admin: #0f766e}body{font-family:var(--font-sans, sans-serif)}.web-shell{background-color:var(--brand-web)}.admin-shell{background-color:var(--brand-admin)}
