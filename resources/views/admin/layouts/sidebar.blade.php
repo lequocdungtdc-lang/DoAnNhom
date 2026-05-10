@@ -56,18 +56,7 @@
                 <span>Album</span>
             </a>
         </nav>
-
-        <div class="mt-8 rounded-[24px] border border-white/8 bg-white/[0.03] p-4">
-            <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#8a93a3]">Hệ thống</p>
-            <div class="mt-4 space-y-3">
-                <div>
-                    <p class="text-sm font-medium text-white">Trạng thái</p>
-                    <p class="mt-1 text-xs text-[#8a93a3]">Không gian đang hoạt động, xác thực ổn định, asset đã được build.</p>
-                </div>
-                <span class="admin-chip">Tailwind + Vite</span>
-            </div>
-        </div>
-
+       
         <div class="mt-auto pt-6">
             <a href="{{ route('home') }}" class="admin-nav-link">
                 <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-black/20">
