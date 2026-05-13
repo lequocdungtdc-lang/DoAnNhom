@@ -7,30 +7,19 @@
     <div class="admin-card">
 
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-
             <div>
-                <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">
-                    Subscription
-                </p>
-
-                <h2 class="mt-2 text-2xl font-semibold text-white">
-                    Danh sách subscription
-                </h2>
+                <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">Subscription</p>
+                <h2 class="mt-2 text-2xl font-semibold text-white">Quản lý subscription</h2>
             </div>
-
-          
-
         </div>
 
-       
+
         {{-- TABLE --}}
-        <div class="mt-6 overflow-x-auto">
+        <div class="mt-6 overflow-hidden rounded-3xl border border-white/8">
 
-            <table class="w-full min-w-[900px] overflow-hidden rounded-2xl">
-
-                <thead class="bg-white/5 text-left">
-
-                    <tr class="text-sm text-[#cfd5df]">
+            <table class="min-w-full divide-y divide-white/8">
+                    <thead class="bg-white/[0.03]">
+                        <tr class="text-left text-sm text-[#8a93a3]">
 
                         <th class="px-4 py-4">ID</th>
                         <th class="px-4 py-4">Người dùng</th>
@@ -44,95 +33,67 @@
 
                 </thead>
 
-                <tbody>
+                <tbody class="divide-y divide-white/8 bg-[#11141b]">
 
                     @forelse($subscriptions as $subscription)
 
-                        <tr class="border-t border-white/5 text-sm text-white">
+                    <tr class="text-sm text-white">
 
-                            <td class="px-4 py-4">
-                                #{{ $subscription->id }}
-                            </td>
+                        <td class="px-4 py-4">#{{ $subscription->id }}</td>
+                        <td class="px-4 py-4">{{ $subscription->user->fullname ?? 'N/A' }}</td>
+                        <td class="px-4 py-4">{{ $subscription->plan->name ?? 'N/A' }}</td>
+                        <td class="px-4 py-4">{{ $subscription->starts_at }}</td>
+                        <td class="px-4 py-4">{{ $subscription->expires_at }}</td>
+                        <td class="px-4 py-4">
+                            @if($subscription->status)
+                            <span class="rounded-full bg-emerald-500/15 px-3 py-1 text-xs text-emerald-300">
+                                Hoạt động
+                            </span>
+                            @else
+                            <span class="rounded-full bg-red-500/15 px-3 py-1 text-xs text-red-300">
+                                Ngưng
+                            </span>
+                            @endif
+                        </td>
 
-                            <td class="px-4 py-4">
-                                {{ $subscription->user->fullname ?? 'N/A' }}
-                            </td>
+                        <td class="px-4 py-4">
 
-                            <td class="px-4 py-4">
-                                {{ $subscription->plan->name ?? 'N/A' }}
-                            </td>
+                            <div class="flex justify-end gap-2">
 
-                            <td class="px-4 py-4">
-                                {{ $subscription->starts_at }}
-                            </td>
+                                <a href="{{ route('admin.subscriptions.edit', $subscription->id) }}"
+                                    class="rounded-xl border border-white/10 px-4 py-2 text-xs text-white transition hover:bg-white/5">
+                                    Sửa
+                                </a>
 
-                            <td class="px-4 py-4">
-                                {{ $subscription->expires_at }}
-                            </td>
+                                <form
+                                    action="{{ route('admin.subscriptions.delete', $subscription->id) }}"
+                                    method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button
+                                        type="submit"
+                                        onclick="return confirm('Xóa subscription này?')"
+                                        class="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-2 text-xs text-red-300 transition hover:bg-red-500/20">
+                                        Xóa
+                                    </button>
+                                </form>
 
-                            <td class="px-4 py-4">
+                            </div>
 
-                                @if($subscription->status)
+                        </td>
 
-                                    <span class="rounded-full bg-emerald-500/15 px-3 py-1 text-xs text-emerald-300">
-                                        Hoạt động
-                                    </span>
-
-                                @else
-
-                                    <span class="rounded-full bg-red-500/15 px-3 py-1 text-xs text-red-300">
-                                        Ngưng
-                                    </span>
-
-                                @endif
-
-                            </td>
-
-                            <td class="px-4 py-4">
-
-                                <div class="flex justify-end gap-2">
-
-                                    <a
-                                        href="{{ route('admin.subscriptions.edit', $subscription->id) }}"
-                                        class="rounded-xl border border-white/10 px-4 py-2 text-xs text-white transition hover:bg-white/5"
-                                    >
-                                        Sửa
-                                    </a>
-
-                                    <form
-                                        action="{{ route('admin.subscriptions.delete', $subscription->id) }}"
-                                        method="POST"
-                                    >
-
-                                        @csrf
-                                        @method('DELETE')
-
-                                        <button
-                                            type="submit"
-                                            onclick="return confirm('Xóa subscription này?')"
-                                            class="rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-2 text-xs text-red-300 transition hover:bg-red-500/20"
-                                        >
-                                            Xóa
-                                        </button>
-
-                                    </form>
-
-                                </div>
-
-                            </td>
-
-                        </tr>
+                    </tr>
 
                     @empty
 
-                        <tr>
+                    <tr>
 
-                            <td colspan="7"
-                                class="px-4 py-10 text-center text-sm text-[#7f8898]">
-                                Chưa có subscription nào.
-                            </td>
+                        <td colspan="7"
+                            class="px-4 py-10 text-center text-sm text-[#7f8898]">
+                            Chưa có subscription nào.
+                        </td>
 
-                        </tr>
+                    </tr>
 
                     @endforelse
 
