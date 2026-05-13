@@ -9,10 +9,21 @@ use Illuminate\View\View;
 
 class AlbumController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $search = $request->query('search');
+
+        // Khởi tạo query
+        $query = Album::latest();
+
+        // Kiểm tra nếu có từ khóa và độ dài > 3
+        if (!empty($search) && mb_strlen($search) > 3) {
+            // Thay 'ten_album' bằng tên cột chính xác trong database của bạn
+            $query->where('ten_album', 'like', '%' . $search . '%');
+        }
+
         return view('admin.albums.index', [
-            'albums' => Album::latest()->paginate(10),
+            'albums' => $query->paginate(10)->withQueryString(),
         ]);
     }
 
