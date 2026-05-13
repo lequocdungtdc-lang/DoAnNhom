@@ -11,10 +11,25 @@ use Illuminate\View\View;
 
 class SongController extends Controller
 {
-    public function index(): View
+
+
+    public function index(Request $request): View
     {
+        // Lấy từ khóa từ URL
+        $search = $request->query('search');
+
+        // Khởi tạo query với các quan hệ liên quan
+        $query = Song::with(['artist', 'category'])->latest();
+
+        // Nếu từ khóa > 2 ký tự (giống logic Categories bạn vừa đưa)
+        if (!empty($search) && mb_strlen($search) > 2) {
+            $query->where(function($q) use ($search) {
+                $q->where('tenbaihat', 'like', '%' . $search . '%');
+            });
+        }
+
         return view('admin.songs.index', [
-            'songs' => Song::with(['artist', 'category'])->latest()->paginate(10),
+            'songs' => $query->paginate(10)->withQueryString(),
         ]);
     }
 
