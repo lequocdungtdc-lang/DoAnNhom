@@ -673,6 +673,7 @@ namespace App\Models {
      *
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
+     * @property boolean $status
      * @property int $category_id
      * @property string|null $image_artist
      * @property string $name_artist
@@ -684,6 +685,7 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<Artist>|Artist whereNameArtist($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Artist>|Artist whereImageArtist($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Artist>|Artist whereCategoryId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Artist>|Artist whereStatus($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Artist>|Artist whereCreatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Artist>|Artist whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Artist>|Artist newModelQuery()
@@ -1340,8 +1342,10 @@ namespace App\Models {
      *
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
+     * @property boolean $status
      * @property int $id
      * @method static \Illuminate\Database\Eloquent\Builder<Comment>|Comment whereId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Comment>|Comment whereStatus($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Comment>|Comment whereCreatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Comment>|Comment whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Comment>|Comment newModelQuery()
@@ -1664,8 +1668,10 @@ namespace App\Models {
      *
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
+     * @property boolean $status
      * @property int $id
      * @method static \Illuminate\Database\Eloquent\Builder<ListeningHistory>|ListeningHistory whereId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<ListeningHistory>|ListeningHistory whereStatus($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ListeningHistory>|ListeningHistory whereCreatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ListeningHistory>|ListeningHistory whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<ListeningHistory>|ListeningHistory newModelQuery()
@@ -1988,8 +1994,10 @@ namespace App\Models {
      *
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
+     * @property boolean $status
      * @property int $id
      * @method static \Illuminate\Database\Eloquent\Builder<News>|News whereId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<News>|News whereStatus($value)
      * @method static \Illuminate\Database\Eloquent\Builder<News>|News whereCreatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<News>|News whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<News>|News newModelQuery()
@@ -2312,6 +2320,7 @@ namespace App\Models {
      *
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
+     * @property boolean $status
      * @property string|null $anh_daidien
      * @property string $file_amthanh
      * @property int $theloai
@@ -2330,6 +2339,7 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<Song>|Song whereTheloai($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Song>|Song whereFileAmthanh($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Song>|Song whereAnhDaidien($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<Song>|Song whereStatus($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Song>|Song whereCreatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Song>|Song whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<Song>|Song newModelQuery()
@@ -2976,8 +2986,10 @@ namespace App\Models {
      *
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
+     * @property boolean $status
      * @property int $id
      * @method static \Illuminate\Database\Eloquent\Builder<SongView>|SongView whereId($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<SongView>|SongView whereStatus($value)
      * @method static \Illuminate\Database\Eloquent\Builder<SongView>|SongView whereCreatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<SongView>|SongView whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<SongView>|SongView newModelQuery()
