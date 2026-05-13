@@ -10,8 +10,31 @@
                 <svg class="h-4 w-4 text-[#7b8494]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m1.85-5.15a7 7 0 1 1-14 0a7 7 0 0 1 14 0Z" />
                 </svg>
-                <span>Tìm trang, người dùng, nội dung</span>
+                <!-- <span>Tìm trang, người dùng, nội dung</span> -->
+                 <!-- from input search  yấy theo categories-->
+                 <!-- http://127.0.0.1:8000/admin/categories -->
             </div>
+
+           <form action="{{ url()->current() }}" method="GET" id="searchForm" class="relative">
+                <div id="inputWrapper" class="flex items-center gap-2 rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-3 text-sm text-[#aeb6c3] focus-within:border-white/20 transition-all">
+                    <button type="submit">
+                        <svg class="h-4 w-4 text-[#7b8494]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35m1.85-5.15a7 7 0 1 1-14 0a7 7 0 0 1 14 0Z" />
+                        </svg>
+                    </button>
+
+                    <input 
+                        type="text" 
+                        name="search" 
+                        id="searchInput"
+                        value="{{ request('search') }}" 
+                        placeholder="Tìm kiếm danh mục..." 
+                        class="w-full bg-transparent border-none p-0 focus:ring-0 outline-none"
+                        autocomplete="off"
+                    />
+                </div>
+                <p id="errorMsg" class="hidden text-red-400 text-xs mt-2 ml-4">Vui lòng nhập hơn 2 ký tự để tìm kiếm.</p>
+            </form>
 
             <div class="flex items-center justify-between gap-3 rounded-2xl border border-white/8 bg-white/[0.04] px-4 py-3">
                 <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#10a37f]/14 text-sm font-semibold text-[#7ef0cf]">
