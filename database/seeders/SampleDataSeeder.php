@@ -83,7 +83,7 @@ class SampleDataSeeder extends Seeder
                 'description' => 'Giai điệu tự do, cá tính và thư giãn.',
                 'status' => true,
             ],
-        ])->map(fn ($item) => Categories::create($item));
+        ])->map(fn($item) => Categories::create($item));
 
         $artists = collect([
             [
@@ -110,7 +110,25 @@ class SampleDataSeeder extends Seeder
                 'category_id' => $categories[2]->id,
                 'status' => true,
             ],
-        ])->map(fn ($item) => Artist::create($item));
+            [
+                'name_artist' => 'HIEUTHUHAI',
+                'image_artist' => 'https://picsum.photos/seed/hieuthuhai/300/300',
+                'category_id' => $categories[2]->id,
+                'status' => true,
+            ],
+            [
+                'name_artist' => 'Đen Vâu',
+                'image_artist' => 'https://picsum.photos/seed/denvau/300/300',
+                'category_id' => $categories[1]->id,
+                'status' => true,
+            ],
+            [
+                'name_artist' => 'Duy Mạnh',
+                'image_artist' => 'https://picsum.photos/seed/duymanh/300/300',
+                'category_id' => $categories[0]->id,
+                'status' => true,
+            ],
+        ])->map(fn($item) => Artist::create($item));
 
         $albums = collect([
             [
@@ -131,7 +149,7 @@ class SampleDataSeeder extends Seeder
                 'anh_bia' => 'https://picsum.photos/seed/album3/400/400',
                 'status' => true,
             ],
-        ])->map(fn ($item) => Album::create($item));
+        ])->map(fn($item) => Album::create($item));
 
         $songs = collect([
             [
@@ -143,11 +161,27 @@ class SampleDataSeeder extends Seeder
                 'status' => true,
             ],
             [
+                'tenbaihat' => 'Có Chắc Yêu Là Đây',
+                'nghesi' => $artists[2]->id,
+                'theloai' => $categories[3]->id,
+                'file_amthanh' => 'songs/co-chac-yeu-la-day.mp3',
+                'anh_daidien' => 'https://picsum.photos/seed/song7/500/300',
+                'status' => true,
+            ],
+            [
+                'tenbaihat' => 'Lạ Lùng',
+                'nghesi' => $artists[1]->id,
+                'theloai' => $categories[1]->id,
+                'file_amthanh' => 'songs/la-lung.mp3',
+                'anh_daidien' => 'https://picsum.photos/seed/song3/500/300',
+                'status' => true,
+            ],
+            [
                 'tenbaihat' => 'Nơi Này Có Anh',
                 'nghesi' => $artists[1]->id,
                 'theloai' => $categories[0]->id,
                 'file_amthanh' => 'songs/noi-nay-co-anh.mp3',
-                'anh_daidien' => 'https://picsum.photos/seed/song2/500/300',
+                'anh_daidien' => 'https://picsum.photos/seed/song4/500/300',
                 'status' => true,
             ],
             [
@@ -155,7 +189,7 @@ class SampleDataSeeder extends Seeder
                 'nghesi' => $artists[2]->id,
                 'theloai' => $categories[1]->id,
                 'file_amthanh' => 'songs/tren-tinh-ban-duoi-tinh-yeu.mp3',
-                'anh_daidien' => 'https://picsum.photos/seed/song3/500/300',
+                'anh_daidien' => 'https://picsum.photos/seed/song5/500/300',
                 'status' => true,
             ],
             [
@@ -163,17 +197,25 @@ class SampleDataSeeder extends Seeder
                 'nghesi' => $artists[3]->id,
                 'theloai' => $categories[2]->id,
                 'file_amthanh' => 'songs/thanh-xuan.mp3',
-                'anh_daidien' => 'https://picsum.photos/seed/song4/500/300',
+                'anh_daidien' => 'https://picsum.photos/seed/song6/500/300',
                 'status' => true,
             ],
-        ])->map(fn ($item) => Song::create($item));
+            [
+                'tenbaihat' => 'Thức giấc',
+                'nghesi' => $artists[3]->id,
+                'theloai' => $categories[2]->id,
+                'file_amthanh' => 'songs/thuc-giac.mp3',
+                'anh_daidien' => 'https://picsum.photos/seed/song8/500/300',
+                'status' => true,
+            ],
+        ])->map(fn($item) => Song::create($item));
 
         News::insert([
             ['status' => true, 'created_at' => now(), 'updated_at' => now()],
             ['status' => true, 'created_at' => now(), 'updated_at' => now()],
         ]);
 
-        SongView::insert($songs->map(fn ($song) => [
+        SongView::insert($songs->map(fn($song) => [
             'status' => true,
             'created_at' => now(),
             'updated_at' => now(),
