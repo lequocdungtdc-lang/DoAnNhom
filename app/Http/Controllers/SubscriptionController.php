@@ -60,5 +60,42 @@ class SubscriptionController extends Controller
                 ->withQueryString(),
         ]);
     }
-    
+    public function update(Request $request, int $id): RedirectResponse
+    {
+        $validated = $request->validate([
+            'user_id' => ['required', 'exists:users,id'],
+            'plan_id' => ['required', 'exists:plans,id'],
+            'starts_at' => ['required', 'date'],
+            'status' => ['nullable', 'boolean'],
+        ]);
+
+        // Lấy plan
+        $plan = Plan::findOrFail($validated['plan_id']);
+
+        // Tính lại ngày hết hạn
+        $validated['expires_at'] = Carbon::parse($validated['starts_at'])
+            ->addDays($plan->duration_days);
+
+        $validated['status'] = $request->boolean('status');
+
+        // Tìm subscription
+        $subscription = Subscription::findOrFail($id);
+
+        // Update
+        $subscription->update($validated);
+
+        return redirect()
+            ->route('admin.subscriptions.index')
+            ->with('status', 'Cập nhật subscription thành công.');
+    }
+    public function delete(int $id): RedirectResponse
+    {
+        $subscription = Subscription::findOrFail($id);
+
+        $subscription->delete();
+
+        return redirect()
+            ->route('admin.subscriptions.index')
+            ->with('status', 'Xóa subscription thành công.');
+    }
 }
