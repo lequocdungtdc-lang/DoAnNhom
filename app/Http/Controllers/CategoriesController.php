@@ -9,10 +9,17 @@ use Illuminate\View\View;
 
 class CategoriesController extends Controller
 {
-    public function index(): View
+   public function index(Request $request): View
     {
+        // Tìm kiếm theo tên và nhóm
+        $search = $request->query('search');
+        $query = Categories::latest();
+        if (!empty($search) && mb_strlen($search) > 2) {
+            $query->where('tentheloai', 'like', '%' . $search . '%')
+            ->orWhere('nhom', 'like', '%' . $search . '%');
+        }
         return view('admin.categories.index', [
-            'categories' => Categories::latest()->paginate(10),
+            'categories' => $query->paginate(10)->withQueryString(),
         ]);
     }
 
