@@ -10,13 +10,25 @@ use Illuminate\View\View;
 
 class ArtistsController extends Controller
 {
-    public function index(): View
+   public function index(Request $request): View
     {
+        // 1. Lấy từ khóa từ request
+        $search = $request->query('search');
+
+        // 2. Khởi tạo query với eager loading 'category'
+        $query = Artist::with(['songs','category'])->latest();
+        
+
+        // 3. Kiểm tra điều kiện: không trống và độ dài > 2
+        if (!empty($search) && mb_strlen($search) > 2) {
+            $query->where('name_artist', 'like', '%' . $search . '%');
+        }
+
+        // 4. Phân trang và giữ lại tham số tìm kiếm trên URL
         return view('admin.artists.index', [
-            'artists' => Artist::with('category')->latest()->paginate(10),
+            'artists' => $query->paginate(10)->withQueryString(),
         ]);
     }
-
     public function create(): View
     {
         return view('admin.artists.form', [
