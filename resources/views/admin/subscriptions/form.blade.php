@@ -111,7 +111,7 @@
             </div>
 
             {{-- START DATE --}}
-            <!-- <div>
+            <div>
                 <label class="mb-2 block text-sm text-[#cfd5df]">
                     Ngày bắt đầu
                 </label>
@@ -132,7 +132,7 @@
                         {{ $message }}
                     </p>
                 @enderror
-            </div> -->
+            </div>
 
             {{-- STATUS --}}
             <div>

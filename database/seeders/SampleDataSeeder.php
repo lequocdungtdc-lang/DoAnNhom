@@ -8,9 +8,7 @@ use App\Models\Categories;
 use App\Models\Comment;
 use App\Models\ListeningHistory;
 use App\Models\News;
-use App\Models\Song;
 use App\Models\SongUserLike;
-use App\Models\SongView;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -25,7 +23,6 @@ class SampleDataSeeder extends Seeder
         DB::table('listening_history')->delete();
         DB::table('song_views')->delete();
         DB::table('news')->delete();
-        DB::table('songs')->delete();
         DB::table('artists')->delete();
         DB::table('albums')->delete();
         DB::table('categories')->delete();
@@ -151,75 +148,11 @@ class SampleDataSeeder extends Seeder
             ],
         ])->map(fn($item) => Album::create($item));
 
-        $songs = collect([
-            [
-                'tenbaihat' => 'Bước Qua Nhau',
-                'nghesi' => $artists[0]->id,
-                'theloai' => $categories[3]->id,
-                'file_amthanh' => 'songs/buoc-qua-nhau.mp3',
-                'anh_daidien' => 'https://picsum.photos/seed/song1/500/300',
-                'status' => true,
-            ],
-            [
-                'tenbaihat' => 'Có Chắc Yêu Là Đây',
-                'nghesi' => $artists[2]->id,
-                'theloai' => $categories[3]->id,
-                'file_amthanh' => 'songs/co-chac-yeu-la-day.mp3',
-                'anh_daidien' => 'https://picsum.photos/seed/song7/500/300',
-                'status' => true,
-            ],
-            [
-                'tenbaihat' => 'Lạ Lùng',
-                'nghesi' => $artists[1]->id,
-                'theloai' => $categories[1]->id,
-                'file_amthanh' => 'songs/la-lung.mp3',
-                'anh_daidien' => 'https://picsum.photos/seed/song3/500/300',
-                'status' => true,
-            ],
-            [
-                'tenbaihat' => 'Nơi Này Có Anh',
-                'nghesi' => $artists[1]->id,
-                'theloai' => $categories[0]->id,
-                'file_amthanh' => 'songs/noi-nay-co-anh.mp3',
-                'anh_daidien' => 'https://picsum.photos/seed/song4/500/300',
-                'status' => true,
-            ],
-            [
-                'tenbaihat' => 'Trên Tình Bạn Dưới Tình Yêu',
-                'nghesi' => $artists[2]->id,
-                'theloai' => $categories[1]->id,
-                'file_amthanh' => 'songs/tren-tinh-ban-duoi-tinh-yeu.mp3',
-                'anh_daidien' => 'https://picsum.photos/seed/song5/500/300',
-                'status' => true,
-            ],
-            [
-                'tenbaihat' => 'Thanh Xuân',
-                'nghesi' => $artists[3]->id,
-                'theloai' => $categories[2]->id,
-                'file_amthanh' => 'songs/thanh-xuan.mp3',
-                'anh_daidien' => 'https://picsum.photos/seed/song6/500/300',
-                'status' => true,
-            ],
-            [
-                'tenbaihat' => 'Thức giấc',
-                'nghesi' => $artists[3]->id,
-                'theloai' => $categories[2]->id,
-                'file_amthanh' => 'songs/thuc-giac.mp3',
-                'anh_daidien' => 'https://picsum.photos/seed/song8/500/300',
-                'status' => true,
-            ],
-        ])->map(fn($item) => Song::create($item));
 
         News::insert([
             ['status' => true, 'created_at' => now(), 'updated_at' => now()],
             ['status' => true, 'created_at' => now(), 'updated_at' => now()],
         ]);
-
-        SongView::insert($songs->map(fn($song) => [
-            'status' => true,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ])->all());
 
         $user = User::where('email', 'user@gmail.com')->first();
 
