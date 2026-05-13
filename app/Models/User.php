@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -54,5 +56,19 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
+    public function activeSubscription()
+    {
+        return $this->hasOne(Subscription::class)
+            ->where('status', true)
+            ->where('expires_at', '>', now());
+        if (auth()->user()->activeSubscription) {
+
+            echo "Còn VIP";
+        }
     }
 }
