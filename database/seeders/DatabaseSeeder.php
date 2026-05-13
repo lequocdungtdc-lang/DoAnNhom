@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             SampleDataSeeder::class,
             PlanSeeder::class,
             SubscriptionSeeder::class,
+            SongSeeder::class,
         ]);
     }
 }
