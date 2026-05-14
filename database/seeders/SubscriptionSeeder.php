@@ -10,7 +10,6 @@ use Carbon\Carbon;
 
 class SubscriptionSeeder extends Seeder
 {
-    //tạo seeder cho bảng subscriptions
     public function run(): void
     {
         $users = User::all();
