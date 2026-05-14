@@ -29,11 +29,11 @@
                                 <td class="px-4 py-4">{{ $category->tentheloai }}</td>
                                 <td class="px-4 py-4">
                                     @php
-                                        $categoryImageUrl = \App\Support\ImageUpload::url($category->image);
+                                        $categoryImage = trim((string) $category->image);
                                     @endphp
 
-                                    @if ($categoryImageUrl)
-                                        <img src="{{ $categoryImageUrl }}" alt="{{ $category->tentheloai }}" class="h-14 w-14 rounded-xl border border-white/10 object-cover">
+                                    @if ($categoryImage !== '')
+                                        <img src="{{ asset('storage/'.ltrim($categoryImage, '/')) }}" alt="{{ $category->tentheloai }}" class="h-14 w-14 rounded-xl border border-white/10 object-cover">
                                     @else
                                         <span class="inline-flex h-14 w-14 items-center justify-center rounded-xl border border-dashed border-white/10 text-xs text-[#8a93a3]">No img</span>
                                     @endif

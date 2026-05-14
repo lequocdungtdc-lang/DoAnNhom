@@ -1,6 +1,7 @@
 @php
     $fieldName = $name ?? 'image_upload';
-    $currentImageUrl = \App\Support\ImageUpload::url($value ?? null);
+    $currentImage = trim((string) ($value ?? ''));
+    $currentImageUrl = $currentImage !== '' ? asset('storage/'.ltrim($currentImage, '/')) : null;
     $previewId = 'image-preview-'.md5($fieldName);
     $inputId = 'image-input-'.md5($fieldName);
 @endphp
@@ -22,29 +23,31 @@
 </div>
 
 <script>
-    const imageInput = document.getElementById(@json($inputId));
+    (() => {
+        const imageInput = document.getElementById(@json($inputId));
 
-    if (imageInput) {
-        imageInput.addEventListener('change', function () {
-        const file = this.files && this.files[0];
-        const preview = document.getElementById(@json($previewId));
+        if (imageInput) {
+            imageInput.addEventListener('change', function () {
+                const file = this.files && this.files[0];
+                const preview = document.getElementById(@json($previewId));
 
-        if (! file || ! preview || ! file.type.startsWith('image/')) {
-            return;
+                if (! file || ! preview || ! file.type.startsWith('image/')) {
+                    return;
+                }
+
+                const image = preview.querySelector('img');
+                const text = preview.querySelector('[data-preview-text]');
+
+                if (image) {
+                    image.src = URL.createObjectURL(file);
+                }
+
+                if (text) {
+                    text.textContent = 'Ảnh vừa chọn. Bấm lưu để cập nhật.';
+                }
+
+                preview.style.display = 'flex';
+            });
         }
-
-        const image = preview.querySelector('img');
-        const text = preview.querySelector('[data-preview-text]');
-
-        if (image) {
-            image.src = URL.createObjectURL(file);
-        }
-
-        if (text) {
-            text.textContent = 'Ảnh vừa chọn. Bấm lưu để cập nhật.';
-        }
-
-        preview.style.display = 'flex';
-        });
-    }
+    })();
 </script>
