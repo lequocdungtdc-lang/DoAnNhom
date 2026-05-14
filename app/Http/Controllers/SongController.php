@@ -64,7 +64,10 @@ class SongController extends Controller
         $validated['status'] = $request->boolean('status');
         $validated['luot_nghe'] = (int) ($validated['luot_nghe'] ?? 0);
         $validated['file_amthanh'] = AudioUpload::store($request->file('audio_upload'), 'songs');
-        $validated['anh_daidien'] = ImageUpload::store($request->file('image_upload'), 'song_images');
+
+        if ($request->hasFile('image_upload')) {
+            $validated['anh_daidien'] = ImageUpload::store($request->file('image_upload'), 'song_images');
+        }
 
         unset($validated['audio_upload'], $validated['image_upload']);
 
@@ -125,12 +128,16 @@ class SongController extends Controller
         }
 
         if ($request->hasFile('image_upload')) {
-            $validated['anh_daidien'] = ImageUpload::store(
+            $imagePath = ImageUpload::store(
                 $request->file('image_upload'),
                 'song_images',
                 'public',
                 $song->anh_daidien,
             );
+
+            if ($imagePath !== null) {
+                $validated['anh_daidien'] = $imagePath;
+            }
         }
 
         unset($validated['audio_upload'], $validated['image_upload']);

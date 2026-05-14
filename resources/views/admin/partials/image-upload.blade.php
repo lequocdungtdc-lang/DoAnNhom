@@ -1,7 +1,7 @@
 @php
     $fieldName = $name ?? 'image_upload';
     $currentImage = trim((string) ($value ?? ''));
-    $currentImageUrl = $currentImage !== '' ? asset('storage/'.ltrim($currentImage, '/')) : null;
+    $currentImageUrl = \App\Support\ImageUpload::url($currentImage);
     $previewId = 'image-preview-'.md5($fieldName);
     $inputId = 'image-input-'.md5($fieldName);
 @endphp
