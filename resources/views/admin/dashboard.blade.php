@@ -47,7 +47,7 @@
         <div class="mt-5 grid gap-5 md:grid-cols-2 2xl:grid-cols-4">
             <article class="admin-card">
                 <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">Người dùng</p>
-                <p class="mt-4 text-3xl font-semibold text-white"></p>
+                <p class="mt-4 text-3xl font-semibold text-white">{{ $totalUsers }}</p>
                 <p class="mt-2 text-sm text-[#8a93a3]">Tổng người dùng đang hoạt động trong hệ thống.</p>
             </article>
 
@@ -76,16 +76,17 @@
                 <div class="mt-5 grid gap-3">
                     <a href="{{ route('admin.categories.index') }}" class="flex items-center justify-between rounded-2xl border border-white/8 bg-white/[0.02] px-4 py-4 text-sm text-white transition hover:bg-white/[0.05]">
                         <span>Mở thể loại</span>
-                        <span class="text-[#8a93a3]">Quản lý</span>
+                        <span class="text-[#8a93a3]">Categories</span>
                     </a>
                     <a href="{{ route('admin.songs.index') }}" class="flex items-center justify-between rounded-2xl border border-white/8 bg-white/[0.02] px-4 py-4 text-sm text-white transition hover:bg-white/[0.05]">
                         <span>Mở bài hát</span>
-                        <span class="text-[#8a93a3]">Thư viện</span>
+                        <span class="text-[#8a93a3]">Songs</span>
                     </a>
-                    <a href="{{ route('admin.albums.index') }}" class="flex items-center justify-between rounded-2xl border border-white/8 bg-white/[0.02] px-4 py-4 text-sm text-white transition hover:bg-white/[0.05]">
-                        <span>Mở album</span>
-                        <span class="text-[#8a93a3]">Bộ sưu tập</span>
+                    <a href="{{ route('admin.activities.index') }}" class="flex items-center justify-between rounded-2xl border border-white/8 bg-white/[0.02] px-4 py-4 text-sm text-white transition hover:bg-white/[0.05]">
+                        <span>Mở hoạt động</span>
+                        <span class="text-[#8a93a3]">Activities</span>
                     </a>
+
                 </div>
             </div>
 
