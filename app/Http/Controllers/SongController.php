@@ -34,6 +34,9 @@ class SongController extends Controller
 
         return view('admin.songs.index', [
             'songs' => $query->paginate(10)->withQueryString(),
+            'mostPopular' => Song::where('status', true)
+                ->orderBy('luot_nghe', 'desc')
+                ->first(),
         ]);
     }
 
