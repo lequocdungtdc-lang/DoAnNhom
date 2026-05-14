@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             PlanSeeder::class,
             SubscriptionSeeder::class,
             SongSeeder::class,
+                PodcastSeeder::class,
         ]);
     }
 }

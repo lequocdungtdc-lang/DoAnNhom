@@ -77,6 +77,15 @@
                 </span>
                 <span>Subscription</span>
             </a>
+            <a href="{{ route('admin.podcasts.index') }}" class="admin-nav-link {{ request()->routeIs('admin.podcasts.*') ? 'admin-nav-link-active' : '' }}">
+                <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-black/20">
+                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 15a3 3 0 0 0 3-3V7a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3Zm0 0v4m-4-4a4 4 0 0 0 8 0m-8 0H5m11 0h3" />
+                    </svg>
+                </span>
+                <span>Podcast</span>
+            </a>
         </nav>
 
         <div class="mt-auto pt-6">
