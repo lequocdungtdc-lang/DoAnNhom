@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    @include('admin.partials.head')
+    @include('partials.head')
 </head>
 <body>
     <div class="container">
      <!--include file sidebar-->
-     @include('admin.partials.sidebar')
+     @include('partials.sidebar')
     <!-- phân chính -->
     <main>
         <!--include file header-->
-    @include('admin.partials.header')
+    @include('partials.header')
     
         <!--content-->
         <div>
