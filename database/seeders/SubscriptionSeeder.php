@@ -16,8 +16,8 @@ class SubscriptionSeeder extends Seeder
         $plan3 = Plan::find(3);
 
         $start1 = Carbon::parse('2026-05-01');
-        $start2 = Carbon::parse('2026-05-10');
-        $start3 = Carbon::parse('2026-05-14');
+        $start2 = Carbon::parse('2026-04-10');
+        $start3 = Carbon::parse('2026-03-14');
 
         Subscription::create([
             'user_id' => 1,
