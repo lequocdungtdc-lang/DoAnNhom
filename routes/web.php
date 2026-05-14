@@ -13,6 +13,7 @@ use App\Http\Controllers\PlanController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\PodcastController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\ActivityLogController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
