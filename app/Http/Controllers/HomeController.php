@@ -2,14 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\News;
+use Illuminate\View\View;
 
 class HomeController extends Controller
 {
-    //
-    public function index()
+    public function index(): View
     {
-       
-        return view('web.home.index');
+        $latestNews = News::where('status', 'published')
+            ->latest()
+            ->limit(6)
+            ->get();
+
+        $featuredNews = News::where('status', 'published')
+            ->latest()
+            ->limit(3)
+            ->get();
+
+        return view('web.index', compact('latestNews', 'featuredNews'));
     }
 }
