@@ -11,6 +11,7 @@ use App\Support\ImageUpload;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use App\Models\ActivityLog;
 
 class SongController extends Controller
 {
@@ -33,6 +34,9 @@ class SongController extends Controller
 
         return view('admin.songs.index', [
             'songs' => $query->paginate(10)->withQueryString(),
+            'mostPopular' => Song::where('status', true)
+                ->orderBy('luot_nghe', 'desc')
+                ->first(),
         ]);
     }
 
@@ -63,11 +67,20 @@ class SongController extends Controller
         $validated['status'] = $request->boolean('status');
         $validated['luot_nghe'] = (int) ($validated['luot_nghe'] ?? 0);
         $validated['file_amthanh'] = AudioUpload::store($request->file('audio_upload'), 'songs');
-        $validated['anh_daidien'] = ImageUpload::store($request->file('image_upload'), 'song_images');
+
+        if ($request->hasFile('image_upload')) {
+            $validated['anh_daidien'] = ImageUpload::store($request->file('image_upload'), 'song_images');
+        }
 
         unset($validated['audio_upload'], $validated['image_upload']);
 
         Song::create($validated);
+        ActivityLog::create([
+            'module' => 'Song',
+            'action' => 'Tạo bài hát',
+            'title' => $validated['tenbaihat'],
+            'user_id' => auth()->id(),
+        ]);
 
         return redirect()->route('admin.songs.index')
             ->with('status', 'Tạo bài hát thành công.');
@@ -101,6 +114,12 @@ class SongController extends Controller
         $validated['luot_nghe'] = (int) ($validated['luot_nghe'] ?? 0);
 
         $song = Song::findOrFail($id);
+        ActivityLog::create([
+            'module' => 'Song',
+            'action' => 'Cập nhật bài hát',
+            'title' => $validated['tenbaihat'],
+            'user_id' => auth()->id(),
+        ]);
 
         if ($request->hasFile('audio_upload')) {
             $validated['file_amthanh'] = AudioUpload::store(
@@ -112,12 +131,16 @@ class SongController extends Controller
         }
 
         if ($request->hasFile('image_upload')) {
-            $validated['anh_daidien'] = ImageUpload::store(
+            $imagePath = ImageUpload::store(
                 $request->file('image_upload'),
                 'song_images',
                 'public',
                 $song->anh_daidien,
             );
+
+            if ($imagePath !== null) {
+                $validated['anh_daidien'] = $imagePath;
+            }
         }
 
         unset($validated['audio_upload'], $validated['image_upload']);
@@ -136,6 +159,12 @@ class SongController extends Controller
         ImageUpload::delete($song->anh_daidien);
 
         $song->delete();
+        ActivityLog::create([
+            'module' => 'Song',
+            'action' => 'Xóa bài hát',
+            'title' => $song->tenbaihat,
+            'user_id' => auth()->id(),
+        ]);
 
         return redirect()->route('admin.songs.index')
             ->with('status', 'Xóa bài hát thành công.');

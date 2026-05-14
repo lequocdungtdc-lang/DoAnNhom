@@ -8,11 +8,12 @@ class Podcast extends Model
 {
 
     protected $fillable = [
-        'title',
-        'description',
-        'audio_file',
-        'thumbnail',
-        'duration',
-        'status',
-    ];
+    'title',
+    'description',
+    'audio_file',
+    'thumbnail',
+    'duration',
+    'views',
+    'status',
+];
 }

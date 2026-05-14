@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\ActivityLog;
 
 class SubscriptionController extends Controller
 {
@@ -73,11 +74,18 @@ class SubscriptionController extends Controller
                 $q->where('fullname', 'like', '%' . $search . '%');
             });
         }
+        // Tổng subscription
+        $totalSubscriptions = Subscription::count();
 
+        // Tổng doanh thu
+        $totalRevenue = Subscription::join('plans', 'subscriptions.plan_id', '=', 'plans.id')
+            ->sum('plans.price');
         return view('admin.subscriptions.index', [
             'subscriptions' => $query
                 ->paginate(10)
                 ->withQueryString(),
+            'totalSubscriptions' => $totalSubscriptions,
+            'totalRevenue' => $totalRevenue,
         ]);
     }
     public function update(Request $request, int $id): RedirectResponse
@@ -103,7 +111,12 @@ class SubscriptionController extends Controller
 
         // Update
         $subscription->update($validated);
-
+        ActivityLog::create([
+            'module' => 'Subscription',
+            'action' => 'Cập nhật subscription',
+            'title' => 'Subscription #' . $subscription->id,
+            'user_id' => auth()->id(),
+        ]);
         return redirect()
             ->route('admin.subscriptions.index')
             ->with('status', 'Cập nhật subscription thành công.');
@@ -113,6 +126,13 @@ class SubscriptionController extends Controller
         $subscription = Subscription::findOrFail($id);
 
         $subscription->delete();
+
+        ActivityLog::create([
+            'module' => 'Subscription',
+            'action' => 'Xóa subscription',
+            'title' => 'Subscription #' . $subscription->id,
+            'user_id' => auth()->id(),
+        ]);
 
         return redirect()
             ->route('admin.subscriptions.index')

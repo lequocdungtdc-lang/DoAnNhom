@@ -2,7 +2,41 @@
 
 @section('content')
 <section class="py-4 md:py-6">
-    <div class="admin-card">
+     @if ($mostPopular)
+    <div class="mt-5 rounded-3xl border border-white/10 bg-white/[0.03] p-5">
+
+        <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">
+            Bài hát nổi bật
+        </p>
+
+        <div class="mt-4 flex items-center gap-4">
+
+            <img
+                src="{{ $mostPopular->anh_daidien }}"
+                class="h-20 w-20 rounded-2xl object-cover border border-white/10">
+
+            <div>
+
+                <h3 class="text-lg font-semibold text-white">
+                    {{ $mostPopular->tenbaihat }}
+                </h3>
+
+                <p class="mt-1 text-sm text-[#8a93a3]">
+                    {{ number_format($mostPopular->luot_nghe) }} lượt nghe
+                </p>
+
+                <p class="mt-2 text-sm text-[#cfd5df] line-clamp-2">
+                    {{ $mostPopular->artist?->name_artist ?? 'N/A' }}
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    @endif
+    <div class="admin-card my-5">
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
                 <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">Bài hát</p>
@@ -32,10 +66,11 @@
                         <td class="px-4 py-4">
                             @php
                                 $songImage = trim((string) $song->anh_daidien);
+                                $songImageUrl = \App\Support\ImageUpload::url($songImage);
                             @endphp
 
-                            @if ($songImage !== '')
-                                <img src="{{ asset('storage/'.ltrim($songImage, '/')) }}" alt="{{ $song->tenbaihat }}" class="h-14 w-14 rounded-xl border border-white/10 object-cover">
+                            @if ($songImageUrl)
+                                <img src="{{ $songImageUrl }}" alt="{{ $song->tenbaihat }}" class="h-14 w-14 rounded-xl border border-white/10 object-cover">
                             @else
                                 <span class="inline-flex h-14 w-14 items-center justify-center rounded-xl border border-dashed border-white/10 text-xs text-[#8a93a3]">No img</span>
                             @endif

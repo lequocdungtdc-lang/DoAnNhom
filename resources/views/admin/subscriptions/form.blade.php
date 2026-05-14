@@ -110,6 +110,24 @@
 
             </div>
 
+            <div>
+                <label class="mb-2 block text-sm text-[#cfd5df]">
+                    Giá gói
+                </label>
+
+                <p
+                    id="plan-price"
+                    class="rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white"
+                >
+                    @php
+                        $selectedPlanId = old('plan_id', $subscription->plan_id);
+                        $selectedPlan = $plans->firstWhere('id', $selectedPlanId);
+                    @endphp
+
+                    {{ $selectedPlan ? number_format($selectedPlan->price, 0, ',', '.') . ' đ' : 'Chọn gói để xem giá' }}
+                </p>
+            </div>
+
             {{-- START DATE --}}
             <div>
                 <label class="mb-2 block text-sm text-[#cfd5df]">
@@ -169,5 +187,37 @@
 
         </form>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const planPrices = @json($plans->pluck('price', 'id'));
+            const planSelect = document.querySelector('select[name="plan_id"]');
+            const priceOutput = document.getElementById('plan-price');
+
+            function formatPrice(value) {
+                return new Intl.NumberFormat('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND',
+                    maximumFractionDigits: 0,
+                }).format(value);
+            }
+
+            function updatePrice() {
+                const selected = planSelect.value;
+
+                if (!selected || planPrices[selected] === undefined) {
+                    priceOutput.textContent = 'Chọn gói để xem giá';
+                    return;
+                }
+
+                priceOutput.textContent = formatPrice(planPrices[selected]);
+            }
+
+            if (planSelect && priceOutput) {
+                planSelect.addEventListener('change', updatePrice);
+                updatePrice();
+            }
+        });
+    </script>
 </section>
 @endsection

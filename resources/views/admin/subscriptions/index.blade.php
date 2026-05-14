@@ -15,15 +15,16 @@
 
 
         {{-- TABLE --}}
-        <div class="mt-6 overflow-hidden rounded-3xl border border-white/8">
+        <div class="my-6 overflow-hidden rounded-3xl border border-white/8">
 
             <table class="min-w-full divide-y divide-white/8">
-                    <thead class="bg-white/[0.03]">
-                        <tr class="text-left text-sm text-[#8a93a3]">
+                <thead class="bg-white/[0.03]">
+                    <tr class="text-left text-sm text-[#8a93a3]">
 
                         <th class="px-4 py-4">ID</th>
                         <th class="px-4 py-4">Người dùng</th>
                         <th class="px-4 py-4">Gói</th>
+                        <th class="px-4 py-4">Giá gói</th>
                         <th class="px-4 py-4">Ngày bắt đầu</th>
                         <th class="px-4 py-4">Ngày hết hạn</th>
                         <th class="px-4 py-4">Trạng thái</th>
@@ -42,6 +43,9 @@
                         <td class="px-4 py-4">#{{ $subscription->id }}</td>
                         <td class="px-4 py-4">{{ $subscription->user->fullname ?? 'N/A' }}</td>
                         <td class="px-4 py-4">{{ $subscription->plan->name ?? 'N/A' }}</td>
+                        <td class="px-4 py-4">
+                            {{ $subscription->plan ? number_format($subscription->plan->price, 0, ',', '.') . ' đ' : 'N/A' }}
+                        </td>
                         <td class="px-4 py-4">{{ $subscription->starts_at }}</td>
                         <td class="px-4 py-4">{{ $subscription->expires_at }}</td>
                         <td class="px-4 py-4">
@@ -103,13 +107,52 @@
 
         </div>
 
+
         {{-- PAGINATION --}}
         <div class="mt-6">
             {{ $subscriptions->links() }}
         </div>
 
     </div>
+    <div class="mt-2 grid gap-4 md:grid-cols-2">
 
+
+
+        {{-- Tổng subscription --}}
+        <article class="admin-card">
+
+            <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">
+                Subscription
+            </p>
+
+            <p class="mt-4 text-3xl font-semibold text-white">
+                {{ $totalSubscriptions }}
+            </p>
+
+            <p class="mt-2 text-sm text-[#8a93a3]">
+                Tổng lượt đăng ký gói cước.
+            </p>
+
+        </article>
+
+        {{-- Tổng doanh thu --}}
+        <article class="admin-card">
+
+            <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">
+                Doanh thu
+            </p>
+
+            <p class="mt-4 text-3xl font-semibold text-emerald-400">
+                {{ number_format($totalRevenue) }}đ
+            </p>
+
+            <p class="mt-2 text-sm text-[#8a93a3]">
+                Tổng doanh thu từ subscription.
+            </p>
+
+        </article>
+
+    </div>
 </section>
 
 @endsection
