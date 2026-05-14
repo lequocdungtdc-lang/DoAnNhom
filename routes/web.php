@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\PodcastController;
+use App\Http\Controllers\AdminDashboardController;
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::middleware('guest')->group(function () {
@@ -33,9 +35,7 @@ Route::prefix('admin')
     ->middleware(['auth', 'role:admin'])
     ->name('admin.')
     ->group(function () {
-        Route::get('/', function () {
-            return view('admin.dashboard');
-        })->name('dashboard');
+        Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
 
         Route::get('/dashboard', function () {
             return redirect()->route('admin.dashboard');
@@ -133,4 +133,6 @@ Route::prefix('admin')
                 Route::put('/{id}', [PodcastController::class, 'update'])->name('update');
                 Route::delete('/{id}', [PodcastController::class, 'delete'])->name('delete');
             });
+        Route::get('/activity_logs', [ActivityLogController::class, 'index'])
+            ->name('activities.index');
     });

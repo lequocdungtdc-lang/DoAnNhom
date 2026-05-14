@@ -7,6 +7,7 @@ use App\Models\Podcast;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use App\Models\ActivityLog;
 
 class PodcastController extends Controller
 {
@@ -54,7 +55,12 @@ class PodcastController extends Controller
         $validated['status'] = $request->boolean('status');
 
         Podcast::create($validated);
-
+        ActivityLog::create([
+            'module' => 'Podcast',
+            'action' => 'Tạo podcast',
+            'title' => $validated['title'],
+            'user_id' => auth()->id(),
+        ]);
         return redirect()
             ->route('admin.podcasts.index')
             ->with('status', 'Tạo podcast thành công.');
@@ -81,7 +87,16 @@ class PodcastController extends Controller
 
         $validated['status'] = $request->boolean('status');
 
-        Podcast::findOrFail($id)->update($validated);
+        $podcast = Podcast::findOrFail($id);
+
+        $podcast->update($validated);
+        ActivityLog::create([
+            'module' => 'Podcast',
+            'action' => 'Cập nhật podcast',
+            'title' => $validated['title'],
+            'user_id' => auth()->id(),
+        ]);
+
 
         return redirect()
             ->route('admin.podcasts.index')
@@ -90,7 +105,18 @@ class PodcastController extends Controller
 
     public function delete(int $id): RedirectResponse
     {
-        Podcast::findOrFail($id)->delete();
+        $podcast = Podcast::findOrFail($id);
+
+        $title = $podcast->title;
+
+        $podcast->delete();
+
+        ActivityLog::create([
+            'module' => 'Podcast',
+            'action' => 'Xóa podcast',
+            'title' => $title,
+            'user_id' => auth()->id(),
+        ]);
 
         return redirect()
             ->route('admin.podcasts.index')
