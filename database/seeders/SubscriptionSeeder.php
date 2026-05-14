@@ -45,5 +45,45 @@ class SubscriptionSeeder extends Seeder
                 ->addDays($plan3->duration_days),
             'status' => true,
         ]);
+        Subscription::create([
+            'user_id' => 4,
+            'plan_id' => $plan3->id,
+            'starts_at' => $start3,
+            'expires_at' => (clone $start3)
+                ->addDays($plan3->duration_days),
+            'status' => true,
+        ]);
+        Subscription::create([
+            'user_id' => 5,
+            'plan_id' => $plan3->id,
+            'starts_at' => $start3,
+            'expires_at' => (clone $start3)
+                ->addDays($plan3->duration_days),
+            'status' => true,
+        ]);
+        Subscription::create([
+            'user_id' => 6,
+            'plan_id' => $plan1->id,
+            'starts_at' => $start1,
+            'expires_at' => (clone $start1)
+                ->addDays($plan1->duration_days),
+            'status' => true,
+        ]);
+        Subscription::create([
+            'user_id' => 7,
+            'plan_id' => $plan1->id,
+            'starts_at' => $start1,
+            'expires_at' => (clone $start1)
+                ->addDays($plan1->duration_days),
+            'status' => true,
+        ]);
+        Subscription::create([
+            'user_id' => 8,
+            'plan_id' => $plan2->id,
+            'starts_at' => $start2,
+            'expires_at' => (clone $start2)
+                ->addDays($plan2->duration_days),
+            'status' => true,
+        ]);
     }
 }
