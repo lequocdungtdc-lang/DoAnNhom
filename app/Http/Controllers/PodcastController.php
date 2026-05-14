@@ -27,6 +27,8 @@ class PodcastController extends Controller
 
         return view('admin.podcasts.index', [
             'podcasts' => $query->paginate(10)->withQueryString(),
+            // Tổng podcast đang hiển thị
+            'totalPodcasts' => Podcast::where('status', true)->count(),
         ]);
     }
 

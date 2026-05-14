@@ -2,7 +2,10 @@
     <div class="flex h-full flex-col p-4 md:p-5">
         <div class="mb-6 flex items-center gap-3 px-2 pt-1">
             <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#10a37f] font-semibold text-[#08110d]">
-                AI
+                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 18V5l12-2v13M9 18a3 3 0 1 1-6 0a3 3 0 0 1 6 0Zm12-2a3 3 0 1 1-6 0a3 3 0 0 1 6 0Z" />
+                </svg>
             </div>
             <div>
                 <p class="text-sm font-semibold text-white">Quản trị hiện đại</p>
@@ -17,7 +20,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.2c0-.63 0-.945.073-1.24a2 2 0 0 1 .313-.668c.18-.244.43-.438.93-.826l5.5-4.278c.82-.638 1.23-.957 1.684-1.08a2 2 0 0 1 1 0c.454.123.864.442 1.684 1.08l5.5 4.278c.5.388.75.582.93.826a2 2 0 0 1 .313.668c.073.295.073.61.073 1.24V18a2 2 0 0 1-2 2h-3v-4.5a1.5 1.5 0 0 0-1.5-1.5h-3A1.5 1.5 0 0 0 9 15.5V20H6a2 2 0 0 1-2-2v-4.8Z" />
                     </svg>
                 </span>
-                <span>Bảng điều khiển</span>
+                <span>Dashboard</span>
             </a>
 
             <a href="{{ route('admin.users.index') }}" class="admin-nav-link {{ request()->routeIs('admin.users.*') ? 'admin-nav-link-active' : '' }}">
