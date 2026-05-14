@@ -11,7 +11,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\SubscriptionController;
-
+use App\Http\Controllers\PodcastController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::middleware('guest')->group(function () {
@@ -122,5 +122,15 @@ Route::prefix('admin')
 
                 Route::delete('/{id}', [SubscriptionController::class, 'delete'])
                     ->name('delete');
+            });
+        Route::prefix('podcasts')
+            ->name('podcasts.')
+            ->group(function () {
+                Route::get('/', [PodcastController::class, 'index'])->name('index');
+                Route::get('/create', [PodcastController::class, 'create'])->name('create');
+                Route::post('/', [PodcastController::class, 'store'])->name('store');
+                Route::get('/{id}/edit', [PodcastController::class, 'edit'])->name('edit');
+                Route::put('/{id}', [PodcastController::class, 'update'])->name('update');
+                Route::delete('/{id}', [PodcastController::class, 'delete'])->name('delete');
             });
     });
