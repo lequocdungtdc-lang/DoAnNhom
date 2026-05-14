@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Plan;
 use App\Models\Subscription;
-use App\Models\User;
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
 
@@ -12,38 +11,39 @@ class SubscriptionSeeder extends Seeder
 {
     public function run(): void
     {
-        $users = User::all();
+        $plan1 = Plan::find(1);
+        $plan2 = Plan::find(2);
+        $plan3 = Plan::find(3);
 
-        $plans = Plan::all();
+        $start1 = Carbon::parse('2026-05-01');
+        $start2 = Carbon::parse('2026-05-10');
+        $start3 = Carbon::parse('2026-05-14');
 
-        if ($users->isEmpty() || $plans->isEmpty()) {
-            return;
-        }
+        Subscription::create([
+            'user_id' => 1,
+            'plan_id' => $plan1->id,
+            'starts_at' => $start1,
+            'expires_at' => (clone $start1)
+                ->addDays($plan1->duration_days),
+            'status' => true,
+        ]);
 
-        foreach ($users as $user) {
+        Subscription::create([
+            'user_id' => 2,
+            'plan_id' => $plan2->id,
+            'starts_at' => $start2,
+            'expires_at' => (clone $start2)
+                ->addDays($plan2->duration_days),
+            'status' => true,
+        ]);
 
-            // Random plan
-            $plan = $plans->random();
-
-            // Random ngày bắt đầu
-            $startsAt = Carbon::now()
-                ->subDays(rand(1, 30));
-
-            // Tính ngày hết hạn
-            $expiresAt = (clone $startsAt)
-                ->addDays($plan->duration_days);
-
-            Subscription::create([
-                'user_id' => $user->id,
-
-                'plan_id' => $plan->id,
-
-                'starts_at' => $startsAt,
-
-                'expires_at' => $expiresAt,
-
-                'status' => true,
-            ]);
-        }
+        Subscription::create([
+            'user_id' => 3,
+            'plan_id' => $plan3->id,
+            'starts_at' => $start3,
+            'expires_at' => (clone $start3)
+                ->addDays($plan3->duration_days),
+            'status' => true,
+        ]);
     }
 }
