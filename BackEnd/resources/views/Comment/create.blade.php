@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    @include('admin.partials.head')
+    @include('partials.head')
 
     <style>
         .btn {
@@ -67,10 +67,10 @@
 </head>
 <body>
 <div class="container">
-    @include('admin.partials.sidebar')
+    @include('partials.sidebar')
 
     <main>
-        @include('admin.partials.header')
+        @include('partials.header')
 
         <div class="page-header">
             <h2 class="title">Thêm bình luận mới</h2>

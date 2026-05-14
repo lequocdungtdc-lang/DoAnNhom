@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    @include('admin.partials.head')
+    @include('partials.head')
 
     <style>
         .btn {
@@ -51,7 +51,7 @@
 </head>
 <body>
     <div class="container">
-        @include('admin.partials.sidebar')
+        @include('partials.sidebar')
 
         <main>
             @include('admin.partials.header')
