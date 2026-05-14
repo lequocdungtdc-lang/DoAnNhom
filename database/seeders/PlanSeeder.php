@@ -7,6 +7,7 @@ use App\Models\Plan;
 
 class PlanSeeder extends Seeder
 {
+    //tạo seeder cho bảng plans
     public function run(): void
     {
         Plan::create([
