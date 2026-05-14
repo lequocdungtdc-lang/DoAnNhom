@@ -4,7 +4,7 @@
 <section class="py-4 md:py-6">
     @if ($mostViewedPodcast)
 
-    <div class="mt-5 rounded-3xl border border-white/10 bg-white/[0.03] p-5">
+    <div class="mt-6 rounded-3xl border border-white/10 bg-white/[0.03] p-5">
 
         <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">
             Podcast nổi bật
