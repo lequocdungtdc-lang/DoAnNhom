@@ -43,7 +43,10 @@ class CategoriesController extends Controller
         ]);
 
         $validated['status'] = $request->boolean('status');
-        $validated['image'] = ImageUpload::store($request->file('image_upload'), 'category_images');
+
+        if ($request->hasFile('image_upload')) {
+            $validated['image'] = ImageUpload::store($request->file('image_upload'), 'category_images');
+        }
 
         unset($validated['image_upload']);
 
@@ -76,12 +79,16 @@ class CategoriesController extends Controller
         $category = Categories::findOrFail($id);
 
         if ($request->hasFile('image_upload')) {
-            $validated['image'] = ImageUpload::store(
+            $imagePath = ImageUpload::store(
                 $request->file('image_upload'),
                 'category_images',
                 'public',
                 $category->image,
             );
+
+            if ($imagePath !== null) {
+                $validated['image'] = $imagePath;
+            }
         }
 
         unset($validated['image_upload']);
