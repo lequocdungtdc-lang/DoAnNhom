@@ -20,8 +20,13 @@ return new class extends Migration
         });
 
         Schema::table('news', function (Blueprint $table) {
-            $table->boolean('status')->default(1)->after('id');
+            if (!Schema::hasColumn('news', 'status')) {
+                $table->enum('status', ['draft', 'published'])
+                    ->default('published')
+                    ->after('views');
+            }
         });
+
 
         Schema::table('comments', function (Blueprint $table) {
             $table->boolean('status')->default(1)->after('id');

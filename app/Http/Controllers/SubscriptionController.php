@@ -80,6 +80,7 @@ class SubscriptionController extends Controller
 
         // Tổng doanh thu
         $totalRevenue = Subscription::join('plans', 'subscriptions.plan_id', '=', 'plans.id')
+            ->where('subscriptions.status', true)
             ->sum('plans.price');
         // Revenue theo tháng, dựa trên tháng bắt đầu của subscription
         $monthlyRevenue = Subscription::join(
@@ -88,6 +89,7 @@ class SubscriptionController extends Controller
             '=',
             'plans.id'
         )
+            ->where('subscriptions.status', true)
             ->whereYear(
                 'subscriptions.starts_at',
                 now()->year
@@ -141,7 +143,7 @@ class SubscriptionController extends Controller
         $subscription->update($validated);
         ActivityLog::create([
             'module' => 'Subscription',
-            'action' => 'Cập nhật subscription',
+            'action' => 'UPDATE',
             'title' => 'Subscription #' . $subscription->id,
             'user_id' => auth()->id(),
         ]);
@@ -157,7 +159,7 @@ class SubscriptionController extends Controller
 
         ActivityLog::create([
             'module' => 'Subscription',
-            'action' => 'Xóa subscription',
+            'action' => 'DELETE',
             'title' => 'Subscription #' . $subscription->id,
             'user_id' => auth()->id(),
         ]);

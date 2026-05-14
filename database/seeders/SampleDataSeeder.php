@@ -13,6 +13,7 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class SampleDataSeeder extends Seeder
 {
@@ -27,7 +28,7 @@ class SampleDataSeeder extends Seeder
         DB::table('albums')->delete();
         DB::table('categories')->delete();
 
-       
+
 
         $categories = collect([
             [
@@ -128,8 +129,33 @@ class SampleDataSeeder extends Seeder
 
 
         News::insert([
-            ['status' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['status' => true, 'created_at' => now(), 'updated_at' => now()],
+            [
+                'title' => 'Laravel 12 chính thức ra mắt',
+                'slug' => Str::slug('Laravel 12 chính thức ra mắt'),
+                'content' => 'Laravel 12 mang đến nhiều cải tiến mới cho hiệu suất và bảo mật.',
+                'summary' => 'Laravel 12 đã được phát hành với nhiều tính năng mới.',
+                'image' => 'https://picsum.photos/seed/news1/800/500',
+                'category' => 'Công nghệ',
+                'user_id' => 1,
+                'views' => 120,
+                'status' => 'published',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            [
+                'title' => 'AI đang thay đổi ngành lập trình',
+                'slug' => Str::slug('AI đang thay đổi ngành lập trình'),
+                'content' => 'AI hỗ trợ lập trình viên tăng tốc quá trình phát triển phần mềm.',
+                'summary' => 'Trí tuệ nhân tạo ngày càng phổ biến trong công nghệ.',
+                'image' => 'https://picsum.photos/seed/news2/800/500',
+                'category' => 'AI',
+                'user_id' => 1,
+                'views' => 89,
+                'status' => 'published',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
 
         $user = User::where('email', 'user@gmail.com')->first();
