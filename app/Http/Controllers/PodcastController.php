@@ -64,7 +64,7 @@ class PodcastController extends Controller
         Podcast::create($validated);
         ActivityLog::create([
             'module' => 'Podcast',
-            'action' => 'Tạo podcast',
+            'action' => 'CREATE',
             'title' => $validated['title'],
             'user_id' => auth()->id(),
         ]);
@@ -99,7 +99,7 @@ class PodcastController extends Controller
         $podcast->update($validated);
         ActivityLog::create([
             'module' => 'Podcast',
-            'action' => 'Cập nhật podcast',
+            'action' => 'UPDATE',
             'title' => $validated['title'],
             'user_id' => auth()->id(),
         ]);
@@ -120,7 +120,7 @@ class PodcastController extends Controller
 
         ActivityLog::create([
             'module' => 'Podcast',
-            'action' => 'Xóa podcast',
+            'action' => 'DELETE',
             'title' => $title,
             'user_id' => auth()->id(),
         ]);

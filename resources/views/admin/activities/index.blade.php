@@ -41,7 +41,33 @@
                         </td>
 
                         <td class="px-4 py-4">
-                            {{ $log->action }}
+
+                            @if($log->action === 'CREATE')
+
+                            <span class="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-medium text-emerald-300">
+                                CREATE
+                            </span>
+
+                            @elseif($log->action === 'UPDATE')
+
+                            <span class="rounded-full bg-cyan-500/15 px-3 py-1 text-xs font-medium text-cyan-300">
+                                UPDATE
+                            </span>
+
+                            @elseif($log->action === 'DELETE')
+
+                            <span class="rounded-full bg-red-500/15 px-3 py-1 text-xs font-medium text-red-300">
+                                DELETE
+                            </span>
+
+                            @else
+
+                            <span class="rounded-full bg-gray-500/15 px-3 py-1 text-xs font-medium text-gray-300">
+                                {{ $log->action }}
+                            </span>
+
+                            @endif
+
                         </td>
 
                         <td class="px-4 py-4 text-[#a8b1bf]">

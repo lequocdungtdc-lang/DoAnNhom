@@ -77,7 +77,7 @@ class SongController extends Controller
         Song::create($validated);
         ActivityLog::create([
             'module' => 'Song',
-            'action' => 'Tạo bài hát',
+            'action' => 'CREATE',
             'title' => $validated['tenbaihat'],
             'user_id' => auth()->id(),
         ]);
@@ -116,7 +116,7 @@ class SongController extends Controller
         $song = Song::findOrFail($id);
         ActivityLog::create([
             'module' => 'Song',
-            'action' => 'Cập nhật bài hát',
+            'action' => 'UPDATE',
             'title' => $validated['tenbaihat'],
             'user_id' => auth()->id(),
         ]);
@@ -161,7 +161,7 @@ class SongController extends Controller
         $song->delete();
         ActivityLog::create([
             'module' => 'Song',
-            'action' => 'Xóa bài hát',
+            'action' => 'DELETE',
             'title' => $song->tenbaihat,
             'user_id' => auth()->id(),
         ]);
