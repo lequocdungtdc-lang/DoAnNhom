@@ -47,6 +47,18 @@ return [
             'report' => false,
         ],
 
+        /*
+        | Ảnh/tài nguyên cần URL trực tiếp dưới public/ (vd: /category_images/...)
+        | Không phụ thuộc symlink storage:link.
+        */
+        'public_uploads' => [
+            'driver' => 'local',
+            'root' => public_path(),
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

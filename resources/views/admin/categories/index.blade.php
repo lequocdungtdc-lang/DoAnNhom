@@ -8,14 +8,15 @@
                     <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">Thể loại</p>
                     <h2 class="mt-2 text-2xl font-semibold text-white">Quản lý thể loại</h2>
                 </div>
-                <a href="{{ route('admin.categories.create') }}" class="rounded-2xl bg-[#10a37f] px-4 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">Thêm thể loại</a>
+                <a href="{{ route('admin.categories.create') }}" class="rounded-2xl bg-admin-primary px-4 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">Thêm thể loại</a>
             </div>
 
             <div class="mt-6 overflow-hidden rounded-3xl border border-white/8">
                 <table class="min-w-full divide-y divide-white/8">
-                    <thead class="bg-white/[0.03]">
+                    <thead class="bg-white/3">
                         <tr class="text-left text-sm text-[#8a93a3]">
                             <th class="px-4 py-3">Tên thể loại</th>
+                            <th class="px-4 py-3">Ảnh</th>
                             <th class="px-4 py-3">Nhóm</th>
                             <th class="px-4 py-3">Trạng thái</th>
                             <th class="px-4 py-3">Cập nhật</th>
@@ -26,6 +27,18 @@
                         @forelse ($categories as $category)
                             <tr class="text-sm text-white">
                                 <td class="px-4 py-4">{{ $category->tentheloai }}</td>
+                                <td class="px-4 py-4">
+                                    @php
+                                        $categoryImage = trim((string) $category->image);
+                                        $categoryImageUrl = \App\Support\ImageUpload::url($categoryImage);
+                                    @endphp
+
+                                    @if ($categoryImageUrl)
+                                        <img src="{{ $categoryImageUrl }}" alt="{{ $category->tentheloai }}" class="h-14 w-14 rounded-xl border border-white/10 object-cover">
+                                    @else
+                                        <span class="inline-flex h-14 w-14 items-center justify-center rounded-xl border border-dashed border-white/10 text-xs text-[#8a93a3]">No img</span>
+                                    @endif
+                                </td>
                                 <td class="px-4 py-4 text-[#a8b1bf]">{{ $category->nhom ?: 'Chưa có' }}</td>
                                 <td class="px-4 py-4">{{ $category->status ? 'Hiển thị' : 'Ẩn' }}</td>
                                 <td class="px-4 py-4 text-[#a8b1bf]">{{ optional($category->updated_at)->format('d/m/Y H:i') }}</td>
@@ -42,7 +55,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-4 py-10 text-center text-sm text-[#8a93a3]">Chưa có thể loại nào.</td>
+                                <td colspan="6" class="px-4 py-10 text-center text-sm text-[#8a93a3]">Chưa có thể loại nào.</td>
                             </tr>
                         @endforelse
                     </tbody>

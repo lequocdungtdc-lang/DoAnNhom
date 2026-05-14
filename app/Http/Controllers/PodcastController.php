@@ -30,6 +30,13 @@ class PodcastController extends Controller
             'podcasts' => $query->paginate(10)->withQueryString(),
             // Tổng podcast đang hiển thị
             'totalPodcasts' => Podcast::where('status', true)->count(),
+            // Tổng lượt nghe
+            'totalViews' => Podcast::sum('views'),
+            // Podcast nhiều view nhất
+            'mostViewedPodcast' => Podcast::where('status', true)
+                ->orderBy('views', 'desc')
+                ->first(),
+
         ]);
     }
 
@@ -121,5 +128,16 @@ class PodcastController extends Controller
         return redirect()
             ->route('admin.podcasts.index')
             ->with('status', 'Xóa podcast thành công.');
+    }
+    public function show(int $id): View
+    {
+        $podcast = Podcast::findOrFail($id);
+
+        // Tăng lượt nghe
+        $podcast->increment('views');
+
+        return view('podcasts.show', [
+            'podcast' => $podcast,
+        ]);
     }
 }

@@ -14,6 +14,20 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\PodcastController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\NewsController;
+
+// === ADMIN NEWS ===
+Route::prefix('admin')->group(function () {
+    Route::get('/news', [App\Http\Controllers\Admin\NewsController::class, 'index'])->name('admin.news.index');
+    Route::get('/news/create', [App\Http\Controllers\Admin\NewsController::class, 'create'])->name('admin.news.create');
+    Route::post('/news', [App\Http\Controllers\Admin\NewsController::class, 'store'])->name('admin.news.store');
+});
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/tin-tuc', [NewsController::class, 'index'])->name('news.index');
+Route::get('/tin-tuc/{slug}', [NewsController::class, 'show'])->name('news.show');
+
+// Trang xếp hạng (nếu có)
+Route::get('/bang-xep-hang', [HomeController::class, 'rankings'])->name('rankings');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -126,4 +140,6 @@ Route::prefix('admin')
             });
         Route::get('/activity_logs', [ActivityLogController::class, 'index'])
             ->name('activities.index');
+        Route::get('/podcast/{id}', [PodcastController::class, 'show'])
+            ->name('podcasts.show');
     });

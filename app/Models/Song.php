@@ -15,12 +15,15 @@ class Song extends Model
         'tenbaihat',
         'nghesi',
         'theloai',
+        'id_album',
         'file_amthanh',
         'anh_daidien',
+        'luot_nghe',
         'status',
     ];
 
     protected $casts = [
+        'luot_nghe' => 'integer',
         'status' => 'boolean',
     ];
 
@@ -33,6 +36,11 @@ class Song extends Model
     public function category()
     {
         return $this->belongsTo(Categories::class, 'theloai', 'id');
+    }
+
+    public function album()
+    {
+        return $this->belongsTo(Album::class, 'id_album', 'id');
     }
 
     public function likedByUsers()

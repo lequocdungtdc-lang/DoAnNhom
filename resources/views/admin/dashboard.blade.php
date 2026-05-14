@@ -74,13 +74,18 @@
             <div class="admin-card">
                 <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">Thao tác nhanh</p>
                 <div class="mt-5 grid gap-3">
-                    <a href="{{ route('admin.categories.index') }}" class="flex items-center justify-between rounded-2xl border border-white/8 bg-white/[0.02] px-4 py-4 text-sm text-white transition hover:bg-white/[0.05]">
-                        <span>Mở thể loại</span>
-                        <span class="text-[#8a93a3]">Categories</span>
-                    </a>
+                    
                     <a href="{{ route('admin.songs.index') }}" class="flex items-center justify-between rounded-2xl border border-white/8 bg-white/[0.02] px-4 py-4 text-sm text-white transition hover:bg-white/[0.05]">
                         <span>Mở bài hát</span>
                         <span class="text-[#8a93a3]">Songs</span>
+                    </a>
+                    <a href="{{ route('admin.podcasts.index') }}" class="flex items-center justify-between rounded-2xl border border-white/8 bg-white/[0.02] px-4 py-4 text-sm text-white transition hover:bg-white/[0.05]">
+                        <span>Mở podcast</span>
+                        <span class="text-[#8a93a3]">Podcasts</span>
+                    </a>
+                    <a href="{{ route('admin.categories.index') }}" class="flex items-center justify-between rounded-2xl border border-white/8 bg-white/[0.02] px-4 py-4 text-sm text-white transition hover:bg-white/[0.05]">
+                        <span>Mở thể loại</span>
+                        <span class="text-[#8a93a3]">Categories</span>
                     </a>
                     <a href="{{ route('admin.activities.index') }}" class="flex items-center justify-between rounded-2xl border border-white/8 bg-white/[0.02] px-4 py-4 text-sm text-white transition hover:bg-white/[0.05]">
                         <span>Mở hoạt động</span>

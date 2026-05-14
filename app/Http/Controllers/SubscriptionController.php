@@ -9,6 +9,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\ActivityLog;
+use Illuminate\Support\Facades\DB;
 
 class SubscriptionController extends Controller
 {
@@ -73,11 +75,45 @@ class SubscriptionController extends Controller
                 $q->where('fullname', 'like', '%' . $search . '%');
             });
         }
+        // Tổng subscription
+        $totalSubscriptions = Subscription::count();
 
+        // Tổng doanh thu
+        $totalRevenue = Subscription::join('plans', 'subscriptions.plan_id', '=', 'plans.id')
+            ->sum('plans.price');
+        // Revenue theo tháng, dựa trên tháng bắt đầu của subscription
+        $monthlyRevenue = Subscription::join(
+            'plans',
+            'subscriptions.plan_id',
+            '=',
+            'plans.id'
+        )
+            ->whereYear(
+                'subscriptions.starts_at',
+                now()->year
+            )
+            ->select(
+                DB::raw('MONTH(subscriptions.starts_at) as month'),
+                DB::raw('SUM(plans.price) as revenue')
+            )
+            ->groupBy(DB::raw('MONTH(subscriptions.starts_at)'))
+            ->orderBy('month')
+            ->get();
+
+        // Labels chart
+        $chartLabels = $monthlyRevenue->pluck('month');
+
+        // Revenue chart
+        $chartRevenue = $monthlyRevenue->pluck('revenue');
         return view('admin.subscriptions.index', [
             'subscriptions' => $query
                 ->paginate(10)
                 ->withQueryString(),
+            'totalSubscriptions' => $totalSubscriptions,
+            'totalRevenue' => $totalRevenue,
+            'monthlyRevenue' => $monthlyRevenue,
+            'chartLabels' => $chartLabels,
+            'chartRevenue' => $chartRevenue,
         ]);
     }
     public function update(Request $request, int $id): RedirectResponse
@@ -103,7 +139,12 @@ class SubscriptionController extends Controller
 
         // Update
         $subscription->update($validated);
-
+        ActivityLog::create([
+            'module' => 'Subscription',
+            'action' => 'Cập nhật subscription',
+            'title' => 'Subscription #' . $subscription->id,
+            'user_id' => auth()->id(),
+        ]);
         return redirect()
             ->route('admin.subscriptions.index')
             ->with('status', 'Cập nhật subscription thành công.');
@@ -113,6 +154,13 @@ class SubscriptionController extends Controller
         $subscription = Subscription::findOrFail($id);
 
         $subscription->delete();
+
+        ActivityLog::create([
+            'module' => 'Subscription',
+            'action' => 'Xóa subscription',
+            'title' => 'Subscription #' . $subscription->id,
+            'user_id' => auth()->id(),
+        ]);
 
         return redirect()
             ->route('admin.subscriptions.index')

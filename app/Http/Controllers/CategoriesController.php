@@ -3,18 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categories;
+use App\Support\ImageUpload;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class CategoriesController extends Controller
 {
-   public function index(Request $request): View
+    public function index(Request $request): View
     {
         // Tìm kiếm theo tên và nhóm
         $search = $request->query('search');
         $query = Categories::latest();
-        if (!empty($search) && mb_strlen($search) > 2) {
+        if (! empty($search) && mb_strlen($search) > 2) {
             $query->where('tentheloai', 'like', '%' . $search . '%')
             ->orWhere('nhom', 'like', '%' . $search . '%');
         }
@@ -36,12 +37,18 @@ class CategoriesController extends Controller
         $validated = $request->validate([
             'tentheloai' => ['required', 'string', 'max:255'],
             'nhom' => ['nullable', 'string', 'max:255'],
-            'image' => ['nullable', 'string', 'max:255'],
+            'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:4096'],
             'description' => ['nullable', 'string'],
             'status' => ['nullable', 'boolean'],
         ]);
 
         $validated['status'] = $request->boolean('status');
+
+        if ($request->hasFile('image_upload')) {
+            $validated['image'] = ImageUpload::store($request->file('image_upload'), 'category_images');
+        }
+
+        unset($validated['image_upload']);
 
         Categories::create($validated);
 
@@ -62,7 +69,7 @@ class CategoriesController extends Controller
         $validated = $request->validate([
             'tentheloai' => ['required', 'string', 'max:255'],
             'nhom' => ['nullable', 'string', 'max:255'],
-            'image' => ['nullable', 'string', 'max:255'],
+            'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:4096'],
             'description' => ['nullable', 'string'],
             'status' => ['nullable', 'boolean'],
         ]);
@@ -70,6 +77,22 @@ class CategoriesController extends Controller
         $validated['status'] = $request->boolean('status');
 
         $category = Categories::findOrFail($id);
+
+        if ($request->hasFile('image_upload')) {
+            $imagePath = ImageUpload::store(
+                $request->file('image_upload'),
+                'category_images',
+                'public',
+                $category->image,
+            );
+
+            if ($imagePath !== null) {
+                $validated['image'] = $imagePath;
+            }
+        }
+
+        unset($validated['image_upload']);
+
         $category->update($validated);
 
         return redirect()->route('admin.categories.index')
@@ -78,7 +101,11 @@ class CategoriesController extends Controller
 
     public function delete(int $id): RedirectResponse
     {
-        Categories::findOrFail($id)->delete();
+        $category = Categories::findOrFail($id);
+
+        ImageUpload::delete($category->image);
+
+        $category->delete();
 
         return redirect()->route('admin.categories.index')
             ->with('status', 'Xóa thể loại thành công.');

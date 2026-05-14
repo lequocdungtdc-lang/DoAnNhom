@@ -15,15 +15,16 @@
 
 
         {{-- TABLE --}}
-        <div class="mt-6 overflow-hidden rounded-3xl border border-white/8">
+        <div class="my-6 overflow-hidden rounded-3xl border border-white/8">
 
             <table class="min-w-full divide-y divide-white/8">
-                    <thead class="bg-white/[0.03]">
-                        <tr class="text-left text-sm text-[#8a93a3]">
+                <thead class="bg-white/[0.03]">
+                    <tr class="text-left text-sm text-[#8a93a3]">
 
                         <th class="px-4 py-4">ID</th>
                         <th class="px-4 py-4">Người dùng</th>
                         <th class="px-4 py-4">Gói</th>
+                        <th class="px-4 py-4">Giá gói</th>
                         <th class="px-4 py-4">Ngày bắt đầu</th>
                         <th class="px-4 py-4">Ngày hết hạn</th>
                         <th class="px-4 py-4">Trạng thái</th>
@@ -42,6 +43,9 @@
                         <td class="px-4 py-4">#{{ $subscription->id }}</td>
                         <td class="px-4 py-4">{{ $subscription->user->fullname ?? 'N/A' }}</td>
                         <td class="px-4 py-4">{{ $subscription->plan->name ?? 'N/A' }}</td>
+                        <td class="px-4 py-4">
+                            {{ $subscription->plan ? number_format($subscription->plan->price, 0, ',', '.') . ' đ' : 'N/A' }}
+                        </td>
                         <td class="px-4 py-4">{{ $subscription->starts_at }}</td>
                         <td class="px-4 py-4">{{ $subscription->expires_at }}</td>
                         <td class="px-4 py-4">
@@ -103,13 +107,207 @@
 
         </div>
 
+
         {{-- PAGINATION --}}
         <div class="mt-6">
             {{ $subscriptions->links() }}
         </div>
 
     </div>
+    <div class="my-5 grid gap-4 md:grid-cols-2">
 
+
+
+        {{-- Tổng subscription --}}
+        <article class="admin-card">
+
+            <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">
+                Subscription
+            </p>
+
+            <p class="mt-4 text-3xl font-semibold text-white">
+                {{ $totalSubscriptions }}
+            </p>
+
+            <p class="mt-2 text-sm text-[#8a93a3]">
+                Tổng lượt đăng ký gói cước.
+            </p>
+
+        </article>
+
+        {{-- Tổng doanh thu --}}
+        <article class="admin-card">
+
+            <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">
+                Doanh thu
+            </p>
+
+            <p class="mt-4 text-3xl font-semibold text-emerald-400">
+                {{ number_format($totalRevenue) }}đ
+            </p>
+
+            <p class="mt-2 text-sm text-[#8a93a3]">
+                Tổng doanh thu từ subscription.
+            </p>
+
+        </article>
+
+    </div>
+    <!-- Biểu đồ doanh thu -->
+    <div class="admin-card mb-6">
+
+        <div class="flex items-center justify-between">
+
+            <div>
+                <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">
+                    Revenue Analytics
+                </p>
+
+                <h2 class="mt-2 text-2xl font-semibold text-white">
+                    Biểu đồ doanh thu theo tháng
+                </h2>
+            </div>
+
+        </div>
+
+        <div class="mt-6 h-[400px]">
+
+            <canvas id="revenueChart"></canvas>
+
+        </div>
+
+    </div>
+    <!-- Bảng doanh thu theo tháng -->
+    <div class="admin-card mb-6">
+
+        <div class="flex items-center justify-between">
+
+            <div>
+                <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">
+                    Revenue Analytics
+                </p>
+
+                <h2 class="mt-2 text-2xl font-semibold text-white">
+                    Doanh thu theo tháng
+                </h2>
+            </div>
+
+        </div>
+
+        <div class="mt-6 overflow-x-auto">
+
+            <table class="w-full">
+
+                <thead class="text-left text-sm text-[#7f8898]">
+
+                    <tr>
+                        <th class="py-3">Tháng</th>
+                        <th class="py-3">Doanh thu</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach($monthlyRevenue as $item)
+
+                    <tr class="border-t border-white/5 text-white">
+
+                        <td class="py-4">
+                            Tháng {{ $item->month }}
+                        </td>
+
+                        <td class="py-4 font-semibold text-emerald-400">
+                            {{ number_format($item->revenue) }}đ
+                        </td>
+
+                    </tr>
+
+                    @endforeach
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
 </section>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('revenueChart');
 
+    new Chart(ctx, {
+
+        type: 'bar',
+
+        data: {
+
+            labels: @json($chartLabels),
+
+            datasets: [{
+
+                label: 'Doanh thu',
+
+                data: @json($chartRevenue),
+
+                borderWidth: 2,
+
+                borderRadius: 12,
+
+                backgroundColor: 'rgba(16, 163, 127, 0.5)',
+
+                borderColor: '#10a37f',
+
+                hoverBackgroundColor: '#10a37f',
+            }]
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+                    labels: {
+                        color: '#ffffff'
+                    }
+                }
+            },
+
+            scales: {
+
+                x: {
+
+                    ticks: {
+                        color: '#cfd5df'
+                    },
+
+                    grid: {
+                        color: 'rgba(255,255,255,0.05)'
+                    }
+                },
+
+                y: {
+
+                    ticks: {
+
+                        color: '#cfd5df',
+
+                        callback: function(value) {
+                            return value.toLocaleString() + 'đ';
+                        }
+                    },
+
+                    grid: {
+                        color: 'rgba(255,255,255,0.05)'
+                    }
+                }
+            }
+        }
+    });
+</script>
 @endsection
