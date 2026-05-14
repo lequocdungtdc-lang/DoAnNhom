@@ -11,7 +11,7 @@
                 <a href="{{ route('admin.categories.index') }}" class="rounded-2xl border border-white/10 px-4 py-3 text-sm text-white transition hover:bg-white/5">Quay lại</a>
             </div>
 
-            <form action="{{ $isEdit ? route('admin.categories.update', $category->id) : route('admin.categories.store') }}" method="POST" class="mt-8 space-y-5">
+            <form action="{{ $isEdit ? route('admin.categories.update', $category->id) : route('admin.categories.store') }}" method="POST" enctype="multipart/form-data" class="mt-8 space-y-5">
                 @csrf
                 @if ($isEdit)
                     @method('PUT')
@@ -20,34 +20,35 @@
                 <div class="grid gap-5 md:grid-cols-2">
                     <div>
                         <label class="mb-2 block text-sm text-[#cfd5df]">Tên thể loại</label>
-                        <input name="tentheloai" value="{{ old('tentheloai', $category->tentheloai) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
+                        <input name="tentheloai" value="{{ old('tentheloai', $category->tentheloai) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-admin-primary">
                         @error('tentheloai') <p class="mt-2 text-sm text-red-300">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="mb-2 block text-sm text-[#cfd5df]">Nhóm</label>
-                        <input name="nhom" value="{{ old('nhom', $category->nhom) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
+                        <input name="nhom" value="{{ old('nhom', $category->nhom) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-admin-primary">
                     </div>
                 </div>
 
-                <div>
-                    <label class="mb-2 block text-sm text-[#cfd5df]">Ảnh đại diện (URL)</label>
-                    <input name="image" value="{{ old('image', $category->image) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
-                </div>
+                @include('admin.partials.image-upload', [
+                    'name' => 'image_upload',
+                    'label' => 'Ảnh đại diện',
+                    'value' => $category->image,
+                ])
 
                 <div>
                     <label class="mb-2 block text-sm text-[#cfd5df]">Mô tả</label>
-                    <textarea name="description" rows="4" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">{{ old('description', $category->description) }}</textarea>
+                    <textarea name="description" rows="4" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-admin-primary">{{ old('description', $category->description) }}</textarea>
                 </div>
 
                 <div>
                     <label class="mb-2 block text-sm text-[#cfd5df]">Trạng thái</label>
-                    <select name="status" class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-[#10a37f]">
+                    <select name="status" class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-admin-primary">
                         <option value="1" @selected((string) old('status', (int) $category->status) === '1')>Hiển thị</option>
                         <option value="0" @selected((string) old('status', (int) $category->status) === '0')>Ẩn</option>
                     </select>
                 </div>
 
-                <button type="submit" class="rounded-2xl bg-[#10a37f] px-5 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">
+                <button type="submit" class="rounded-2xl bg-admin-primary px-5 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">
                     {{ $isEdit ? 'Lưu thay đổi' : 'Tạo thể loại' }}
                 </button>
             </form>
