@@ -9,7 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Carbon\Carbon;
 use App\Models\User;
-
+use App\Models\ActivityLog;
 class SubscriptionController extends Controller
 {
     public function create(): View
@@ -103,7 +103,12 @@ class SubscriptionController extends Controller
 
         // Update
         $subscription->update($validated);
-
+        ActivityLog::create([
+            'module' => 'Subscription',
+            'action' => 'Cập nhật subscription',
+            'title' => 'Subscription #' . $subscription->id,
+            'user_id' => auth()->id(),
+        ]);
         return redirect()
             ->route('admin.subscriptions.index')
             ->with('status', 'Cập nhật subscription thành công.');
@@ -113,6 +118,13 @@ class SubscriptionController extends Controller
         $subscription = Subscription::findOrFail($id);
 
         $subscription->delete();
+
+        ActivityLog::create([
+            'module' => 'Subscription',
+            'action' => 'Xóa subscription',
+            'title' => 'Subscription #' . $subscription->id,
+            'user_id' => auth()->id(),
+        ]);
 
         return redirect()
             ->route('admin.subscriptions.index')
