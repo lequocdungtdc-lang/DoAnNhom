@@ -17,6 +17,7 @@ class PodcastSeeder extends Seeder
                 'audio_file' => 'podcasts/tam-su-dem-khuya.mp3',
                 'thumbnail' => 'https://picsum.photos/seed/podcast1/500/300',
                 'duration' => 1250,
+                'views' => 1657,
                 'status' => true,
             ],
 
@@ -26,6 +27,7 @@ class PodcastSeeder extends Seeder
                 'audio_file' => 'podcasts/ca-phe-cuoi-tuan.mp3',
                 'thumbnail' => 'https://picsum.photos/seed/podcast2/500/300',
                 'duration' => 980,
+                'views' => 700,
                 'status' => true,
             ],
 
@@ -35,6 +37,7 @@ class PodcastSeeder extends Seeder
                 'audio_file' => 'podcasts/hanh-trinh-lap-trinh.mp3',
                 'thumbnail' => 'https://picsum.photos/seed/podcast3/500/300',
                 'duration' => 2100,
+                'views' => 2850,
                 'status' => true,
             ],
 
@@ -44,6 +47,7 @@ class PodcastSeeder extends Seeder
                 'audio_file' => 'podcasts/chuyen-nguoi-tre.mp3',
                 'thumbnail' => 'https://picsum.photos/seed/podcast4/500/300',
                 'duration' => 1540,
+                'views' => 4442,
                 'status' => false,
             ],
 
@@ -53,6 +57,7 @@ class PodcastSeeder extends Seeder
                 'audio_file' => 'podcasts/midnight-stories.mp3',
                 'thumbnail' => 'https://picsum.photos/seed/podcast5/500/300',
                 'duration' => 1870,
+                'views' => 4312,
                 'status' => true,
             ],
 

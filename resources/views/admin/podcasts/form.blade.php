@@ -14,19 +14,19 @@
             </div>
 
             <a href="{{ route('admin.podcasts.index') }}"
-               class="rounded-2xl border border-white/10 px-4 py-3 text-sm text-white transition hover:bg-white/5">
+                class="rounded-2xl border border-white/10 px-4 py-3 text-sm text-white transition hover:bg-white/5">
                 Quay lại
             </a>
         </div>
 
         <form action="{{ $isEdit ? route('admin.podcasts.update', $podcast->id) : route('admin.podcasts.store') }}"
-              method="POST"
-              class="mt-8 space-y-5">
+            method="POST"
+            class="mt-8 space-y-5">
 
             @csrf
 
             @if ($isEdit)
-                @method('PUT')
+            @method('PUT')
             @endif
 
             <div>
@@ -37,11 +37,10 @@
                 <input
                     name="title"
                     value="{{ old('title', $podcast->title) }}"
-                    class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]"
-                >
+                    class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
 
                 @error('title')
-                    <p class="mt-2 text-sm text-red-300">{{ $message }}</p>
+                <p class="mt-2 text-sm text-red-300">{{ $message }}</p>
                 @enderror
             </div>
 
@@ -53,15 +52,14 @@
                 <textarea
                     name="description"
                     rows="5"
-                    class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]"
-                >{{ old('description', $podcast->description) }}</textarea>
+                    class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">{{ old('description', $podcast->description) }}</textarea>
 
                 @error('description')
-                    <p class="mt-2 text-sm text-red-300">{{ $message }}</p>
+                <p class="mt-2 text-sm text-red-300">{{ $message }}</p>
                 @enderror
             </div>
 
-            <div class="grid gap-5 md:grid-cols-2">
+            <div class="grid gap-5 md:grid-cols-3">
 
                 <div>
                     <label class="mb-2 block text-sm text-[#cfd5df]">
@@ -72,11 +70,10 @@
                         name="audio_file"
                         value="{{ old('audio_file', $podcast->audio_file) }}"
                         placeholder="podcasts/demo.mp3"
-                        class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]"
-                    >
+                        class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
 
                     @error('audio_file')
-                        <p class="mt-2 text-sm text-red-300">{{ $message }}</p>
+                    <p class="mt-2 text-sm text-red-300">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -89,11 +86,25 @@
                         type="number"
                         name="duration"
                         value="{{ old('duration', $podcast->duration) }}"
-                        class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]"
-                    >
+                        class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
 
                     @error('duration')
-                        <p class="mt-2 text-sm text-red-300">{{ $message }}</p>
+                    <p class="mt-2 text-sm text-red-300">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div>
+                    <label class="mb-2 block text-sm text-[#cfd5df]">
+                        Lượt nghe
+                    </label>
+
+                    <input
+                        type="number"
+                        name="views"
+                        value="{{ old('views', $podcast->views ?? 0) }}"
+                        class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
+
+                    @error('views')
+                    <p class="mt-2 text-sm text-red-300">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -107,21 +118,19 @@
                 <input
                     name="thumbnail"
                     value="{{ old('thumbnail', $podcast->thumbnail) }}"
-                    class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]"
-                >
+                    class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
 
                 @error('thumbnail')
-                    <p class="mt-2 text-sm text-red-300">{{ $message }}</p>
+                <p class="mt-2 text-sm text-red-300">{{ $message }}</p>
                 @enderror
             </div>
 
             @if ($podcast->thumbnail)
-                <div>
-                    <img
-                        src="{{ $podcast->thumbnail }}"
-                        class="h-32 w-32 rounded-2xl object-cover border border-white/10"
-                    >
-                </div>
+            <div>
+                <img
+                    src="{{ $podcast->thumbnail }}"
+                    class="h-32 w-32 rounded-2xl object-cover border border-white/10">
+            </div>
             @endif
 
             <div>
@@ -131,8 +140,7 @@
 
                 <select
                     name="status"
-                    class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-[#10a37f]"
-                >
+                    class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-[#10a37f]">
                     <option value="1" @selected((string) old('status', (int) $podcast->status) === '1')>
                         Hiển thị
                     </option>
@@ -145,8 +153,7 @@
 
             <button
                 type="submit"
-                class="rounded-2xl bg-[#10a37f] px-5 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110"
-            >
+                class="rounded-2xl bg-[#10a37f] px-5 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">
                 {{ $isEdit ? 'Lưu thay đổi' : 'Tạo podcast' }}
             </button>
 

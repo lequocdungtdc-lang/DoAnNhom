@@ -126,4 +126,6 @@ Route::prefix('admin')
             });
         Route::get('/activity_logs', [ActivityLogController::class, 'index'])
             ->name('activities.index');
+        Route::get('/podcast/{id}', [PodcastController::class, 'show'])
+            ->name('podcasts.show');
     });
