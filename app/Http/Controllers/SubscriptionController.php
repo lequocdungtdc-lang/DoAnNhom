@@ -10,6 +10,7 @@ use Illuminate\View\View;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\ActivityLog;
+
 class SubscriptionController extends Controller
 {
     public function create(): View
@@ -73,11 +74,18 @@ class SubscriptionController extends Controller
                 $q->where('fullname', 'like', '%' . $search . '%');
             });
         }
+        // Tổng subscription
+        $totalSubscriptions = Subscription::count();
 
+        // Tổng doanh thu
+        $totalRevenue = Subscription::join('plans', 'subscriptions.plan_id', '=', 'plans.id')
+            ->sum('plans.price');
         return view('admin.subscriptions.index', [
             'subscriptions' => $query
                 ->paginate(10)
                 ->withQueryString(),
+            'totalSubscriptions' => $totalSubscriptions,
+            'totalRevenue' => $totalRevenue,
         ]);
     }
     public function update(Request $request, int $id): RedirectResponse

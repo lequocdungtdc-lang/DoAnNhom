@@ -4,7 +4,7 @@
 <section class="py-4 md:py-6">
     @if ($mostViewedPodcast)
 
-    <div class="mt-4 rounded-3xl border border-white/10 bg-white/[0.03] p-5">
+    <div class="mt-5 rounded-3xl border border-white/10 bg-white/[0.03] p-5">
 
         <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">
             Podcast nổi bật
@@ -37,7 +37,7 @@
     </div>
 
     @endif
-    <div class="admin-card">
+    <div class="admin-card my-4">
 
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 
@@ -162,9 +162,9 @@
         </div>
 
     </div>
-    <div class="mt-4 grid gap-4 md:grid-cols-2">
+    <div class="mt-2 grid gap-4 md:grid-cols-2">
 
-        <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+        <article class="admin-card">
             <p class="text-sm text-[#8a93a3]">
                 Podcast đang hiển thị
             </p>
@@ -172,9 +172,9 @@
             <h3 class="mt-2 text-2xl font-bold text-white">
                 {{ $totalPodcasts }}
             </h3>
-        </div>
+        </article>
 
-        <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+        <article class="admin-card">
             <p class="text-sm text-[#8a93a3]">
                 Tổng lượt nghe
             </p>
@@ -182,7 +182,7 @@
             <h3 class="mt-2 text-2xl font-bold text-white">
                 {{ number_format($totalViews) }}
             </h3>
-        </div>
+        </article>
 
     </div>
 
