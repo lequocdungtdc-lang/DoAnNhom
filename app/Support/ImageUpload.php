@@ -69,6 +69,10 @@ class ImageUpload
             return asset($relativePath);
         }
 
+        if (! Storage::disk($disk)->exists($relativePath)) {
+            return null;
+        }
+
         return asset('storage/'.$relativePath);
     }
 

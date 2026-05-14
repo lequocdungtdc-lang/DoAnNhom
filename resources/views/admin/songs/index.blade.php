@@ -32,10 +32,11 @@
                         <td class="px-4 py-4">
                             @php
                                 $songImage = trim((string) $song->anh_daidien);
+                                $songImageUrl = \App\Support\ImageUpload::url($songImage);
                             @endphp
 
-                            @if ($songImage !== '')
-                                <img src="{{ asset('storage/'.ltrim($songImage, '/')) }}" alt="{{ $song->tenbaihat }}" class="h-14 w-14 rounded-xl border border-white/10 object-cover">
+                            @if ($songImageUrl)
+                                <img src="{{ $songImageUrl }}" alt="{{ $song->tenbaihat }}" class="h-14 w-14 rounded-xl border border-white/10 object-cover">
                             @else
                                 <span class="inline-flex h-14 w-14 items-center justify-center rounded-xl border border-dashed border-white/10 text-xs text-[#8a93a3]">No img</span>
                             @endif
