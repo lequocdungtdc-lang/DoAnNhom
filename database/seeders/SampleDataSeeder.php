@@ -27,29 +27,7 @@ class SampleDataSeeder extends Seeder
         DB::table('albums')->delete();
         DB::table('categories')->delete();
 
-        User::updateOrCreate(
-            ['email' => 'admin@gmail.com'],
-            [
-                'fullname' => 'Quản trị viên mẫu',
-                'password' => Hash::make('123456'),
-                'role' => 'admin',
-                'status' => 'active',
-                'phone' => '0900000001',
-                'address' => 'Thành phố Hồ Chí Minh',
-            ]
-        );
-
-        User::updateOrCreate(
-            ['email' => 'user@gmail.com'],
-            [
-                'fullname' => 'Người dùng mẫu',
-                'password' => Hash::make('123456'),
-                'role' => 'user',
-                'status' => 'active',
-                'phone' => '0900000002',
-                'address' => 'Hà Nội',
-            ]
-        );
+       
 
         $categories = collect([
             [
