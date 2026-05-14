@@ -126,6 +126,12 @@
         </div>
 
     </div>
+    <p class="mt-2 text-sm text-[#8a93a3]">
+    Tổng podcast đang hiển thị:
+    <span class="font-semibold text-white">
+        {{ $totalPodcasts }}
+    </span>
+</p>
 
 </section>
 @endsection

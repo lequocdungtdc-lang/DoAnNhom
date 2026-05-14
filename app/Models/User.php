@@ -66,9 +66,13 @@ class User extends Authenticatable
         return $this->hasOne(Subscription::class)
             ->where('status', true)
             ->where('expires_at', '>', now());
-        if (auth()->user()->activeSubscription) {
+    }
+    // Controller
 
-            echo "Còn VIP";
-        }
+    public function dashboard()
+    {
+        $totalUsers = User::count();
+
+        return view('admin.dashboard', compact('totalUsers'));
     }
 }

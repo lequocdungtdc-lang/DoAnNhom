@@ -47,7 +47,7 @@
         <div class="mt-5 grid gap-5 md:grid-cols-2 2xl:grid-cols-4">
             <article class="admin-card">
                 <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">Người dùng</p>
-                <p class="mt-4 text-3xl font-semibold text-white">1.2k</p>
+                <p class="mt-4 text-3xl font-semibold text-white"></p>
                 <p class="mt-2 text-sm text-[#8a93a3]">Tổng người dùng đang hoạt động trong hệ thống.</p>
             </article>
 
