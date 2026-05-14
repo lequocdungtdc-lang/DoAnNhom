@@ -19,6 +19,8 @@
                         <th class="px-4 py-3">Tên bài hát</th>
                         <th class="px-4 py-3">Nghệ sĩ</th>
                         <th class="px-4 py-3">Thể loại</th>
+                        <th class="px-4 py-3">Album</th>
+                        <th class="px-4 py-3">Lượt nghe</th>
                         <th class="px-4 py-3">Tệp âm thanh</th>
                         <th class="px-4 py-3">Trạng thái</th>
                         <th class="px-4 py-3 text-right">Thao tác</th>
@@ -41,6 +43,8 @@
                         <td class="px-4 py-4">{{ $song->tenbaihat }}</td>
                         <td class="px-4 py-4 text-[#a8b1bf]">{{ $song->artist?->name_artist ?: 'Chưa có' }}</td>
                         <td class="px-4 py-4 text-[#a8b1bf]">{{ $song->category?->tentheloai ?: 'Chưa có' }}</td>
+                        <td class="px-4 py-4 text-[#a8b1bf]">{{ $song->album?->ten_album ?: 'Chưa có' }}</td>
+                        <td class="px-4 py-4 text-[#a8b1bf]">{{ number_format((int) $song->luot_nghe) }}</td>
                         <td class="px-4 py-4 text-[#a8b1bf]">
                             @php
                                 $songAudio = trim((string) $song->file_amthanh);
@@ -74,7 +78,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="7" class="px-4 py-10 text-center text-sm text-[#8a93a3]">Chưa có bài hát nào.</td>
+                        <td colspan="9" class="px-4 py-10 text-center text-sm text-[#8a93a3]">Chưa có bài hát nào.</td>
                     </tr>
                     @endforelse
                 </tbody>

@@ -46,6 +46,27 @@
                         </select>
                         @error('theloai') <p class="mt-2 text-sm text-red-300">{{ $message }}</p> @enderror
                     </div>
+                    <div>
+                        <label class="mb-2 block text-sm text-[#cfd5df]">Album</label>
+                        <select name="id_album" class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-admin-primary">
+                            <option value="">Không thuộc album</option>
+                            @foreach ($albums as $album)
+                                <option value="{{ $album->id }}" @selected((string) old('id_album', $song->id_album) === (string) $album->id)>{{ $album->ten_album }}</option>
+                            @endforeach
+                        </select>
+                        @error('id_album') <p class="mt-2 text-sm text-red-300">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+
+                <div>
+                    <div>
+                        <label class="mb-2 block text-sm text-[#cfd5df]">Lượt nghe</label>
+                        <input type="number" min="0" name="luot_nghe" value="{{ old('luot_nghe', $song->luot_nghe ?? 0) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-admin-primary">
+                        @error('luot_nghe') <p class="mt-2 text-sm text-red-300">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+
+                <div>
                     @include('admin.partials.audio-upload', [
                         'name' => 'audio_upload',
                         'label' => 'Tệp âm thanh MP3',

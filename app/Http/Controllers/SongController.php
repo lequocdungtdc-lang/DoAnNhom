@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Album;
 use App\Models\Artist;
 use App\Models\Categories;
 use App\Models\Song;
@@ -21,7 +22,7 @@ class SongController extends Controller
         $search = $request->query('search');
 
         // Khởi tạo query với các quan hệ liên quan
-        $query = Song::with(['artist', 'category'])->latest();
+        $query = Song::with(['artist', 'category', 'album'])->latest();
 
         // Nếu từ khóa > 2 ký tự (giống logic Categories bạn vừa đưa)
         if (! empty($search) && mb_strlen($search) > 2) {
@@ -39,6 +40,7 @@ class SongController extends Controller
     {
         return view('admin.songs.form', [
             'song' => new Song(),
+            'albums' => Album::orderBy('ten_album')->get(),
             'artists' => Artist::orderBy('name_artist')->get(),
             'categories' => Categories::orderBy('tentheloai')->get(),
             'isEdit' => false,
@@ -51,12 +53,15 @@ class SongController extends Controller
             'tenbaihat' => ['required', 'string', 'max:255'],
             'nghesi' => ['nullable', 'exists:artists,id'],
             'theloai' => ['required', 'exists:categories,id'],
+            'id_album' => ['nullable', 'exists:albums,id'],
             'audio_upload' => ['required', 'file', 'mimes:mp3', 'max:512000'],
             'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:4096'],
+            'luot_nghe' => ['nullable', 'integer', 'min:0'],
             'status' => ['nullable', 'boolean'],
         ]);
 
         $validated['status'] = $request->boolean('status');
+        $validated['luot_nghe'] = (int) ($validated['luot_nghe'] ?? 0);
         $validated['file_amthanh'] = AudioUpload::store($request->file('audio_upload'), 'songs');
         $validated['anh_daidien'] = ImageUpload::store($request->file('image_upload'), 'song_images');
 
@@ -72,6 +77,7 @@ class SongController extends Controller
     {
         return view('admin.songs.form', [
             'song' => Song::findOrFail($id),
+            'albums' => Album::orderBy('ten_album')->get(),
             'artists' => Artist::orderBy('name_artist')->get(),
             'categories' => Categories::orderBy('tentheloai')->get(),
             'isEdit' => true,
@@ -84,12 +90,15 @@ class SongController extends Controller
             'tenbaihat' => ['required', 'string', 'max:255'],
             'nghesi' => ['nullable', 'exists:artists,id'],
             'theloai' => ['required', 'exists:categories,id'],
+            'id_album' => ['nullable', 'exists:albums,id'],
             'audio_upload' => ['nullable', 'file', 'mimes:mp3', 'max:512000'],
             'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:4096'],
+            'luot_nghe' => ['nullable', 'integer', 'min:0'],
             'status' => ['nullable', 'boolean'],
         ]);
 
         $validated['status'] = $request->boolean('status');
+        $validated['luot_nghe'] = (int) ($validated['luot_nghe'] ?? 0);
 
         $song = Song::findOrFail($id);
 
