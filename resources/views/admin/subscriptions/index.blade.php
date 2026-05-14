@@ -114,7 +114,7 @@
         </div>
 
     </div>
-    <div class="mt-2 grid gap-4 md:grid-cols-2">
+    <div class="my-5 grid gap-4 md:grid-cols-2">
 
 
 
@@ -153,6 +153,161 @@
         </article>
 
     </div>
-</section>
+    <!-- Biểu đồ doanh thu -->
+    <div class="admin-card mb-6">
 
+        <div class="flex items-center justify-between">
+
+            <div>
+                <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">
+                    Revenue Analytics
+                </p>
+
+                <h2 class="mt-2 text-2xl font-semibold text-white">
+                    Biểu đồ doanh thu theo tháng
+                </h2>
+            </div>
+
+        </div>
+
+        <div class="mt-6 h-[400px]">
+
+            <canvas id="revenueChart"></canvas>
+
+        </div>
+
+    </div>
+    <!-- Bảng doanh thu theo tháng -->
+    <div class="admin-card mb-6">
+
+        <div class="flex items-center justify-between">
+
+            <div>
+                <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">
+                    Revenue Analytics
+                </p>
+
+                <h2 class="mt-2 text-2xl font-semibold text-white">
+                    Doanh thu theo tháng
+                </h2>
+            </div>
+
+        </div>
+
+        <div class="mt-6 overflow-x-auto">
+
+            <table class="w-full">
+
+                <thead class="text-left text-sm text-[#7f8898]">
+
+                    <tr>
+                        <th class="py-3">Tháng</th>
+                        <th class="py-3">Doanh thu</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach($monthlyRevenue as $item)
+
+                    <tr class="border-t border-white/5 text-white">
+
+                        <td class="py-4">
+                            Tháng {{ $item->month }}
+                        </td>
+
+                        <td class="py-4 font-semibold text-emerald-400">
+                            {{ number_format($item->revenue) }}đ
+                        </td>
+
+                    </tr>
+
+                    @endforeach
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('revenueChart');
+
+    new Chart(ctx, {
+
+        type: 'bar',
+
+        data: {
+
+            labels: @json($chartLabels),
+
+            datasets: [{
+
+                label: 'Doanh thu',
+
+                data: @json($chartRevenue),
+
+                borderWidth: 2,
+
+                borderRadius: 12,
+
+                backgroundColor: 'rgba(16, 163, 127, 0.5)',
+
+                borderColor: '#10a37f',
+
+                hoverBackgroundColor: '#10a37f',
+            }]
+        },
+
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+                    labels: {
+                        color: '#ffffff'
+                    }
+                }
+            },
+
+            scales: {
+
+                x: {
+
+                    ticks: {
+                        color: '#cfd5df'
+                    },
+
+                    grid: {
+                        color: 'rgba(255,255,255,0.05)'
+                    }
+                },
+
+                y: {
+
+                    ticks: {
+
+                        color: '#cfd5df',
+
+                        callback: function(value) {
+                            return value.toLocaleString() + 'đ';
+                        }
+                    },
+
+                    grid: {
+                        color: 'rgba(255,255,255,0.05)'
+                    }
+                }
+            }
+        }
+    });
+</script>
 @endsection
