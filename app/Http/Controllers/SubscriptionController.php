@@ -12,6 +12,26 @@ use App\Models\User;
 
 class SubscriptionController extends Controller
 {
+    public function create(): View
+    {
+        return view('admin.subscriptions.form', [
+            'subscription' => new Subscription(),
+            'isEdit' => false,
+            'users' => User::all(),
+            'plans' => Plan::all(),
+        ]);
+    }
+
+    public function edit(int $id): View
+    {
+        return view('admin.subscriptions.form', [
+            'subscription' => Subscription::findOrFail($id),
+            'isEdit' => true,
+            'users' => User::all(),
+            'plans' => Plan::all(),
+        ]);
+    }
+
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -50,7 +70,7 @@ class SubscriptionController extends Controller
 
             $query->whereHas('user', function ($q) use ($search) {
 
-                $q->where('name', 'like', '%' . $search . '%');
+                $q->where('fullname', 'like', '%' . $search . '%');
             });
         }
 

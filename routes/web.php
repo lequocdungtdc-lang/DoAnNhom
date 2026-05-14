@@ -96,16 +96,6 @@ Route::prefix('admin')
                 Route::put('/{id}', [AlbumController::class, 'update'])->name('update');
                 Route::delete('/{id}', [AlbumController::class, 'delete'])->name('delete');
             });
-        Route::prefix('plans')
-            ->name('plans.')
-            ->group(function () {
-                Route::get('/', [PlanController::class, 'index'])->name('index');
-                Route::get('/create', [PlanController::class, 'create'])->name('create');
-                Route::post('/', [PlanController::class, 'store'])->name('store');
-                Route::get('/{id}/edit', [PlanController::class, 'edit'])->name('edit');
-                Route::put('/{id}', [PlanController::class, 'update'])->name('update');
-                Route::delete('/{id}', [PlanController::class, 'delete'])->name('delete');
-            });
         Route::prefix('subscriptions')
             ->name('subscriptions.')
             ->group(function () {
