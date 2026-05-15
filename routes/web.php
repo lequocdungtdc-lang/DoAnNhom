@@ -22,10 +22,19 @@ Route::prefix('admin')->group(function () {
     Route::get('/news/create', [App\Http\Controllers\Admin\NewsController::class, 'create'])->name('admin.news.create');
     Route::post('/news', [App\Http\Controllers\Admin\NewsController::class, 'store'])->name('admin.news.store');
 });
-Route::get('/', [HomeController::class, 'index'])->name('home');
+// Trang chủ - Dùng trang welcome mặc định của Laravel
+Route::get('/', function () {
+    return view('welcome');
+});
+
+// Tin tức
 Route::get('/tin-tuc', [NewsController::class, 'index'])->name('news.index');
 Route::get('/tin-tuc/{slug}', [NewsController::class, 'show'])->name('news.show');
 
+// Giữ route cũ nếu cần
+Route::get('/news', function () {
+    return redirect('/tin-tuc');
+});
 // Trang xếp hạng (nếu có)
 Route::get('/bang-xep-hang', [HomeController::class, 'rankings'])->name('rankings');
 

@@ -1,45 +1,41 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\News;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class NewsController extends Controller
 {
-    public function index()
+    /**
+     * Danh sách tin tức
+     */
+    public function index(): View
     {
-        $news = News::latest()->paginate(10);
-        return view('admin.news.index', compact('news'));
+        $news = News::where('status', 'published')
+                    ->latest()
+                    ->paginate(9);
+
+        return view('news.index', compact('news'));
     }
 
-    public function create()
+    /**
+     * Chi tiết tin tức
+     */
+    public function show($slug): View
     {
-        return view('admin.news.create');
-    }
+        $news = News::where('slug', $slug)->firstOrFail();
+        
+        // Tăng lượt xem
+        $news->increment('views');
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required',
-            'summary' => 'nullable',
-            'category' => 'nullable|string',
-        ]);
+        // Tin liên quan
+        $relatedNews = News::where('category', $news->category)
+                            ->where('id', '!=', $news->id)
+                            ->latest()
+                            ->limit(4)
+                            ->get();
 
-        News::create([
-            'title' => $request->title,
-            'slug' => Str::slug($request->title),
-            'content' => $request->content,
-            'summary' => $request->summary,
-            'category' => $request->category,
-            'user_id' => 1, // sau này sẽ là auth()->id()
-            'status' => 'published',
-        ]);
-
-        return redirect()->route('admin.news.index')
-                         ->with('success', 'Thêm tin tức thành công!');
+        return view('news.show', compact('news', 'relatedNews'));
     }
 }
