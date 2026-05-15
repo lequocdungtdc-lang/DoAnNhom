@@ -19,9 +19,9 @@ return new class extends Migration
             $table->boolean('status')->default(1)->after('anh_daidien');
         });
 
-        Schema::table('news', function (Blueprint $table) {
-            $table->boolean('status')->default(1)->after('id');
-        });
+        // Schema::table('news', function (Blueprint $table) {
+        //     $table->boolean('status')->default(1)->after('id');
+        // });
 
         Schema::table('comments', function (Blueprint $table) {
             $table->boolean('status')->default(1)->after('id');
@@ -49,9 +49,9 @@ return new class extends Migration
             $table->dropColumn('status');
         });
 
-        Schema::table('news', function (Blueprint $table) {
-            $table->dropColumn('status');
-        });
+        // Schema::table('news', function (Blueprint $table) {
+        //     $table->dropColumn('status');
+        // });
 
         Schema::table('comments', function (Blueprint $table) {
             $table->dropColumn('status');

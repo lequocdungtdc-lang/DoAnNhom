@@ -10,21 +10,21 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-{
-    Schema::create('news', function (Blueprint $table) {
-        $table->id();
-        $table->string('title');
-        $table->string('slug')->unique();
-        $table->longText('content');
-        $table->text('summary')->nullable();
-        $table->string('image')->nullable();
-        $table->string('category')->nullable();
-        $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
-        $table->integer('views')->default(0);
-        $table->enum('status', ['draft', 'published'])->default('published');
-        $table->timestamps();
-    });
-}
+    {
+        Schema::create('news', function (Blueprint $table) {
+            $table->id();
+            $table->string('title')->nullable();
+            $table->string('slug')->nullable();
+            $table->longText('content')->nullable();
+            $table->text('summary')->nullable();
+            $table->string('image')->nullable();
+            $table->string('category')->nullable();
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null');
+            $table->integer('views')->default(0);
+            $table->enum('status', ['draft', 'published'])->default('published');
+            $table->timestamps();
+        });
+    }
 
     /**
      * Reverse the migrations.
