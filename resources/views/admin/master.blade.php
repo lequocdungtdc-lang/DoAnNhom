@@ -9,9 +9,20 @@
                     <div class="flex min-w-0 flex-col">
                         @include('admin.layouts.header')
                         <main class="min-h-0 flex-1 overflow-auto px-4 pb-4 md:px-6 md:pb-6">
-                            @if (session('status'))
+                            {{-- @if (session('status'))
                                 <div class="mt-4 rounded-2xl border border-emerald-400/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
                                     {{ session('status') }}
+                                </div>
+                            @endif --}}
+                            @if (session('message'))
+                                <div class="
+                                    mt-4 rounded-2xl px-4 py-3 text-sm font-medium border
+                                    {{ session('status') === 'success'
+                                        ? 'border-emerald-400/20 bg-emerald-500/10 text-emerald-200'
+                                        : 'border-red-400/20 bg-red-500/10 text-red-200'
+                                    }}
+                                ">
+                                    {{ session('message') }}
                                 </div>
                             @endif
                             @yield('content')

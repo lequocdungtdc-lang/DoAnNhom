@@ -87,6 +87,8 @@ Route::prefix('admin')
                 Route::get('/{id}/edit', [SongController::class, 'edit'])->name('edit');
                 Route::put('/{id}', [SongController::class, 'update'])->name('update');
                 Route::delete('/{id}', [SongController::class, 'delete'])->name('delete');
+                Route::get('/export', [SongController::class, 'export'])->name('export');
+                Route::post('/import', [SongController::class, 'import'])->name('import');
             });
 
         Route::prefix('artists')
