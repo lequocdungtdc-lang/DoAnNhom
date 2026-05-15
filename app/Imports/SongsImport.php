@@ -20,16 +20,16 @@ class SongsImport implements ToModel, WithHeadingRow
         */
 
         // tìm nghệ sĩ
-        $artist = Artist::where('name_artist', $row['nghe_si']??0)->first();
+        $artist = Artist::where('name_artist', $row['nghe_si'] ?? 0)->first();
 
         // tìm thể loại
-        $category = Categories::where('tentheloai', $row['the_loai'])->first();
+        $category = Categories::where('tentheloai', $row['the_loai'] ?? 0)->first();
 
         // tìm album
-        $album = Album::where('ten_album', $row['album'])->first();
+        $album = Album::where('ten_album', $row['album'] ?? 0)->first();
+
         $arrSong = [
-            'tenbaihat'    => $row['ten_bai_hat'] ?? '',
-            'nghesi'       => $artist?->id?? 0,
+            'nghesi'       => $artist?->id ?? 0,
             'theloai'      => $category?->id ?? 0,
             'id_album'     => $album?->id ?? 0,
             'file_amthanh' => $row['file_am_thanh'] ?? '',
@@ -38,6 +38,12 @@ class SongsImport implements ToModel, WithHeadingRow
             'status'       => $row['status'] ?? 1,
         ];
 
-        return new Song($arrSong);
+        return Song::updateOrCreate(
+            [
+                // điều kiện kiểm tra tồn tại
+                'tenbaihat' => $row['ten_bai_hat'] ?? '',
+            ],
+            $arrSong
+        );
     }
 }
