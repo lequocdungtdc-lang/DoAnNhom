@@ -22,7 +22,6 @@ class SampleDataSeeder extends Seeder
         DB::table('comments')->delete();
         DB::table('listening_history')->delete();
         DB::table('song_views')->delete();
-        DB::table('news')->delete();
         DB::table('artists')->delete();
         DB::table('albums')->delete();
         DB::table('categories')->delete();
@@ -127,10 +126,6 @@ class SampleDataSeeder extends Seeder
         ])->map(fn($item) => Album::create($item));
 
 
-        News::insert([
-            ['status' => true, 'created_at' => now(), 'updated_at' => now()],
-            ['status' => true, 'created_at' => now(), 'updated_at' => now()],
-        ]);
 
         $user = User::where('email', 'user@gmail.com')->first();
 
