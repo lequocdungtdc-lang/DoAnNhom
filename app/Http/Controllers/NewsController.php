@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -11,8 +10,8 @@ class NewsController extends Controller
 {
     public function index()
     {
-        $news = News::latest()->paginate(10);
-        return view('admin.news.index', compact('news'));
+        $newsList = News::latest()->paginate(10);
+        return view('admin.news.index', compact('newsList'));
     }
 
     public function create()
@@ -41,5 +40,11 @@ class NewsController extends Controller
 
         return redirect()->route('admin.news.index')
                          ->with('success', 'Thêm tin tức thành công!');
+    }
+
+    public function show(string $slug)
+    {
+        $news = News::where('slug', $slug)->firstOrFail();
+        return view('admin.news.index', ['newsList' => News::latest()->paginate(10), 'currentNews' => $news]);
     }
 }

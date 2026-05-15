@@ -11,9 +11,20 @@
 
         <div class="mt-4 flex items-center gap-4">
 
-            <img
+            {{-- <img
                 src="{{ $mostPopular->anh_daidien }}"
-                class="h-20 w-20 rounded-2xl object-cover border border-white/10">
+                class="h-20 w-20 rounded-2xl object-cover border border-white/10"> --}}
+
+                 @php
+                    $songImage = trim((string) $mostPopular->anh_daidien);
+                    $songImageUrl = \App\Support\ImageUpload::url($songImage);
+                @endphp
+
+                @if ($songImageUrl)
+                    <img src="{{ $songImageUrl }}" alt="{{ $mostPopular->tenbaihat }}" class="h-14 w-14 rounded-xl border border-white/10 object-cover">
+                @else
+                    <span class="inline-flex h-14 w-14 items-center justify-center rounded-xl border border-dashed border-white/10 text-xs text-[#8a93a3]">No img</span>
+                @endif
 
             <div>
 
@@ -37,12 +48,51 @@
 
     @endif
     <div class="admin-card my-5">
-        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+       <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
-                <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">Bài hát</p>
-                <h2 class="mt-2 text-2xl font-semibold text-white">Quản lý bài hát</h2>
+                <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">
+                    Bài hát
+                </p>
+
+                <h2 class="mt-2 text-2xl font-semibold text-white">
+                    Quản lý bài hát
+                </h2>
             </div>
-            <a href="{{ route('admin.songs.create') }}" class="rounded-2xl bg-admin-primary px-4 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">Thêm bài hát</a>
+
+            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-end">
+
+                {{-- Import Excel --}}
+                <form action="{{ route('admin.songs.import') }}"
+                    method="POST"
+                    enctype="multipart/form-data"
+                    class="flex items-center gap-2">
+                    @csrf
+
+                    <input type="file"
+                        name="file"
+                        class="hidden"
+                        id="importExcel"
+                        onchange="this.form.submit()">
+
+                    <label for="importExcel"
+                        class="cursor-pointer rounded-2xl bg-blue-500 px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110">
+                        Import Excel
+                    </label>
+                </form>
+
+                {{-- Export Excel --}}
+                <a href="{{ route('admin.songs.export') }}"
+                class="rounded-2xl bg-green-500 px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110">
+                    Export Excel
+                </a>
+
+                {{-- Thêm bài hát --}}
+                <a href="{{ route('admin.songs.create') }}"
+                class="rounded-2xl bg-admin-primary px-4 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">
+                    Thêm bài hát
+                </a>
+
+            </div>
         </div>
 
         <div class="mt-6 overflow-hidden rounded-3xl border border-white/8">

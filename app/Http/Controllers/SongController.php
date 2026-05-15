@@ -12,6 +12,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Models\ActivityLog;
+use App\Exports\SongsExport;
+use App\Imports\SongsImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SongController extends Controller
 {
@@ -168,5 +171,38 @@ class SongController extends Controller
 
         return redirect()->route('admin.songs.index')
             ->with('status', 'Xóa bài hát thành công.');
+    }
+
+    //excel export
+   public function export()
+    {
+        return Excel::download(
+            new SongsExport,
+            'danh-sach-bai-hat.xlsx'
+        );
+    }
+    // excel import
+    public function import(Request $request)
+    {
+        try {
+
+            $request->validate([
+                'file' => 'required|mimes:xlsx,xls,csv',
+            ]);
+
+            Excel::import(new SongsImport, $request->file('file'));
+
+            return back()->with([
+                'status' => 'success',
+                'message' => 'Import Excel thành công',
+            ]);
+
+        } catch (\Exception $e) {
+
+            return back()->with([
+                'status' => 'error',
+                'message' => 'Import thất bại: ' . $e->getMessage(),
+            ]);
+        }
     }
 }

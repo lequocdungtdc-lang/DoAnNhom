@@ -48,10 +48,10 @@ class Song extends Model
         return $this->belongsToMany(User::class, 'song_user_likes', 'song_id', 'user_id');
     }
 
-    public function songView()
-    {
-        return $this->hasOne(SongView::class);
-    }
+    // public function songView()
+    // {
+    //     return $this->hasOne(SongView::class);
+    // }
 
     public function getViewCountAttribute()
     {
