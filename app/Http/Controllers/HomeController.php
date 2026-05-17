@@ -108,4 +108,52 @@ class HomeController extends Controller
             'searchCategories' => $searchCategories,
         ]);
     }
+
+    public function rankings(): View
+    {
+        $likedSongIds = auth()->check()
+            ? auth()->user()->likedSongs()->pluck('songs.id')->all()
+            : [];
+
+        $topSongs = Song::with(['artist', 'category', 'album'])
+            ->where('status', true)
+            ->where('created_at', '>=', now()->subDays(30))
+            ->orderByDesc('listen_count')
+            ->limit(50)
+            ->get()
+            ->map(function (Song $song) use ($likedSongIds) {
+                return [
+                    'id' => $song->id,
+                    'title' => $song->title,
+                    'artist' => $song->artist?->name ?? 'Nghệ sĩ chưa cập nhật',
+                    'category' => $song->category?->name ?? 'Chưa phân loại',
+                    'thumbnail' => ImageUpload::url($song->thumbnail),
+                    'audio_url' => AudioUpload::url($song->audio_file),
+                    'listen_count' => $song->listen_count,
+                    'is_liked' => in_array($song->id, $likedSongIds, true),
+                ];
+            })
+            ->filter(fn (array $song) => $song['audio_url'] !== null)
+            ->values();
+
+        $topArtists = Artist::withCount(['songs as listen_count' => function ($query) {
+                $query->selectRaw('sum(songs.listen_count)');
+            }])
+            ->where('status', true)
+            ->orderByDesc('listen_count')
+            ->limit(10)
+            ->get()
+            ->map(fn ($a) => [
+                'id' => $a->id,
+                'name' => $a->name,
+                'image' => ImageUpload::url($a->image),
+                'listen_count' => $a->listen_count ?? 0,
+            ]);
+
+        return view('web.rankings.index', [
+            'topSongs' => $topSongs,
+            'topArtists' => $topArtists,
+            'featuredSong' => $topSongs->first(),
+        ]);
+    }
 }

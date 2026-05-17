@@ -1,7 +1,7 @@
 @extends('web.master', ['title' => 'Đăng ký'])
 
 @section('content')
-    <div class="mx-auto grid max-w-5xl gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+    <div class="mx-auto grid max-w-5xl  my-5">
         <section class="rounded-[2rem] border border-white/10 bg-stone-900/80 p-8 shadow-2xl">
             <h2 class="text-2xl font-semibold text-white">Tạo tài khoản</h2>
             <p class="mt-2 text-sm text-stone-400">Đăng ký nhanh để bắt đầu sử dụng hệ thống.</p>
@@ -51,14 +51,5 @@
             <p class="mt-6 text-sm text-stone-400">Đã có tài khoản? <a href="{{ route('login') }}" class="font-medium text-orange-300 hover:text-orange-200">Đăng nhập</a></p>
         </section>
 
-        <section class="rounded-[2rem] border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur">
-            <p class="mb-3 text-sm uppercase tracking-[0.3em] text-orange-300/80">Lõi xác thực</p>
-            <h1 class="text-4xl font-semibold leading-tight text-white">Đăng ký tài khoản mới để vào khu vực web và admin theo role.</h1>
-            <ul class="mt-6 space-y-3 text-sm text-stone-300">
-                <li class="rounded-2xl border border-white/10 bg-black/10 px-4 py-3">Role mặc định của tài khoản mới là <strong class="text-orange-200">user</strong>.</li>
-                <li class="rounded-2xl border border-white/10 bg-black/10 px-4 py-3">Đăng nhập thành công sẽ tạo session auth chuẩn của Laravel.</li>
-                <li class="rounded-2xl border border-white/10 bg-black/10 px-4 py-3">Nếu role là admin, hệ thống tự redirect vào bảng điều khiển admin.</li>
-            </ul>
-        </section>
     </div>
 @endsection
