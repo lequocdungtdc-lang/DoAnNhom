@@ -18,12 +18,11 @@ class HomeController extends Controller
             ? auth()->user()->likedSongs()->pluck('songs.id')->all()
             : [];
 
-
         $songs = Song::with(['artist', 'category', 'album'])
             ->where('status', true)
             ->latest()
             ->get()
-            ->map(function (Song $song) {
+            ->map(function (Song $song) use ($likedSongIds) {
                 return [
                     'id' => $song->id,
                     'title' => $song->title,
@@ -33,7 +32,7 @@ class HomeController extends Controller
                     'thumbnail' => ImageUpload::url($song->thumbnail),
                     'audio_url' => AudioUpload::url($song->audio_file),
                     'listen_count' => $song->listen_count,
-                    'is_liked' => !empty($likedSongIds) ? in_array($song->id, $likedSongIds, true) : false,
+                    'is_liked' => in_array($song->id, $likedSongIds, true),
                 ];
             })
             ->filter(fn (array $song) => $song['audio_url'] !== null)
