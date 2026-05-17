@@ -33,7 +33,7 @@ class HomeController extends Controller
             ->filter(fn (array $song) => $song['audio_url'] !== null)
             ->values();
 
-        return view('web.music', [
+        return view('web.home.index', [
             'songs' => $songs,
             'featuredSong' => $songs->first(),
             'topSongs' => $songs->sortByDesc('listen_count')->take(5)->values(),

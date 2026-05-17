@@ -1,4 +1,4 @@
-@extends('layouts.web', ['title' => 'Hồ sơ'])
+@extends('web.master', ['title' => 'Hồ sơ'])
 
 @section('content')
     <div class="mx-auto max-w-3xl rounded-[2rem] border border-white/10 bg-stone-900/80 p-8 shadow-2xl">

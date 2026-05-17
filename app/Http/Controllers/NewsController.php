@@ -10,8 +10,13 @@ class NewsController extends Controller
 {
     public function index()
     {
-        $newsList = News::latest()->paginate(10);
-        return view('admin.news.index', compact('newsList'));
+        $news = News::where('status', 'published')
+            ->latest()
+            ->paginate(9);
+
+        return view('web.news.index', [
+            'news' => $news,
+        ]);
     }
 
     public function create()
@@ -46,7 +51,19 @@ class NewsController extends Controller
 
     public function show(string $slug)
     {
-        $news = News::where('slug', $slug)->firstOrFail();
-        return view('admin.news.index', ['newsList' => News::latest()->paginate(10), 'currentNews' => $news]);
+        $news = News::where('status', 'published')
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        $relatedNews = News::where('status', 'published')
+            ->whereKeyNot($news->id)
+            ->latest()
+            ->take(3)
+            ->get();
+
+        return view('web.news.show', [
+            'news' => $news,
+            'relatedNews' => $relatedNews,
+        ]);
     }
 }

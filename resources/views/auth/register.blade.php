@@ -1,4 +1,4 @@
-@extends('layouts.web', ['title' => 'Đăng ký'])
+@extends('web.master', ['title' => 'Đăng ký'])
 
 @section('content')
     <div class="mx-auto grid max-w-5xl gap-8 lg:grid-cols-[0.9fr_1.1fr]">
