@@ -42,8 +42,10 @@ class UserController extends Controller
 
         User::create($validated);
 
-        return redirect()->route('admin.users.index')
-            ->with('status', 'Tạo người dùng thành công.');
+        return redirect()->route('admin.users.index')->with([
+            'status' => 'success',
+            'message' => 'Tạo người dùng thành công.',
+        ]);
     }
 
     public function edit(int $id): View
@@ -76,16 +78,20 @@ class UserController extends Controller
 
         $user->update($validated);
 
-        return redirect()->route('admin.users.index')
-            ->with('status', 'Cập nhật người dùng thành công.');
+        return redirect()->route('admin.users.index')->with([
+            'status' => 'success',
+            'message' => 'Cập nhật người dùng thành công.',
+        ]);
     }
 
     public function delete(int $id): RedirectResponse
     {
         User::findOrFail($id)->delete();
 
-        return redirect()->route('admin.users.index')
-            ->with('status', 'Xóa người dùng thành công.');
+        return redirect()->route('admin.users.index')->with([
+            'status' => 'success',
+            'message' => 'Xóa người dùng thành công.',
+        ]);
     }
 
     public function bulkDelete(Request $request): RedirectResponse
@@ -97,7 +103,9 @@ class UserController extends Controller
 
         User::whereIn('id', $validated['ids'])->delete();
 
-        return redirect()->route('admin.users.index')
-            ->with('status', 'Xóa các người dùng đã chọn thành công.');
+        return redirect()->route('admin.users.index')->with([
+            'status' => 'success',
+            'message' => 'Xóa các người dùng đã chọn thành công.',
+        ]);
     }
 }

@@ -14,13 +14,12 @@ class SongsExport implements FromCollection, WithHeadings, ShouldAutoSize
         return Song::with([
                 'artist',
                 'category',
-                'album'
+                'album',
             ])
             ->get()
             ->map(function ($song) {
 
                 return [
-                    $song->id,
                     $song->title,
                     $song->artist?->name ?? '',
                     $song->category?->name ?? '',
@@ -29,8 +28,8 @@ class SongsExport implements FromCollection, WithHeadings, ShouldAutoSize
                     $song->thumbnail,
                     $song->listen_count,
                     $song->view_count,
-                    $song->status ? 'Hiển thị' : 'Ẩn',
-                    optional($song->created_at)->format('d/m/Y'),
+                    $song->status ? 1 : 0,
+                    optional($song->created_at)->format('Y-m-d'),
                 ];
             });
     }
@@ -38,17 +37,16 @@ class SongsExport implements FromCollection, WithHeadings, ShouldAutoSize
     public function headings(): array
     {
         return [
-            'ID',
-            'Tên bài hát',
-            'Nghệ sĩ',
-            'Thể loại',
-            'Album',
-            'File âm thanh',
-            'Ảnh đại diện',
-            'Lượt nghe',
-            'Lượt xem',
-            'Trạng thái',
-            'Ngày tạo',
+            'title',
+            'artist',
+            'category',
+            'album',
+            'audio_file',
+            'thumbnail',
+            'listen_count',
+            'views',
+            'status',
+            'created_at',
         ];
     }
 }

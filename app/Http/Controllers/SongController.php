@@ -85,8 +85,10 @@ class SongController extends Controller
             'user_id' => auth()->id(),
         ]);
 
-        return redirect()->route('admin.songs.index')
-            ->with('status', 'Tạo bài hát thành công.');
+        return redirect()->route('admin.songs.index')->with([
+            'status' => 'success',
+            'message' => 'Tạo bài hát thành công.',
+        ]);
     }
 
     public function edit(int $id): View
@@ -150,8 +152,10 @@ class SongController extends Controller
 
         $song->update($validated);
 
-        return redirect()->route('admin.songs.index')
-            ->with('status', 'Cập nhật bài hát thành công.');
+        return redirect()->route('admin.songs.index')->with([
+            'status' => 'success',
+            'message' => 'Cập nhật bài hát thành công.',
+        ]);
     }
 
     public function delete(int $id): RedirectResponse
@@ -169,12 +173,21 @@ class SongController extends Controller
             'user_id' => auth()->id(),
         ]);
 
-        return redirect()->route('admin.songs.index')
-            ->with('status', 'Xóa bài hát thành công.');
+        return redirect()->route('admin.songs.index')->with([
+            'status' => 'success',
+            'message' => 'Xóa bài hát thành công.',
+        ]);
     }
 
     public function bulkDelete(Request $request): RedirectResponse
     {
+        if (! $request->filled('ids')) {
+            return redirect()->route('admin.songs.index')->with([
+                'status' => 'error',
+                'message' => 'Vui lòng chọn ít nhất một bài hát để xóa.',
+            ]);
+        }
+
         $validated = $request->validate([
             'ids' => ['required', 'array'],
             'ids.*' => ['integer', 'exists:songs,id'],
@@ -195,12 +208,14 @@ class SongController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.songs.index')
-            ->with('status', 'Xóa các bài hát đã chọn thành công.');
+        return redirect()->route('admin.songs.index')->with([
+            'status' => 'success',
+            'message' => 'Xóa các bài hát đã chọn thành công.',
+        ]);
     }
 
     //excel export
-   public function export()
+    public function export()
     {
         return Excel::download(
             new SongsExport,
@@ -213,7 +228,12 @@ class SongController extends Controller
         try {
 
             $request->validate([
-                'file' => 'required|mimes:xlsx,xls,csv',
+                'file' => ['required', 'file', 'mimes:xlsx,xls,csv', 'max:10240'],
+            ], [
+                'file.required' => 'Vui lòng chọn file Excel để import.',
+                'file.file' => 'File import không hợp lệ.',
+                'file.mimes' => 'File import phải có định dạng xlsx, xls hoặc csv.',
+                'file.max' => 'File import không được vượt quá 10MB.',
             ]);
 
             Excel::import(new SongsImport, $request->file('file'));

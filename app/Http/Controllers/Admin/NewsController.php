@@ -39,7 +39,9 @@ class NewsController extends Controller
             'status'   => 'published',
         ]);
 
-        return redirect()->route('admin.news.index')
-                         ->with('success', '✅ Thêm tin tức thành công!');
+        return redirect()->route('admin.news.index')->with([
+            'status' => 'success',
+            'message' => 'Thêm tin tức thành công!',
+        ]);
     }
 }

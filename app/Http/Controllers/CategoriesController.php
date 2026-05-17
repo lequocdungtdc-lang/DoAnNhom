@@ -52,8 +52,10 @@ class CategoriesController extends Controller
 
         Categories::create($validated);
 
-        return redirect()->route('admin.categories.index')
-            ->with('status', 'Tạo thể loại thành công.');
+        return redirect()->route('admin.categories.index')->with([
+            'status' => 'success',
+            'message' => 'Tạo thể loại thành công.',
+        ]);
     }
 
     public function edit(int $id): View
@@ -95,8 +97,10 @@ class CategoriesController extends Controller
 
         $category->update($validated);
 
-        return redirect()->route('admin.categories.index')
-            ->with('status', 'Cập nhật thể loại thành công.');
+        return redirect()->route('admin.categories.index')->with([
+            'status' => 'success',
+            'message' => 'Cập nhật thể loại thành công.',
+        ]);
     }
 
     public function delete(int $id): RedirectResponse
@@ -107,8 +111,10 @@ class CategoriesController extends Controller
 
         $category->delete();
 
-        return redirect()->route('admin.categories.index')
-            ->with('status', 'Xóa thể loại thành công.');
+        return redirect()->route('admin.categories.index')->with([
+            'status' => 'success',
+            'message' => 'Xóa thể loại thành công.',
+        ]);
     }
 
     public function bulkDelete(Request $request): RedirectResponse
@@ -125,7 +131,9 @@ class CategoriesController extends Controller
             $category->delete();
         }
 
-        return redirect()->route('admin.categories.index')
-            ->with('status', 'Xóa các thể loại đã chọn thành công.');
+        return redirect()->route('admin.categories.index')->with([
+            'status' => 'success',
+            'message' => 'Xóa các thể loại đã chọn thành công.',
+        ]);
     }
 }

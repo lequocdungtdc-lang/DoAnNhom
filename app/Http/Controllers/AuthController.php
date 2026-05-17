@@ -34,10 +34,16 @@ class AuthController extends Controller
         $user = $request->user();
 
         if ($user?->role === 'admin') {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.dashboard')->with([
+                'status' => 'success',
+                'message' => 'Đăng nhập thành công.',
+            ]);
         }
 
-        return redirect()->intended(route('dashboard'));
+        return redirect()->intended(route('dashboard'))->with([
+            'status' => 'success',
+            'message' => 'Đăng nhập thành công.',
+        ]);
     }
 
     public function showRegister()
@@ -65,7 +71,10 @@ class AuthController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        return redirect()->route('dashboard');
+        return redirect()->route('dashboard')->with([
+            'status' => 'success',
+            'message' => 'Đăng ký tài khoản thành công.',
+        ]);
     }
 
     public function logout(Request $request): RedirectResponse
@@ -75,6 +84,9 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login');
+        return redirect()->route('login')->with([
+            'status' => 'success',
+            'message' => 'Đăng xuất thành công.',
+        ]);
     }
 }

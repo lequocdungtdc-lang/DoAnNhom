@@ -24,6 +24,9 @@ class ProfileController extends Controller
 
         $request->user()->update($validated);
 
-        return back()->with('status', 'Cap nhat thong tin thanh cong.');
+        return back()->with([
+            'status' => 'success',
+            'message' => 'Cập nhật thông tin thành công.',
+        ]);
     }
 }

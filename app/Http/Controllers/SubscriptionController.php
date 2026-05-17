@@ -57,7 +57,10 @@ class SubscriptionController extends Controller
 
         return redirect()
             ->route('admin.subscriptions.index')
-            ->with('status', 'Tạo subscription thành công.');
+            ->with([
+                'status' => 'success',
+                'message' => 'Tạo subscription thành công.',
+            ]);
     }
     public function index(Request $request): View
     {
@@ -147,7 +150,10 @@ class SubscriptionController extends Controller
         ]);
         return redirect()
             ->route('admin.subscriptions.index')
-            ->with('status', 'Cập nhật subscription thành công.');
+            ->with([
+                'status' => 'success',
+                'message' => 'Cập nhật subscription thành công.',
+            ]);
     }
     public function delete(int $id): RedirectResponse
     {
@@ -164,7 +170,10 @@ class SubscriptionController extends Controller
 
         return redirect()
             ->route('admin.subscriptions.index')
-            ->with('status', 'Xóa subscription thành công.');
+            ->with([
+                'status' => 'success',
+                'message' => 'Xóa subscription thành công.',
+            ]);
     }
 
     public function bulkDelete(Request $request): RedirectResponse
@@ -190,6 +199,9 @@ class SubscriptionController extends Controller
 
         return redirect()
             ->route('admin.subscriptions.index')
-            ->with('status', 'Xóa các subscription đã chọn thành công.');
+            ->with([
+                'status' => 'success',
+                'message' => 'Xóa các subscription đã chọn thành công.',
+            ]);
     }
 }
