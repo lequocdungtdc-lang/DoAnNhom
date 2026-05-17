@@ -16,7 +16,7 @@ return new class extends Migration
         });
 
         Schema::table('songs', function (Blueprint $table) {
-            $table->boolean('status')->default(1)->after('anh_daidien');
+            $table->boolean('status')->default(1)->after('thumbnail');
         });
 
         // Schema::table('news', function (Blueprint $table) {

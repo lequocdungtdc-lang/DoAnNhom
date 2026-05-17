@@ -13,15 +13,12 @@ return new class extends Migration
     {
         Schema::create('songs', function (Blueprint $table) {
             $table->id();
-            $table->string('tenbaihat');
-            $table->unsignedBigInteger('nghesi')->nullable(); // Thay đổi kiểu dữ liệu của cột 'nghesi'
-            $table->unsignedBigInteger('theloai');
-            $table->string('file_amthanh');
-            $table->string('anh_daidien')->nullable();
+            $table->string('title');
+            $table->unsignedBigInteger('artist_id')->nullable();
+            $table->unsignedBigInteger('category_id');
+            $table->string('audio_file');
+            $table->string('thumbnail')->nullable();
             $table->timestamps();
-
-            $table->foreign('nghesi')->references('id')->on('artists')->onDelete('cascade'); // Thêm khóa ngoại
-            $table->foreign('theloai')->references('id')->on('categories')->onDelete('cascade');
         });
     }
 

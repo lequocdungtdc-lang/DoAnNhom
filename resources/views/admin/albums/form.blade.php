@@ -20,19 +20,19 @@
                 <div class="grid gap-5 md:grid-cols-2">
                     <div>
                         <label class="mb-2 block text-sm text-[#cfd5df]">Tên album</label>
-                        <input name="ten_album" value="{{ old('ten_album', $album->ten_album) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
-                        @error('ten_album') <p class="mt-2 text-sm text-red-300">{{ $message }}</p> @enderror
+                        <input name="title" value="{{ old('title', $album->title) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
+                        @error('title') <p class="mt-2 text-sm text-red-300">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="mb-2 block text-sm text-[#cfd5df]">Nghệ sĩ</label>
-                        <input name="nghe_si" value="{{ old('nghe_si', $album->nghe_si) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
-                        @error('nghe_si') <p class="mt-2 text-sm text-red-300">{{ $message }}</p> @enderror
+                        <input name="artist_name" value="{{ old('artist_name', $album->artist_name) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
+                        @error('artist_name') <p class="mt-2 text-sm text-red-300">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
                 <div>
                     <label class="mb-2 block text-sm text-[#cfd5df]">Ảnh bìa (URL)</label>
-                    <input name="anh_bia" value="{{ old('anh_bia', $album->anh_bia) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
+                    <input name="cover_image" value="{{ old('cover_image', $album->cover_image) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
                 </div>
 
                 <div>

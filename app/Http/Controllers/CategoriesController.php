@@ -16,8 +16,8 @@ class CategoriesController extends Controller
         $search = $request->query('search');
         $query = Categories::latest();
         if (! empty($search) && mb_strlen($search) > 2) {
-            $query->where('tentheloai', 'like', '%' . $search . '%')
-            ->orWhere('nhom', 'like', '%' . $search . '%');
+            $query->where('name', 'like', '%' . $search . '%')
+            ->orWhere('group_name', 'like', '%' . $search . '%');
         }
         return view('admin.categories.index', [
             'categories' => $query->paginate(10)->withQueryString(),
@@ -35,8 +35,8 @@ class CategoriesController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'tentheloai' => ['required', 'string', 'max:255'],
-            'nhom' => ['nullable', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
+            'group_name' => ['nullable', 'string', 'max:255'],
             'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:4096'],
             'description' => ['nullable', 'string'],
             'status' => ['nullable', 'boolean'],
@@ -67,8 +67,8 @@ class CategoriesController extends Controller
     public function update(Request $request, int $id): RedirectResponse
     {
         $validated = $request->validate([
-            'tentheloai' => ['required', 'string', 'max:255'],
-            'nhom' => ['nullable', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
+            'group_name' => ['nullable', 'string', 'max:255'],
             'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:4096'],
             'description' => ['nullable', 'string'],
             'status' => ['nullable', 'boolean'],
@@ -109,5 +109,23 @@ class CategoriesController extends Controller
 
         return redirect()->route('admin.categories.index')
             ->with('status', 'Xóa thể loại thành công.');
+    }
+
+    public function bulkDelete(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'ids' => ['required', 'array'],
+            'ids.*' => ['integer', 'exists:categories,id'],
+        ]);
+
+        $categories = Categories::whereIn('id', $validated['ids'])->get();
+
+        foreach ($categories as $category) {
+            ImageUpload::delete($category->image);
+            $category->delete();
+        }
+
+        return redirect()->route('admin.categories.index')
+            ->with('status', 'Xóa các thể loại đã chọn thành công.');
     }
 }

@@ -20,12 +20,12 @@
                 <div class="grid gap-5 md:grid-cols-2">
                     <div>
                         <label class="mb-2 block text-sm text-[#cfd5df]">Tên thể loại</label>
-                        <input name="tentheloai" value="{{ old('tentheloai', $category->tentheloai) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-admin-primary">
-                        @error('tentheloai') <p class="mt-2 text-sm text-red-300">{{ $message }}</p> @enderror
+                        <input name="name" value="{{ old('name', $category->name) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-admin-primary">
+                        @error('name') <p class="mt-2 text-sm text-red-300">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="mb-2 block text-sm text-[#cfd5df]">Nhóm</label>
-                        <input name="nhom" value="{{ old('nhom', $category->nhom) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-admin-primary">
+                        <input name="group_name" value="{{ old('group_name', $category->group_name) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-admin-primary">
                     </div>
                 </div>
 

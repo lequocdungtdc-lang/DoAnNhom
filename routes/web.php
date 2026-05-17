@@ -73,6 +73,7 @@ Route::prefix('admin')
                 Route::post('/', [UserController::class, 'store'])->name('store');
                 Route::get('/{id}/edit', [UserController::class, 'edit'])->name('edit');
                 Route::put('/{id}', [UserController::class, 'update'])->name('update');
+                Route::delete('/bulk-delete', [UserController::class, 'bulkDelete'])->name('bulk-delete');
                 Route::delete('/{id}', [UserController::class, 'delete'])->name('delete');
             });
 
@@ -84,6 +85,7 @@ Route::prefix('admin')
                 Route::post('/', [CategoriesController::class, 'store'])->name('store');
                 Route::get('/{id}/edit', [CategoriesController::class, 'edit'])->name('edit');
                 Route::put('/{id}', [CategoriesController::class, 'update'])->name('update');
+                Route::delete('/bulk-delete', [CategoriesController::class, 'bulkDelete'])->name('bulk-delete');
                 Route::delete('/{id}', [CategoriesController::class, 'delete'])->name('delete');
             });
 
@@ -95,6 +97,7 @@ Route::prefix('admin')
                 Route::post('/', [SongController::class, 'store'])->name('store');
                 Route::get('/{id}/edit', [SongController::class, 'edit'])->name('edit');
                 Route::put('/{id}', [SongController::class, 'update'])->name('update');
+                Route::delete('/bulk-delete', [SongController::class, 'bulkDelete'])->name('bulk-delete');
                 Route::delete('/{id}', [SongController::class, 'delete'])->name('delete');
                 Route::get('/export', [SongController::class, 'export'])->name('export');
                 Route::post('/import', [SongController::class, 'import'])->name('import');
@@ -108,6 +111,7 @@ Route::prefix('admin')
                 Route::post('/', [ArtistsController::class, 'store'])->name('store');
                 Route::get('/{id}/edit', [ArtistsController::class, 'edit'])->name('edit');
                 Route::put('/{id}', [ArtistsController::class, 'update'])->name('update');
+                Route::delete('/bulk-delete', [ArtistsController::class, 'bulkDelete'])->name('bulk-delete');
                 Route::delete('/{id}', [ArtistsController::class, 'delete'])->name('delete');
             });
 
@@ -119,6 +123,7 @@ Route::prefix('admin')
                 Route::post('/', [AlbumController::class, 'store'])->name('store');
                 Route::get('/{id}/edit', [AlbumController::class, 'edit'])->name('edit');
                 Route::put('/{id}', [AlbumController::class, 'update'])->name('update');
+                Route::delete('/bulk-delete', [AlbumController::class, 'bulkDelete'])->name('bulk-delete');
                 Route::delete('/{id}', [AlbumController::class, 'delete'])->name('delete');
             });
         Route::prefix('subscriptions')
@@ -136,6 +141,9 @@ Route::prefix('admin')
                 Route::put('/{id}', [SubscriptionController::class, 'update'])
                     ->name('update');
 
+                Route::delete('/bulk-delete', [SubscriptionController::class, 'bulkDelete'])
+                    ->name('bulk-delete');
+
                 Route::delete('/{id}', [SubscriptionController::class, 'delete'])
                     ->name('delete');
             });
@@ -147,6 +155,7 @@ Route::prefix('admin')
                 Route::post('/', [PodcastController::class, 'store'])->name('store');
                 Route::get('/{id}/edit', [PodcastController::class, 'edit'])->name('edit');
                 Route::put('/{id}', [PodcastController::class, 'update'])->name('update');
+                Route::delete('/bulk-delete', [PodcastController::class, 'bulkDelete'])->name('bulk-delete');
                 Route::delete('/{id}', [PodcastController::class, 'delete'])->name('delete');
             });
         Route::get('/activity_logs', [ActivityLogController::class, 'index'])

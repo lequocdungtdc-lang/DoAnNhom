@@ -12,35 +12,35 @@ class Song extends Model
     protected $table = 'songs';
 
     protected $fillable = [
-        'tenbaihat',
-        'nghesi',
-        'theloai',
-        'id_album',
-        'file_amthanh',
-        'anh_daidien',
-        'luot_nghe',
+        'title',
+        'artist_id',
+        'category_id',
+        'album_id',
+        'audio_file',
+        'thumbnail',
+        'listen_count',
         'status',
     ];
 
     protected $casts = [
-        'luot_nghe' => 'integer',
+        'listen_count' => 'integer',
         'status' => 'boolean',
     ];
 
     // Quan hệ với nghệ sĩ (Artist)
     public function artist()
     {
-        return $this->belongsTo(Artist::class, 'nghesi', 'id');
+        return $this->belongsTo(Artist::class);
     }
 
     public function category()
     {
-        return $this->belongsTo(Categories::class, 'theloai', 'id');
+        return $this->belongsTo(Categories::class);
     }
 
     public function album()
     {
-        return $this->belongsTo(Album::class, 'id_album', 'id');
+        return $this->belongsTo(Album::class);
     }
 
     public function likedByUsers()

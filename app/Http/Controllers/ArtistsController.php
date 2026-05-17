@@ -21,7 +21,7 @@ class ArtistsController extends Controller
 
         // 3. Kiểm tra điều kiện: không trống và độ dài > 2
         if (!empty($search) && mb_strlen($search) > 2) {
-            $query->where('name_artist', 'like', '%' . $search . '%');
+            $query->where('name', 'like', '%' . $search . '%');
         }
 
         // 4. Phân trang và giữ lại tham số tìm kiếm trên URL
@@ -33,7 +33,7 @@ class ArtistsController extends Controller
     {
         return view('admin.artists.form', [
             'artist' => new Artist(),
-            'categories' => Categories::orderBy('tentheloai')->get(),
+            'categories' => Categories::orderBy('name')->get(),
             'isEdit' => false,
         ]);
     }
@@ -41,8 +41,8 @@ class ArtistsController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'name_artist' => ['required', 'string', 'max:255'],
-            'image_artist' => ['nullable', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
+            'image' => ['nullable', 'string', 'max:255'],
             'category_id' => ['required', 'exists:categories,id'],
             'status' => ['nullable', 'boolean'],
         ]);
@@ -59,7 +59,7 @@ class ArtistsController extends Controller
     {
         return view('admin.artists.form', [
             'artist' => Artist::findOrFail($id),
-            'categories' => Categories::orderBy('tentheloai')->get(),
+            'categories' => Categories::orderBy('name')->get(),
             'isEdit' => true,
         ]);
     }
@@ -67,8 +67,8 @@ class ArtistsController extends Controller
     public function update(Request $request, int $id): RedirectResponse
     {
         $validated = $request->validate([
-            'name_artist' => ['required', 'string', 'max:255'],
-            'image_artist' => ['nullable', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
+            'image' => ['nullable', 'string', 'max:255'],
             'category_id' => ['required', 'exists:categories,id'],
             'status' => ['nullable', 'boolean'],
         ]);
@@ -87,5 +87,18 @@ class ArtistsController extends Controller
 
         return redirect()->route('admin.artists.index')
             ->with('status', 'Xóa nghệ sĩ thành công.');
+    }
+
+    public function bulkDelete(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'ids' => ['required', 'array'],
+            'ids.*' => ['integer', 'exists:artists,id'],
+        ]);
+
+        Artist::whereIn('id', $validated['ids'])->delete();
+
+        return redirect()->route('admin.artists.index')
+            ->with('status', 'Xóa các nghệ sĩ đã chọn thành công.');
     }
 }

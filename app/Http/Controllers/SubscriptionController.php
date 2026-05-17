@@ -166,4 +166,30 @@ class SubscriptionController extends Controller
             ->route('admin.subscriptions.index')
             ->with('status', 'Xóa subscription thành công.');
     }
+
+    public function bulkDelete(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'ids' => ['required', 'array'],
+            'ids.*' => ['integer', 'exists:subscriptions,id'],
+        ]);
+
+        $subscriptions = Subscription::whereIn('id', $validated['ids'])->get();
+
+        foreach ($subscriptions as $subscription) {
+            $subscriptionId = $subscription->id;
+            $subscription->delete();
+
+            ActivityLog::create([
+                'module' => 'Subscription',
+                'action' => 'Xóa subscription',
+                'title' => 'Subscription #' . $subscriptionId,
+                'user_id' => auth()->id(),
+            ]);
+        }
+
+        return redirect()
+            ->route('admin.subscriptions.index')
+            ->with('status', 'Xóa các subscription đã chọn thành công.');
+    }
 }
