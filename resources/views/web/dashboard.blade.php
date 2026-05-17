@@ -1,4 +1,4 @@
-@extends('layouts.web', ['title' => 'Bảng điều khiển'])
+@extends('web.master', ['title' => 'Bảng điều khiển'])
 
 @section('content')
     <div class="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
