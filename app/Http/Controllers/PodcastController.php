@@ -129,6 +129,33 @@ class PodcastController extends Controller
             ->route('admin.podcasts.index')
             ->with('status', 'Xóa podcast thành công.');
     }
+
+    public function bulkDelete(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'ids' => ['required', 'array'],
+            'ids.*' => ['integer', 'exists:podcasts,id'],
+        ]);
+
+        $podcasts = Podcast::whereIn('id', $validated['ids'])->get();
+
+        foreach ($podcasts as $podcast) {
+            $title = $podcast->title;
+            $podcast->delete();
+
+            ActivityLog::create([
+                'module' => 'Podcast',
+                'action' => 'DELETE',
+                'title' => $title,
+                'user_id' => auth()->id(),
+            ]);
+        }
+
+        return redirect()
+            ->route('admin.podcasts.index')
+            ->with('status', 'Xóa các podcast đã chọn thành công.');
+    }
+
     public function show(int $id): View
     {
         $podcast = Podcast::findOrFail($id);

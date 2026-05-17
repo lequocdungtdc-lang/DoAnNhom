@@ -10,9 +10,9 @@ class Album extends Model
      use HasFactory;
 
     protected $fillable = [
-        'ten_album',
-        'nghe_si',
-        'anh_bia',
+        'title',
+        'artist_name',
+        'cover_image',
         'status',
     ];
 

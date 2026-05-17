@@ -9,12 +9,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('songs', function (Blueprint $table) {
-            if (! Schema::hasColumn('songs', 'id_album')) {
-                $table->unsignedBigInteger('id_album')->nullable()->after('theloai');
+            $table->foreign('artist_id')->references('id')->on('artists')->cascadeOnDelete();
+            $table->foreign('category_id')->references('id')->on('categories')->cascadeOnDelete();
+
+            if (! Schema::hasColumn('songs', 'album_id')) {
+                $table->foreignId('album_id')->nullable()->after('category_id')->constrained('albums')->nullOnDelete();
             }
 
-            if (! Schema::hasColumn('songs', 'luot_nghe')) {
-                $table->unsignedInteger('luot_nghe')->default(0)->after('anh_daidien');
+            if (! Schema::hasColumn('songs', 'listen_count')) {
+                $table->unsignedInteger('listen_count')->default(0)->after('thumbnail');
             }
 
         });
@@ -23,10 +26,15 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('songs', function (Blueprint $table) {
-            foreach (['luot_nghe', 'id_album'] as $column) {
-                if (Schema::hasColumn('songs', $column)) {
-                    $table->dropColumn($column);
-                }
+            $table->dropForeign(['artist_id']);
+            $table->dropForeign(['category_id']);
+
+            if (Schema::hasColumn('songs', 'listen_count')) {
+                $table->dropColumn('listen_count');
+            }
+
+            if (Schema::hasColumn('songs', 'album_id')) {
+                $table->dropConstrainedForeignId('album_id');
             }
         });
     }

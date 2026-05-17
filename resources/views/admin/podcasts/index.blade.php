@@ -51,10 +51,20 @@
                 </h2>
             </div>
 
-            <a href="{{ route('admin.podcasts.create') }}"
-                class="rounded-2xl bg-[#10a37f] px-4 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">
-                Thêm podcast
-            </a>
+            <div class="flex flex-col gap-3 md:flex-row md:items-center">
+                <form id="bulk-delete-podcasts-form" action="{{ route('admin.podcasts.bulk-delete') }}" method="POST" onsubmit="return confirm('Xóa các podcast đã chọn?')">
+                    @csrf
+                    @method('DELETE')
+                </form>
+                <button type="submit" form="bulk-delete-podcasts-form"
+                    class="rounded-2xl border border-red-400/20 px-4 py-3 text-sm font-semibold text-red-200 transition hover:bg-red-500/10">
+                    Xóa đã chọn
+                </button>
+                <a href="{{ route('admin.podcasts.create') }}"
+                    class="rounded-2xl bg-[#10a37f] px-4 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">
+                    Thêm podcast
+                </a>
+            </div>
 
         </div>
 
@@ -64,6 +74,9 @@
 
                 <thead class="bg-white/[0.03]">
                     <tr class="text-left text-sm text-[#8a93a3]">
+                        <th class="px-4 py-3">
+                            <input type="checkbox" data-check-all="podcast_ids" class="h-4 w-4 rounded border-white/10 bg-white/5">
+                        </th>
                         <th class="px-4 py-3">Ảnh</th>
                         <th class="px-4 py-3">Tiêu đề</th>
                         <th class="px-4 py-3">File âm thanh</th>
@@ -79,6 +92,10 @@
                     @forelse ($podcasts as $podcast)
 
                     <tr class="text-sm text-white">
+
+                        <td class="px-4 py-4">
+                            <input form="bulk-delete-podcasts-form" type="checkbox" name="ids[]" value="{{ $podcast->id }}" data-check-item="podcast_ids" class="h-4 w-4 rounded border-white/10 bg-white/5">
+                        </td>
 
                         <td class="px-4 py-4">
                             @if ($podcast->thumbnail)
@@ -143,7 +160,7 @@
                     @empty
 
                     <tr>
-                        <td colspan="6"
+                        <td colspan="8"
                             class="px-4 py-10 text-center text-sm text-[#8a93a3]">
                             Chưa có podcast nào.
                         </td>
@@ -187,4 +204,13 @@
     </div>
 
 </section>
+<script>
+    document.querySelectorAll('[data-check-all]').forEach((checkbox) => {
+        checkbox.addEventListener('change', () => {
+            document.querySelectorAll(`[data-check-item="${checkbox.dataset.checkAll}"]`).forEach((item) => {
+                item.checked = checkbox.checked;
+            });
+        });
+    });
+</script>
 @endsection

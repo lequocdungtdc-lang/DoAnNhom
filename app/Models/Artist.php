@@ -10,8 +10,8 @@ class Artist extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name_artist',
-        'image_artist',
+        'name',
+        'image',
         'category_id',
         'status',
     ];
@@ -27,6 +27,6 @@ class Artist extends Model
 
     public function songs()
     {
-        return $this->hasMany(Song::class, 'nghesi');
+        return $this->hasMany(Song::class);
     }
 }

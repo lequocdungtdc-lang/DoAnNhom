@@ -16,32 +16,32 @@ class SongsImport implements ToModel, WithHeadingRow
         /*
         File Excel mẫu:
 
-        ten_bai_hat | nghe_si | the_loai | album | file_am_thanh | anh_dai_dien | luot_nghe | status
+        title | artist | category | album | audio_file | thumbnail | listen_count | status
         */
 
         // tìm nghệ sĩ
-        $artist = Artist::where('name_artist', $row['nghe_si'] ?? 0)->first();
+        $artist = Artist::where('name', $row['artist'] ?? '')->first();
 
         // tìm thể loại
-        $category = Categories::where('tentheloai', $row['the_loai'] ?? 0)->first();
+        $category = Categories::where('name', $row['category'] ?? '')->first();
 
         // tìm album
-        $album = Album::where('ten_album', $row['album'] ?? 0)->first();
+        $album = Album::where('title', $row['album'] ?? '')->first();
 
         $arrSong = [
-            'nghesi'       => $artist?->id ?? 0,
-            'theloai'      => $category?->id ?? 0,
-            'id_album'     => $album?->id ?? 0,
-            'file_amthanh' => $row['file_am_thanh'] ?? '',
-            'anh_daidien'  => $row['anh_dai_dien'] ?? '',
-            'luot_nghe'    => $row['luot_nghe'] ?? 0,
+            'artist_id'    => $artist?->id,
+            'category_id'  => $category?->id,
+            'album_id'     => $album?->id,
+            'audio_file'   => $row['audio_file'] ?? '',
+            'thumbnail'    => $row['thumbnail'] ?? '',
+            'listen_count' => $row['listen_count'] ?? 0,
             'status'       => $row['status'] ?? 1,
         ];
 
         return Song::updateOrCreate(
             [
                 // điều kiện kiểm tra tồn tại
-                'tenbaihat' => $row['ten_bai_hat'] ?? '',
+                'title' => $row['title'] ?? '',
             ],
             $arrSong
         );

@@ -31,14 +31,14 @@ class SongController extends Controller
         // Nếu từ khóa > 2 ký tự (giống logic Categories bạn vừa đưa)
         if (! empty($search) && mb_strlen($search) > 2) {
             $query->where(function ($q) use ($search) {
-                $q->where('tenbaihat', 'like', '%' . $search . '%');
+                $q->where('title', 'like', '%' . $search . '%');
             });
         }
 
         return view('admin.songs.index', [
             'songs' => $query->paginate(10)->withQueryString(),
             'mostPopular' => Song::where('status', true)
-                ->orderBy('luot_nghe', 'desc')
+                ->orderBy('listen_count', 'desc')
                 ->first(),
         ]);
     }
@@ -47,9 +47,9 @@ class SongController extends Controller
     {
         return view('admin.songs.form', [
             'song' => new Song(),
-            'albums' => Album::orderBy('ten_album')->get(),
-            'artists' => Artist::orderBy('name_artist')->get(),
-            'categories' => Categories::orderBy('tentheloai')->get(),
+            'albums' => Album::orderBy('title')->get(),
+            'artists' => Artist::orderBy('name')->get(),
+            'categories' => Categories::orderBy('name')->get(),
             'isEdit' => false,
         ]);
     }
@@ -57,22 +57,22 @@ class SongController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'tenbaihat' => ['required', 'string', 'max:255'],
-            'nghesi' => ['nullable', 'exists:artists,id'],
-            'theloai' => ['required', 'exists:categories,id'],
-            'id_album' => ['nullable', 'exists:albums,id'],
+            'title' => ['required', 'string', 'max:255'],
+            'artist_id' => ['nullable', 'exists:artists,id'],
+            'category_id' => ['required', 'exists:categories,id'],
+            'album_id' => ['nullable', 'exists:albums,id'],
             'audio_upload' => ['required', 'file', 'mimes:mp3', 'max:512000'],
             'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:4096'],
-            'luot_nghe' => ['nullable', 'integer', 'min:0'],
+            'listen_count' => ['nullable', 'integer', 'min:0'],
             'status' => ['nullable', 'boolean'],
         ]);
 
         $validated['status'] = $request->boolean('status');
-        $validated['luot_nghe'] = (int) ($validated['luot_nghe'] ?? 0);
-        $validated['file_amthanh'] = AudioUpload::store($request->file('audio_upload'), 'songs');
+        $validated['listen_count'] = (int) ($validated['listen_count'] ?? 0);
+        $validated['audio_file'] = AudioUpload::store($request->file('audio_upload'), 'songs');
 
         if ($request->hasFile('image_upload')) {
-            $validated['anh_daidien'] = ImageUpload::store($request->file('image_upload'), 'song_images');
+            $validated['thumbnail'] = ImageUpload::store($request->file('image_upload'), 'song_images');
         }
 
         unset($validated['audio_upload'], $validated['image_upload']);
@@ -81,7 +81,7 @@ class SongController extends Controller
         ActivityLog::create([
             'module' => 'Song',
             'action' => 'CREATE',
-            'title' => $validated['tenbaihat'],
+            'title' => $validated['title'],
             'user_id' => auth()->id(),
         ]);
 
@@ -93,9 +93,9 @@ class SongController extends Controller
     {
         return view('admin.songs.form', [
             'song' => Song::findOrFail($id),
-            'albums' => Album::orderBy('ten_album')->get(),
-            'artists' => Artist::orderBy('name_artist')->get(),
-            'categories' => Categories::orderBy('tentheloai')->get(),
+            'albums' => Album::orderBy('title')->get(),
+            'artists' => Artist::orderBy('name')->get(),
+            'categories' => Categories::orderBy('name')->get(),
             'isEdit' => true,
         ]);
     }
@@ -103,33 +103,33 @@ class SongController extends Controller
     public function update(Request $request, int $id): RedirectResponse
     {
         $validated = $request->validate([
-            'tenbaihat' => ['required', 'string', 'max:255'],
-            'nghesi' => ['nullable', 'exists:artists,id'],
-            'theloai' => ['required', 'exists:categories,id'],
-            'id_album' => ['nullable', 'exists:albums,id'],
+            'title' => ['required', 'string', 'max:255'],
+            'artist_id' => ['nullable', 'exists:artists,id'],
+            'category_id' => ['required', 'exists:categories,id'],
+            'album_id' => ['nullable', 'exists:albums,id'],
             'audio_upload' => ['nullable', 'file', 'mimes:mp3', 'max:512000'],
             'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:4096'],
-            'luot_nghe' => ['nullable', 'integer', 'min:0'],
+            'listen_count' => ['nullable', 'integer', 'min:0'],
             'status' => ['nullable', 'boolean'],
         ]);
 
         $validated['status'] = $request->boolean('status');
-        $validated['luot_nghe'] = (int) ($validated['luot_nghe'] ?? 0);
+        $validated['listen_count'] = (int) ($validated['listen_count'] ?? 0);
 
         $song = Song::findOrFail($id);
         ActivityLog::create([
             'module' => 'Song',
             'action' => 'UPDATE',
-            'title' => $validated['tenbaihat'],
+            'title' => $validated['title'],
             'user_id' => auth()->id(),
         ]);
 
         if ($request->hasFile('audio_upload')) {
-            $validated['file_amthanh'] = AudioUpload::store(
+            $validated['audio_file'] = AudioUpload::store(
                 $request->file('audio_upload'),
                 'songs',
                 'public',
-                $song->file_amthanh,
+                $song->audio_file,
             );
         }
 
@@ -138,11 +138,11 @@ class SongController extends Controller
                 $request->file('image_upload'),
                 'song_images',
                 'public',
-                $song->anh_daidien,
+                $song->thumbnail,
             );
 
             if ($imagePath !== null) {
-                $validated['anh_daidien'] = $imagePath;
+                $validated['thumbnail'] = $imagePath;
             }
         }
 
@@ -158,19 +158,45 @@ class SongController extends Controller
     {
         $song = Song::findOrFail($id);
 
-        AudioUpload::delete($song->file_amthanh);
-        ImageUpload::delete($song->anh_daidien);
+        AudioUpload::delete($song->audio_file);
+        ImageUpload::delete($song->thumbnail);
 
         $song->delete();
         ActivityLog::create([
             'module' => 'Song',
             'action' => 'DELETE',
-            'title' => $song->tenbaihat,
+            'title' => $song->title,
             'user_id' => auth()->id(),
         ]);
 
         return redirect()->route('admin.songs.index')
             ->with('status', 'Xóa bài hát thành công.');
+    }
+
+    public function bulkDelete(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'ids' => ['required', 'array'],
+            'ids.*' => ['integer', 'exists:songs,id'],
+        ]);
+
+        $songs = Song::whereIn('id', $validated['ids'])->get();
+
+        foreach ($songs as $song) {
+            AudioUpload::delete($song->audio_file);
+            ImageUpload::delete($song->thumbnail);
+            $song->delete();
+
+            ActivityLog::create([
+                'module' => 'Song',
+                'action' => 'DELETE',
+                'title' => $song->title,
+                'user_id' => auth()->id(),
+            ]);
+        }
+
+        return redirect()->route('admin.songs.index')
+            ->with('status', 'Xóa các bài hát đã chọn thành công.');
     }
 
     //excel export

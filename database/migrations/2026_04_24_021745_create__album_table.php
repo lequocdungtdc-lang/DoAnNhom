@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('_album', function (Blueprint $table) {
             $table->id();
-             $table->string('ten_album');
-            $table->string('nghe_si');
-            $table->string('anh_bia')->nullable(); // đường dẫn ảnh bìa
+            $table->string('title');
+            $table->string('artist_name');
+            $table->string('cover_image')->nullable();
             $table->timestamps();
         });
     }

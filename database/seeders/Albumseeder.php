@@ -57,9 +57,9 @@ class AlbumSeeder extends Seeder
             $randomImage = $imageCovers[array_rand($imageCovers)];
 
             $data[] = [
-                'ten_album' => $randomAlbum,
-                'nghe_si' => $randomArtist,
-                'anh_bia' => basename($randomImage),
+                'title' => $randomAlbum,
+                'artist_name' => $randomArtist,
+                'cover_image' => basename($randomImage),
                 'created_at' => now(),
                 'updated_at' => now(),
             ];

@@ -9,8 +9,8 @@ class Categories extends Model
     protected $table = 'categories';
 
     protected $fillable = [
-        'tentheloai',
-        'nhom',
+        'name',
+        'group_name',
         'image',
         'description',
         'status',

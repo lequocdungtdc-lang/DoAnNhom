@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('albums', function (Blueprint $table) {
             $table->id();
-             $table->string('ten_album');
-            $table->string('nghe_si');
-            $table->string('anh_bia')->nullable(); // đường dẫn ảnh bìa
-            $table->boolean('status')->default(1); // 1 = active, 0 = inactive
+            $table->string('title');
+            $table->string('artist_name');
+            $table->string('cover_image')->nullable();
+            $table->boolean('status')->default(1);
             $table->timestamps();
         });
     }

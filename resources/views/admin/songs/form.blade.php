@@ -20,49 +20,49 @@
                 <div class="grid gap-5 md:grid-cols-2">
                     <div>
                         <label class="mb-2 block text-sm text-[#cfd5df]">Tên bài hát</label>
-                        <input name="tenbaihat" value="{{ old('tenbaihat', $song->tenbaihat) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-admin-primary">
-                        @error('tenbaihat') <p class="mt-2 text-sm text-red-300">{{ $message }}</p> @enderror
+                        <input name="title" value="{{ old('title', $song->title) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-admin-primary">
+                        @error('title') <p class="mt-2 text-sm text-red-300">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="mb-2 block text-sm text-[#cfd5df]">Nghệ sĩ</label>
-                        <select name="nghesi" class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-admin-primary">
+                        <select name="artist_id" class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-admin-primary">
                             <option value="">Chọn nghệ sĩ</option>
                             @foreach ($artists as $artist)
-                                <option value="{{ $artist->id }}" @selected((string) old('nghesi', $song->nghesi) === (string) $artist->id)>{{ $artist->name_artist }}</option>
+                                <option value="{{ $artist->id }}" @selected((string) old('artist_id', $song->artist_id) === (string) $artist->id)>{{ $artist->name }}</option>
                             @endforeach
                         </select>
-                        @error('nghesi') <p class="mt-2 text-sm text-red-300">{{ $message }}</p> @enderror
+                        @error('artist_id') <p class="mt-2 text-sm text-red-300">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
                 <div class="grid gap-5 md:grid-cols-2">
                     <div>
                         <label class="mb-2 block text-sm text-[#cfd5df]">Thể loại</label>
-                        <select name="theloai" class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-admin-primary">
+                        <select name="category_id" class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-admin-primary">
                             <option value="">Chọn thể loại</option>
                             @foreach ($categories as $category)
-                                <option value="{{ $category->id }}" @selected((string) old('theloai', $song->theloai) === (string) $category->id)>{{ $category->tentheloai }}</option>
+                                <option value="{{ $category->id }}" @selected((string) old('category_id', $song->category_id) === (string) $category->id)>{{ $category->name }}</option>
                             @endforeach
                         </select>
-                        @error('theloai') <p class="mt-2 text-sm text-red-300">{{ $message }}</p> @enderror
+                        @error('category_id') <p class="mt-2 text-sm text-red-300">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="mb-2 block text-sm text-[#cfd5df]">Album</label>
-                        <select name="id_album" class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-admin-primary">
+                        <select name="album_id" class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-admin-primary">
                             <option value="">Không thuộc album</option>
                             @foreach ($albums as $album)
-                                <option value="{{ $album->id }}" @selected((string) old('id_album', $song->id_album) === (string) $album->id)>{{ $album->ten_album }}</option>
+                                <option value="{{ $album->id }}" @selected((string) old('album_id', $song->album_id) === (string) $album->id)>{{ $album->title }}</option>
                             @endforeach
                         </select>
-                        @error('id_album') <p class="mt-2 text-sm text-red-300">{{ $message }}</p> @enderror
+                        @error('album_id') <p class="mt-2 text-sm text-red-300">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
                 <div>
                     <div>
                         <label class="mb-2 block text-sm text-[#cfd5df]">Lượt nghe</label>
-                        <input type="number" min="0" name="luot_nghe" value="{{ old('luot_nghe', $song->luot_nghe ?? 0) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-admin-primary">
-                        @error('luot_nghe') <p class="mt-2 text-sm text-red-300">{{ $message }}</p> @enderror
+                        <input type="number" min="0" name="listen_count" value="{{ old('listen_count', $song->listen_count ?? 0) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-admin-primary">
+                        @error('listen_count') <p class="mt-2 text-sm text-red-300">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
@@ -70,7 +70,7 @@
                     @include('admin.partials.audio-upload', [
                         'name' => 'audio_upload',
                         'label' => 'Tệp âm thanh MP3',
-                        'value' => $song->file_amthanh,
+                        'value' => $song->audio_file,
                         'help' => $isEdit ? 'MP3 - tối đa 500MB. Bỏ trống nếu không đổi audio.' : 'MP3 - tối đa 500MB.',
                     ])
                 </div>
@@ -78,7 +78,7 @@
                 @include('admin.partials.image-upload', [
                     'name' => 'image_upload',
                     'label' => 'Ảnh đại diện',
-                    'value' => $song->anh_daidien,
+                    'value' => $song->thumbnail,
                 ])
 
                 <div>

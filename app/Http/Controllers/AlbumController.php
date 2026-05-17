@@ -18,8 +18,7 @@ class AlbumController extends Controller
 
         // Kiểm tra nếu có từ khóa và độ dài > 3
         if (!empty($search) && mb_strlen($search) > 3) {
-            // Thay 'ten_album' bằng tên cột chính xác trong database của bạn
-            $query->where('ten_album', 'like', '%' . $search . '%');
+            $query->where('title', 'like', '%' . $search . '%');
         }
 
         return view('admin.albums.index', [
@@ -38,9 +37,9 @@ class AlbumController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'ten_album' => ['required', 'string', 'max:255'],
-            'nghe_si' => ['required', 'string', 'max:255'],
-            'anh_bia' => ['nullable', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255'],
+            'artist_name' => ['required', 'string', 'max:255'],
+            'cover_image' => ['nullable', 'string', 'max:255'],
             'status' => ['nullable', 'boolean'],
         ]);
 
@@ -63,9 +62,9 @@ class AlbumController extends Controller
     public function update(Request $request, int $id): RedirectResponse
     {
         $validated = $request->validate([
-            'ten_album' => ['required', 'string', 'max:255'],
-            'nghe_si' => ['required', 'string', 'max:255'],
-            'anh_bia' => ['nullable', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255'],
+            'artist_name' => ['required', 'string', 'max:255'],
+            'cover_image' => ['nullable', 'string', 'max:255'],
             'status' => ['nullable', 'boolean'],
         ]);
 
@@ -83,5 +82,18 @@ class AlbumController extends Controller
 
         return redirect()->route('admin.albums.index')
             ->with('status', 'Xóa album thành công.');
+    }
+
+    public function bulkDelete(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'ids' => ['required', 'array'],
+            'ids.*' => ['integer', 'exists:albums,id'],
+        ]);
+
+        Album::whereIn('id', $validated['ids'])->delete();
+
+        return redirect()->route('admin.albums.index')
+            ->with('status', 'Xóa các album đã chọn thành công.');
     }
 }

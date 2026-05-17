@@ -11,6 +11,14 @@
                 <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">Subscription</p>
                 <h2 class="mt-2 text-2xl font-semibold text-white">Quản lý subscription</h2>
             </div>
+            <div class="flex flex-col gap-3 md:flex-row md:items-center">
+                <form id="bulk-delete-subscriptions-form" action="{{ route('admin.subscriptions.bulk-delete') }}" method="POST" onsubmit="return confirm('Xóa các subscription đã chọn?')">
+                    @csrf
+                    @method('DELETE')
+                </form>
+                <button type="submit" form="bulk-delete-subscriptions-form" class="rounded-2xl border border-red-400/20 px-4 py-3 text-sm font-semibold text-red-200 transition hover:bg-red-500/10">Xóa đã chọn</button>
+                <a href="{{ route('admin.subscriptions.create') }}" class="rounded-2xl bg-[#10a37f] px-4 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">Thêm subscription</a>
+            </div>
         </div>
 
 
@@ -21,6 +29,9 @@
                 <thead class="bg-white/[0.03]">
                     <tr class="text-left text-sm text-[#8a93a3]">
 
+                        <th class="px-4 py-4">
+                            <input type="checkbox" data-check-all="subscription_ids" class="h-4 w-4 rounded border-white/10 bg-white/5">
+                        </th>
                         <th class="px-4 py-4">ID</th>
                         <th class="px-4 py-4">Người dùng</th>
                         <th class="px-4 py-4">Gói</th>
@@ -40,6 +51,9 @@
 
                     <tr class="text-sm text-white">
 
+                        <td class="px-4 py-4">
+                            <input form="bulk-delete-subscriptions-form" type="checkbox" name="ids[]" value="{{ $subscription->id }}" data-check-item="subscription_ids" class="h-4 w-4 rounded border-white/10 bg-white/5">
+                        </td>
                         <td class="px-4 py-4">#{{ $subscription->id }}</td>
                         <td class="px-4 py-4">{{ $subscription->user->fullname ?? 'N/A' }}</td>
                         <td class="px-4 py-4">{{ $subscription->plan->name ?? 'N/A' }}</td>
@@ -92,7 +106,7 @@
 
                     <tr>
 
-                        <td colspan="7"
+                        <td colspan="9"
                             class="px-4 py-10 text-center text-sm text-[#7f8898]">
                             Chưa có subscription nào.
                         </td>
@@ -308,6 +322,15 @@
                 }
             }
         }
+    });
+</script>
+<script>
+    document.querySelectorAll('[data-check-all]').forEach((checkbox) => {
+        checkbox.addEventListener('change', () => {
+            document.querySelectorAll(`[data-check-item="${checkbox.dataset.checkAll}"]`).forEach((item) => {
+                item.checked = checkbox.checked;
+            });
+        });
     });
 </script>
 @endsection

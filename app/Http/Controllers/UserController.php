@@ -87,4 +87,17 @@ class UserController extends Controller
         return redirect()->route('admin.users.index')
             ->with('status', 'Xóa người dùng thành công.');
     }
+
+    public function bulkDelete(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'ids' => ['required', 'array'],
+            'ids.*' => ['integer', 'exists:users,id'],
+        ]);
+
+        User::whereIn('id', $validated['ids'])->delete();
+
+        return redirect()->route('admin.users.index')
+            ->with('status', 'Xóa các người dùng đã chọn thành công.');
+    }
 }
