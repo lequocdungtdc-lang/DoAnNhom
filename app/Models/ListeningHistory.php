@@ -13,12 +13,16 @@ class ListeningHistory extends Model
         'user_id',
         'song_id',
         'listened_at',
+        'listened_seconds',
+        'has_counted',
         'status',
     ];
 
     protected $casts = [
         'status' => 'boolean',
+        'has_counted' => 'boolean',
         'listened_at' => 'datetime',
+        'listened_seconds' => 'integer',
     ];
 
     public function user(): BelongsTo

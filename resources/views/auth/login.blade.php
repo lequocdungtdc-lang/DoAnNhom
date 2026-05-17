@@ -1,7 +1,7 @@
 @extends('web.master', ['title' => 'Đăng nhập'])
 
 @section('content')
-    <div class="mx-auto grid max-w-5xl gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+    <div class="mx-auto grid max-w-5xl gap-8 lg:grid-cols-[1.1fr_0.9fr] my-5">
         <section class="rounded-[2rem] border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur">
             <p class="mb-3 text-sm uppercase tracking-[0.3em] text-orange-300/80">Chào mừng quay lại</p>
             <h1 class="max-w-xl text-4xl font-semibold leading-tight text-white">Đăng nhập vào hệ thống để quản lý tài khoản và nội dung của bạn.</h1>
