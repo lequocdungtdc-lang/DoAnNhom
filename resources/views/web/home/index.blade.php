@@ -50,18 +50,34 @@
 
             <div class="mt-5 space-y-2">
                 @forelse ($songs as $index => $song)
-                    <button type="button"
-                        class="play-song group flex w-full items-center gap-4 rounded-2xl px-3 py-3 text-left transition hover:bg-white/10"
-                        data-index="{{ $index }}">
-                        <span class="w-6 text-center text-sm text-white/40 group-hover:text-fuchsia-200">{{ $index + 1 }}</span>
-                        <img src="{{ $song['thumbnail'] ?? $fallbackCover }}" alt="{{ $song['title'] }}" class="h-14 w-14 rounded-xl object-cover">
-                        <span class="min-w-0 flex-1">
-                            <span class="block truncate font-semibold">{{ $song['title'] }}</span>
-                            <span class="mt-1 block truncate text-sm text-white/55">{{ $song['artist'] }} • {{ $song['category'] }}</span>
-                        </span>
-                        <span class="hidden text-sm text-white/45 sm:block">{{ number_format((int) $song['listen_count']) }} lượt nghe</span>
-                        <span class="rounded-full border border-white/10 px-3 py-1 text-xs text-white/60 group-hover:border-fuchsia-300/50 group-hover:text-fuchsia-100">Play</span>
-                    </button>
+                    <div class="group flex w-full items-center gap-4 rounded-2xl px-3 py-3 transition hover:bg-white/10">
+                        <button type="button" class="play-song flex min-w-0 flex-1 items-center gap-4 text-left" data-index="{{ $index }}">
+                            <span class="w-6 text-center text-sm text-white/40 group-hover:text-fuchsia-200">{{ $index + 1 }}</span>
+                            <img src="{{ $song['thumbnail'] ?? $fallbackCover }}" alt="{{ $song['title'] }}" class="h-14 w-14 rounded-xl object-cover">
+                            <span class="min-w-0 flex-1">
+                                <span class="block truncate font-semibold">{{ $song['title'] }}</span>
+                                <span class="mt-1 block truncate text-sm text-white/55">{{ $song['artist'] }} • {{ $song['category'] }}</span>
+                            </span>
+                            <span class="hidden text-sm text-white/45 sm:block">{{ number_format((int) $song['listen_count']) }} lượt nghe</span>
+                            <span class="rounded-full border border-white/10 px-3 py-1 text-xs text-white/60 group-hover:border-fuchsia-300/50 group-hover:text-fuchsia-100">Play</span>
+                        </button>
+
+                        @auth
+                            <form action="{{ route('favorites.toggle', $song['id']) }}" method="POST" class="favorite-toggle-form" data-song-id="{{ $song['id'] }}">
+                                @csrf
+                                <button type="submit"
+                                    data-favorite-button
+                                    data-liked-class="flex h-10 w-10 items-center justify-center rounded-full border border-fuchsia-300/40 bg-fuchsia-500/20 text-fuchsia-100 transition hover:bg-fuchsia-500/30 disabled:cursor-not-allowed disabled:opacity-60"
+                                    data-unliked-class="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-white/45 transition hover:bg-white/10 hover:text-fuchsia-100 disabled:cursor-not-allowed disabled:opacity-60"
+                                    class="{{ $song['is_liked'] ? 'flex h-10 w-10 items-center justify-center rounded-full border border-fuchsia-300/40 bg-fuchsia-500/20 text-fuchsia-100 transition hover:bg-fuchsia-500/30 disabled:cursor-not-allowed disabled:opacity-60' : 'flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-white/45 transition hover:bg-white/10 hover:text-fuchsia-100 disabled:cursor-not-allowed disabled:opacity-60' }}"
+                                    title="{{ $song['is_liked'] ? 'Bỏ yêu thích' : 'Thêm yêu thích' }}">
+                                    {{ $song['is_liked'] ? '♥' : '♡' }}
+                                </button>
+                            </form>
+                        @else
+                            <a href="{{ route('login') }}" class="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-white/45 transition hover:bg-white/10 hover:text-fuchsia-100" title="Đăng nhập để yêu thích">♡</a>
+                        @endauth
+                    </div>
                 @empty
                     <div class="rounded-3xl border border-dashed border-white/15 p-8 text-center text-white/60">
                         Chưa có bài hát có file âm thanh để phát. Hãy thêm bài hát trong trang admin trước.

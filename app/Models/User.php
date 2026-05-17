@@ -61,6 +61,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(Subscription::class);
     }
+
+    public function likedSongs()
+    {
+        return $this->belongsToMany(Song::class, 'song_user_likes', 'user_id', 'song_id')
+            ->withTimestamps();
+    }
+
     public function activeSubscription()
     {
         return $this->hasOne(Subscription::class)

@@ -10,18 +10,6 @@
                     @include('web.layouts.header')
 
                     <main class="min-w-0 flex-1">
-                        @if (session('message'))
-                            <div class="
-                                mt-6 rounded-2xl border px-4 py-3 text-sm
-                                {{ session('status') === 'success'
-                                    ? 'border-emerald-400/30 bg-emerald-500/10 text-emerald-200'
-                                    : 'border-red-400/30 bg-red-500/10 text-red-200'
-                                }}
-                            ">
-                                {{ session('message') }}
-                            </div>
-                        @endif
-
                         @yield('content')
                     </main>
 
@@ -30,7 +18,93 @@
             </div>
         </div>
 
+        <div id="webToast" class="pointer-events-none fixed right-4 top-4 z-[100] hidden max-w-sm rounded-2xl border px-4 py-3 text-sm shadow-2xl shadow-black/30 backdrop-blur-xl"></div>
         @yield('player')
+        <script>
+            window.showWebToast = function (message, status = 'success') {
+                const toast = document.getElementById('webToast');
+
+                if (!toast || !message) {
+                    return;
+                }
+
+                toast.textContent = message;
+                toast.className = [
+                    'pointer-events-none fixed right-4 top-4 z-[100] max-w-sm rounded-2xl border px-4 py-3 text-sm shadow-2xl shadow-black/30 backdrop-blur-xl transition',
+                    status === 'success'
+                        ? 'border-emerald-400/30 bg-emerald-500/15 text-emerald-100'
+                        : 'border-red-400/30 bg-red-500/15 text-red-100',
+                ].join(' ');
+
+                clearTimeout(window.webToastTimer);
+                window.webToastTimer = setTimeout(() => {
+                    toast.classList.add('hidden');
+                }, 2600);
+            };
+
+            document.querySelectorAll('.favorite-toggle-form').forEach((form) => {
+                form.addEventListener('submit', async (event) => {
+                    event.preventDefault();
+
+                    const button = form.querySelector('[data-favorite-button]');
+                    button?.setAttribute('disabled', 'disabled');
+
+                    try {
+                        const response = await fetch(form.action, {
+                            method: 'POST',
+                            headers: {
+                                'Accept': 'application/json',
+                                'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value,
+                            },
+                        });
+
+                        if (!response.ok) {
+                            throw new Error('Không thể cập nhật yêu thích.');
+                        }
+
+                        const data = await response.json();
+                        const sameSongForms = document.querySelectorAll(`.favorite-toggle-form[data-song-id="${form.dataset.songId}"]`);
+
+                        sameSongForms.forEach((item) => {
+                            const itemButton = item.querySelector('[data-favorite-button]');
+
+                            if (!itemButton) {
+                                return;
+                            }
+
+                            itemButton.textContent = data.liked ? '♥' : '♡';
+                            itemButton.title = data.liked ? 'Bỏ yêu thích' : 'Thêm yêu thích';
+                            itemButton.className = data.liked
+                                ? itemButton.dataset.likedClass
+                                : itemButton.dataset.unlikedClass;
+                        });
+
+                        if (!data.liked && form.dataset.removeOnUnlike === 'true') {
+                            form.closest('[data-favorite-row]')?.remove();
+
+                            const count = document.getElementById('favoriteSongCount');
+                            if (count) {
+                                count.textContent = document.querySelectorAll('[data-favorite-row]').length;
+                            }
+
+                            if (!document.querySelector('[data-favorite-row]')) {
+                                document.getElementById('favoriteEmptyState')?.classList.remove('hidden');
+                            }
+                        }
+
+                        window.showWebToast(data.message, 'success');
+                    } catch (error) {
+                        window.showWebToast(error.message || 'Có lỗi xảy ra, vui lòng thử lại.', 'error');
+                    } finally {
+                        button?.removeAttribute('disabled');
+                    }
+                });
+            });
+
+            @if (session('message'))
+                window.showWebToast(@json(session('message')), @json(session('status') ?? 'success'));
+            @endif
+        </script>
         @stack('scripts')
     </body>
 </html>
