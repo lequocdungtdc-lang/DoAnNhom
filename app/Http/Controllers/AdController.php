@@ -36,7 +36,10 @@ class AdController extends Controller
 
         Ad::create($validated);
 
-        return redirect()->route('admin.ad.index')->with('success', 'Quảng cáo đã được tạo thành công');
+        return redirect()->route('admin.ad.index')->with([
+            'status' => 'success',
+            'message' => 'Quảng cáo đã được tạo thành công.',
+        ]);
     }
 
     public function edit(Ad $ad)
@@ -65,7 +68,10 @@ class AdController extends Controller
 
         $ad->update($validated);
 
-        return redirect()->route('admin.ad.index');
+        return redirect()->route('admin.ad.index')->with([
+            'status' => 'success',
+            'message' => 'Quảng cáo đã được cập nhật thành công.',
+        ]);
     }
 
     public function destroy(Ad $ad)
@@ -74,7 +80,10 @@ class AdController extends Controller
             Storage::disk('public')->delete($ad->media_type);
         }
         $ad->delete();
-        return redirect()->route('admin.ad.index');
+        return redirect()->route('admin.ad.index')->with([
+            'status' => 'success',
+            'message' => 'Quảng cáo đã được xóa thành công.',
+        ]);
     }
     
 }

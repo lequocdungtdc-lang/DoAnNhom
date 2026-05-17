@@ -72,6 +72,7 @@
                         name="file"
                         class="hidden"
                         id="importExcel"
+                        accept=".xlsx,.xls,.csv"
                         onchange="this.form.submit()">
 
                     <label for="importExcel"

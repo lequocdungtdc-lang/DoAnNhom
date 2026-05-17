@@ -51,8 +51,10 @@ class ArtistsController extends Controller
 
         Artist::create($validated);
 
-        return redirect()->route('admin.artists.index')
-            ->with('status', 'Tạo nghệ sĩ thành công.');
+        return redirect()->route('admin.artists.index')->with([
+            'status' => 'success',
+            'message' => 'Tạo nghệ sĩ thành công.',
+        ]);
     }
 
     public function edit(int $id): View
@@ -77,16 +79,20 @@ class ArtistsController extends Controller
 
         Artist::findOrFail($id)->update($validated);
 
-        return redirect()->route('admin.artists.index')
-            ->with('status', 'Cập nhật nghệ sĩ thành công.');
+        return redirect()->route('admin.artists.index')->with([
+            'status' => 'success',
+            'message' => 'Cập nhật nghệ sĩ thành công.',
+        ]);
     }
 
     public function delete(int $id): RedirectResponse
     {
         Artist::findOrFail($id)->delete();
 
-        return redirect()->route('admin.artists.index')
-            ->with('status', 'Xóa nghệ sĩ thành công.');
+        return redirect()->route('admin.artists.index')->with([
+            'status' => 'success',
+            'message' => 'Xóa nghệ sĩ thành công.',
+        ]);
     }
 
     public function bulkDelete(Request $request): RedirectResponse
@@ -98,7 +104,9 @@ class ArtistsController extends Controller
 
         Artist::whereIn('id', $validated['ids'])->delete();
 
-        return redirect()->route('admin.artists.index')
-            ->with('status', 'Xóa các nghệ sĩ đã chọn thành công.');
+        return redirect()->route('admin.artists.index')->with([
+            'status' => 'success',
+            'message' => 'Xóa các nghệ sĩ đã chọn thành công.',
+        ]);
     }
 }

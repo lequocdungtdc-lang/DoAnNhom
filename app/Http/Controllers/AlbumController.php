@@ -47,8 +47,10 @@ class AlbumController extends Controller
 
         Album::create($validated);
 
-        return redirect()->route('admin.albums.index')
-            ->with('status', 'Tạo album thành công.');
+        return redirect()->route('admin.albums.index')->with([
+            'status' => 'success',
+            'message' => 'Tạo album thành công.',
+        ]);
     }
 
     public function edit(int $id): View
@@ -72,16 +74,20 @@ class AlbumController extends Controller
 
         Album::findOrFail($id)->update($validated);
 
-        return redirect()->route('admin.albums.index')
-            ->with('status', 'Cập nhật album thành công.');
+        return redirect()->route('admin.albums.index')->with([
+            'status' => 'success',
+            'message' => 'Cập nhật album thành công.',
+        ]);
     }
 
     public function delete(int $id): RedirectResponse
     {
         Album::findOrFail($id)->delete();
 
-        return redirect()->route('admin.albums.index')
-            ->with('status', 'Xóa album thành công.');
+        return redirect()->route('admin.albums.index')->with([
+            'status' => 'success',
+            'message' => 'Xóa album thành công.',
+        ]);
     }
 
     public function bulkDelete(Request $request): RedirectResponse
@@ -93,7 +99,9 @@ class AlbumController extends Controller
 
         Album::whereIn('id', $validated['ids'])->delete();
 
-        return redirect()->route('admin.albums.index')
-            ->with('status', 'Xóa các album đã chọn thành công.');
+        return redirect()->route('admin.albums.index')->with([
+            'status' => 'success',
+            'message' => 'Xóa các album đã chọn thành công.',
+        ]);
     }
 }

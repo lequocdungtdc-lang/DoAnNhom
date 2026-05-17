@@ -39,7 +39,7 @@
                 </div>
                 <div class="mt-6 grid gap-3">
                     <a href="{{ route('profile') }}" class="rounded-2xl border border-white/10 px-4 py-3 text-sm font-medium text-[#d5dce7] transition hover:border-[#10a37f]/40 hover:bg-white/5 hover:text-white">Sửa hồ sơ</a>
-                    <a href="{{ route('home') }}" class="rounded-2xl border border-white/10 px-4 py-3 text-sm font-medium text-[#d5dce7] transition hover:border-[#10a37f]/40 hover:bg-white/5 hover:text-white">Xem trang web</a>
+                    <a href="{{ route('home') }}" target="_blank" class="rounded-2xl border border-white/10 px-4 py-3 text-sm font-medium text-[#d5dce7] transition hover:border-[#10a37f]/40 hover:bg-white/5 hover:text-white">Xem trang web</a>
                 </div>
             </div>
         </div>

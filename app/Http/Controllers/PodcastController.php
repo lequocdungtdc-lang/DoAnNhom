@@ -70,7 +70,10 @@ class PodcastController extends Controller
         ]);
         return redirect()
             ->route('admin.podcasts.index')
-            ->with('status', 'Tạo podcast thành công.');
+            ->with([
+                'status' => 'success',
+                'message' => 'Tạo podcast thành công.',
+            ]);
     }
 
     public function edit(int $id): View
@@ -107,7 +110,10 @@ class PodcastController extends Controller
 
         return redirect()
             ->route('admin.podcasts.index')
-            ->with('status', 'Cập nhật podcast thành công.');
+            ->with([
+                'status' => 'success',
+                'message' => 'Cập nhật podcast thành công.',
+            ]);
     }
 
     public function delete(int $id): RedirectResponse
@@ -127,7 +133,10 @@ class PodcastController extends Controller
 
         return redirect()
             ->route('admin.podcasts.index')
-            ->with('status', 'Xóa podcast thành công.');
+            ->with([
+                'status' => 'success',
+                'message' => 'Xóa podcast thành công.',
+            ]);
     }
 
     public function bulkDelete(Request $request): RedirectResponse
@@ -153,7 +162,10 @@ class PodcastController extends Controller
 
         return redirect()
             ->route('admin.podcasts.index')
-            ->with('status', 'Xóa các podcast đã chọn thành công.');
+            ->with([
+                'status' => 'success',
+                'message' => 'Xóa các podcast đã chọn thành công.',
+            ]);
     }
 
     public function show(int $id): View

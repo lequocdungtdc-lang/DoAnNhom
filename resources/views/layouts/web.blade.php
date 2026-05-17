@@ -34,9 +34,15 @@
         </header>
 
         <main class="mx-auto max-w-6xl px-6 py-10">
-            @if (session('status'))
-                <div class="mb-6 rounded-2xl border border-emerald-400/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
-                    {{ session('status') }}
+            @if (session('message'))
+                <div class="
+                    mb-6 rounded-2xl border px-4 py-3 text-sm
+                    {{ session('status') === 'success'
+                        ? 'border-emerald-400/30 bg-emerald-500/10 text-emerald-200'
+                        : 'border-red-400/30 bg-red-500/10 text-red-200'
+                    }}
+                ">
+                    {{ session('message') }}
                 </div>
             @endif
 

@@ -21,6 +21,9 @@ class PlanController extends Controller
 
         Plan::create($validated);
 
-        return redirect()->route('admin.plans.index');
+        return redirect()->route('admin.plans.index')->with([
+            'status' => 'success',
+            'message' => 'Tạo gói cước thành công.',
+        ]);
     }
 }
