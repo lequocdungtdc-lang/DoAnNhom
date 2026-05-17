@@ -49,6 +49,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/listening-history/{song}', [ListeningHistoryController::class, 'store'])->name('listening-history.store');
+    Route::post('/listening-history/{song}/progress', [ListeningHistoryController::class, 'progress'])->name('listening-history.progress');
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/favorites', [FavoriteSongController::class, 'index'])->name('favorites.index');

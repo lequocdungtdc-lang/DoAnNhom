@@ -213,6 +213,7 @@
         const playerArtist = document.getElementById('playerArtist');
         let currentIndex = 0;
         let isSeeking = false;
+        let progressInterval = null;
 
         function formatTime(seconds) {
             if (!Number.isFinite(seconds)) {
@@ -222,6 +223,21 @@
             const minutes = Math.floor(seconds / 60);
             const remainingSeconds = Math.floor(seconds % 60).toString().padStart(2, '0');
             return `${minutes}:${remainingSeconds}`;
+        }
+
+        function sendProgress(songId) {
+            @auth
+            if (!songId) return;
+
+            fetch(`/listening-history/${songId}/progress`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                },
+                body: JSON.stringify({ seconds: 10 })
+            }).catch(() => {});
+            @endauth
         }
 
         function loadSong(index, shouldPlay = false) {
@@ -296,12 +312,26 @@
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
                     }
                 }).catch(() => {});
+
+                // Start progress tracking every 10 seconds
+                if (progressInterval) {
+                    clearInterval(progressInterval);
+                }
+                progressInterval = setInterval(() => {
+                    sendProgress(song.id);
+                }, 10000);
             }
             @endauth
         });
 
         audio.addEventListener('pause', () => {
             playButton.textContent = '▶';
+
+            // Stop progress tracking
+            if (progressInterval) {
+                clearInterval(progressInterval);
+                progressInterval = null;
+            }
         });
 
         audio.addEventListener('loadedmetadata', () => {
