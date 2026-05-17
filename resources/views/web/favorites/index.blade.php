@@ -182,7 +182,21 @@
             loadSong((currentIndex + 1) % songs.length, true);
         });
 
-        audio.addEventListener('play', updatePlayButton);
+        audio.addEventListener('play', () => {
+            updatePlayButton();
+
+            // Track listening history
+            const song = songs[currentIndex];
+            if (song && song.id) {
+                fetch(`/listening-history/${song.id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                    }
+                }).catch(() => {});
+            }
+        });
         audio.addEventListener('pause', updatePlayButton);
         audio.addEventListener('ended', () => nextButton.click());
         audio.addEventListener('loadedmetadata', () => {

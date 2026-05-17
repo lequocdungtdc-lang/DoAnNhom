@@ -68,6 +68,11 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    public function listeningHistory()
+    {
+        return $this->hasMany(ListeningHistory::class);
+    }
+
     public function activeSubscription()
     {
         return $this->hasOne(Subscription::class)
