@@ -77,8 +77,31 @@
         <p class="text-xs font-bold uppercase tracking-[0.28em] text-violet-200/70">Hoạt động gần đây</p>
         <h2 class="mt-2 text-2xl font-bold">Lịch sử của bạn</h2>
 
-        <div class="mt-6 rounded-3xl border border-dashed border-white/15 p-8 text-center text-white/60">
-            Tính năng lịch sử nghe nhạc đang được phát triển. Hãy quay lại sau để xem các bài hát bạn đã nghe gần đây.
-        </div>
+        @if($recentHistory->isNotEmpty())
+            <div class="mt-6 space-y-2">
+                @foreach($recentHistory as $item)
+                    <div class="group flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-3 transition hover:bg-white/10">
+                        <img src="{{ $item['thumbnail'] }}" alt="{{ $item['title'] }}" class="h-12 w-12 rounded-xl object-cover">
+                        <div class="min-w-0 flex-1">
+                            <p class="truncate font-semibold text-white">{{ $item['title'] }}</p>
+                            <p class="mt-1 truncate text-sm text-white/55">{{ $item['artist'] }} • {{ $item['category'] }}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs text-white/45">{{ $item['listened_at']->diffForHumans() }}</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            <div class="mt-4 text-center">
+                <a href="{{ route('home') }}" class="inline-flex rounded-full border border-white/10 px-5 py-2 text-sm text-white/70 transition hover:bg-white/10">
+                    Khám phá thêm nhạc
+                </a>
+            </div>
+        @else
+            <div class="mt-6 rounded-3xl border border-dashed border-white/15 p-8 text-center text-white/60">
+                Bạn chưa nghe bài hát nào. Hãy quay về trang chủ và bắt đầu khám phá âm nhạc!
+            </div>
+        @endif
     </section>
 @endsection

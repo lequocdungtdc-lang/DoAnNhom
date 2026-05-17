@@ -229,6 +229,20 @@
 
         audio.addEventListener('play', () => {
             playButton.textContent = '❚❚';
+
+            // Track listening history
+            @auth
+            const song = songs[currentIndex];
+            if (song && song.id) {
+                fetch(`/listening-history/${song.id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                    }
+                }).catch(() => {});
+            }
+            @endauth
         });
 
         audio.addEventListener('pause', () => {
