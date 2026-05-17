@@ -14,6 +14,11 @@ class HomeController extends Controller
      */
     public function index(): View
     {
+        $likedSongIds = auth()->check()
+            ? auth()->user()->likedSongs()->pluck('songs.id')->all()
+            : [];
+
+
         $songs = Song::with(['artist', 'category', 'album'])
             ->where('status', true)
             ->latest()
@@ -28,6 +33,7 @@ class HomeController extends Controller
                     'thumbnail' => ImageUpload::url($song->thumbnail),
                     'audio_url' => AudioUpload::url($song->audio_file),
                     'listen_count' => $song->listen_count,
+                    'is_liked' => !empty($likedSongIds) ? in_array($song->id, $likedSongIds, true) : false,
                 ];
             })
             ->filter(fn (array $song) => $song['audio_url'] !== null)
