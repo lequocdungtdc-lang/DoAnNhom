@@ -27,14 +27,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Tin tức
-Route::get('/tin-tuc', [NewsController::class, 'index'])->name('news.index');
-Route::get('/tin-tuc/{slug}', [NewsController::class, 'show'])->name('news.show');
 
-// Giữ route cũ nếu cần
-Route::get('/news', function () {
-    return redirect('/tin-tuc');
-});
 // Trang xếp hạng (nếu có)
 Route::get('/bang-xep-hang', [HomeController::class, 'rankings'])->name('rankings');
 
@@ -149,4 +142,25 @@ Route::prefix('admin')
             });
         Route::get('/activity_logs', [ActivityLogController::class, 'index'])
             ->name('activities.index');
+
+        
+
+             Route::prefix('news')
+            ->name('news.')
+            ->group(function () {
+
+                Route::get('/', [NewsController::class, 'index'])->name('index');
+
+                Route::get('/create', [NewsController::class, 'create'])->name('create');
+
+                Route::post('/', [NewsController::class, 'store'])->name('store');
+
+                Route::get('/{id}/edit', [NewsController::class, 'edit'])->name('edit');
+
+                Route::put('/{id}', [NewsController::class, 'update'])->name('update');
+
+                Route::delete('/{id}', [NewsController::class, 'destroy'])->name('destroy');
+                
+
+            });
     });
