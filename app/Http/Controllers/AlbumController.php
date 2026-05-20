@@ -6,7 +6,7 @@ use App\Models\Album;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-
+use App\Models\ActivityLog;
 class AlbumController extends Controller
 {
     public function index(Request $request): View
@@ -45,8 +45,13 @@ class AlbumController extends Controller
 
         $validated['status'] = $request->boolean('status');
 
-        Album::create($validated);
-
+        $album = Album::create($validated);
+        ActivityLog::create([
+            'module' => 'Album',
+            'action' => 'CREATE',
+            'title' => 'Album #' . $album->id,
+            'user_id' => auth()->id(),
+        ]);
         return redirect()->route('admin.albums.index')->with([
             'status' => 'success',
             'message' => 'Tạo album thành công.',
@@ -72,7 +77,14 @@ class AlbumController extends Controller
 
         $validated['status'] = $request->boolean('status');
 
-        Album::findOrFail($id)->update($validated);
+        $album = Album::findOrFail($id);
+        $album->update($validated);
+        ActivityLog::create([
+            'module' => 'Album',
+            'action' => 'UPDATE',
+            'title' => 'Album #' . $album->id,
+            'user_id' => auth()->id(),
+        ]);
 
         return redirect()->route('admin.albums.index')->with([
             'status' => 'success',
@@ -82,7 +94,14 @@ class AlbumController extends Controller
 
     public function delete(int $id): RedirectResponse
     {
-        Album::findOrFail($id)->delete();
+        $album = Album::findOrFail($id);
+        $album->delete();
+        ActivityLog::create([
+            'module' => 'Album',
+            'action' => 'DELETE',
+            'title' => 'Album #' . $album->id,
+            'user_id' => auth()->id(),
+        ]);
 
         return redirect()->route('admin.albums.index')->with([
             'status' => 'success',
@@ -97,6 +116,15 @@ class AlbumController extends Controller
             'ids.*' => ['integer', 'exists:albums,id'],
         ]);
 
+        $albums = Album::whereIn('id', $validated['ids'])->get();
+        foreach ($albums as $album) {
+            ActivityLog::create([
+                'module' => 'Album',
+                'action' => 'DELETE',
+                'title' => 'Album #' . $album->id,
+                'user_id' => auth()->id(),
+            ]);
+        }
         Album::whereIn('id', $validated['ids'])->delete();
 
         return redirect()->route('admin.albums.index')->with([

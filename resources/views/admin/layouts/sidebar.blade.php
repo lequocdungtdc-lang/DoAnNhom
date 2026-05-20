@@ -89,6 +89,15 @@
                 </span>
                 <span>Podcast</span>
             </a>
+            <a href="{{ route('admin.comments.index') }}" class="admin-nav-link {{ request()->routeIs('admin.comments.*') ? 'admin-nav-link-active' : '' }}">
+                <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-black/20">
+                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M7 8h10M7 12h6m-8 8 2.5-2H19a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2z" />
+                    </svg>
+                </span>
+                <span>Comment</span>
+            </a>
         </nav>
 
         <div class="mt-auto pt-6">
