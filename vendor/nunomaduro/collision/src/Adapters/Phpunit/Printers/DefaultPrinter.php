@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace NunoMaduro\Collision\Adapters\Phpunit\Printers;
 
-use Closure;
 use NunoMaduro\Collision\Adapters\Phpunit\ConfigureIO;
 use NunoMaduro\Collision\Adapters\Phpunit\State;
 use NunoMaduro\Collision\Adapters\Phpunit\Style;
@@ -16,7 +15,6 @@ use Pest\Collision\Events;
 use Pest\Result;
 use PHPUnit\Event\Code\TestMethod;
 use PHPUnit\Event\Code\ThrowableBuilder;
-use PHPUnit\Event\Telemetry\Info;
 use PHPUnit\Event\Test\BeforeFirstTestMethodErrored;
 use PHPUnit\Event\Test\ConsideredRisky;
 use PHPUnit\Event\Test\DeprecationTriggered;
@@ -95,13 +93,6 @@ final class DefaultPrinter
     private static bool $verbose = false;
 
     /**
-     * Closures that contribute extra output to the recap line.
-     *
-     * @var array<int, Closure(State, Info, \PHPUnit\TestRunner\TestResult\TestResult): string>
-     */
-    private static array $recapCallbacks = [];
-
-    /**
      * Creates a new Printer instance.
      */
     public function __construct(bool $colors)
@@ -141,32 +132,6 @@ final class DefaultPrinter
         }
 
         return self::$profile;
-    }
-
-    /**
-     * Registers a closure that appends output to the recap's assertions line.
-     *
-     * @param  Closure(State, Info, \PHPUnit\TestRunner\TestResult\TestResult): string  $callback
-     */
-    public static function addRecap(Closure $callback): void
-    {
-        self::$recapCallbacks[] = $callback;
-    }
-
-    /**
-     * @return array<int, Closure(State, Info, \PHPUnit\TestRunner\TestResult\TestResult): string>
-     */
-    public static function recapCallbacks(): array
-    {
-        return self::$recapCallbacks;
-    }
-
-    /**
-     * Removes all registered recap callbacks.
-     */
-    public static function flushRecapCallbacks(): void
-    {
-        self::$recapCallbacks = [];
     }
 
     /**

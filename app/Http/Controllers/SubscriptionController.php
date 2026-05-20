@@ -52,9 +52,13 @@ class SubscriptionController extends Controller
             ->addDays($plan->duration_days);
 
         $validated['status'] = $request->boolean('status');
-
-        Subscription::create($validated);
-
+        $subscription = Subscription::create($validated);
+        ActivityLog::create([
+            'module' => 'Subscription',
+            'action' => 'CREATE',
+            'title' => 'Subscription #' . $subscription->id,
+            'user_id' => auth()->id(),
+        ]);
         return redirect()
             ->route('admin.subscriptions.index')
             ->with([
@@ -144,7 +148,7 @@ class SubscriptionController extends Controller
         $subscription->update($validated);
         ActivityLog::create([
             'module' => 'Subscription',
-            'action' => 'Cập nhật subscription',
+            'action' => 'UPDATE',
             'title' => 'Subscription #' . $subscription->id,
             'user_id' => auth()->id(),
         ]);
@@ -163,7 +167,7 @@ class SubscriptionController extends Controller
 
         ActivityLog::create([
             'module' => 'Subscription',
-            'action' => 'Xóa subscription',
+            'action' => 'DELETE',
             'title' => 'Subscription #' . $subscription->id,
             'user_id' => auth()->id(),
         ]);
@@ -191,7 +195,7 @@ class SubscriptionController extends Controller
 
             ActivityLog::create([
                 'module' => 'Subscription',
-                'action' => 'Xóa subscription',
+                'action' => 'DELETE',
                 'title' => 'Subscription #' . $subscriptionId,
                 'user_id' => auth()->id(),
             ]);

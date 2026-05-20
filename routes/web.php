@@ -18,6 +18,7 @@ use App\Http\Controllers\PodcastController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\CommentsController;
 
 // === ADMIN NEWS ===
 Route::prefix('admin')->group(function () {
@@ -164,4 +165,15 @@ Route::prefix('admin')
             ->name('activities.index');
         Route::get('/podcast/{id}', [PodcastController::class, 'show'])
             ->name('podcasts.show');
+        Route::prefix('comments')
+            ->name('comments.')
+            ->group(function () {
+                Route::get('/', [CommentsController::class, 'index'])->name('index');
+                Route::get('/create', [CommentsController::class, 'create'])->name('create');
+                Route::post('/', [CommentsController::class, 'store'])->name('store');
+                Route::get('/{id}/edit', [CommentsController::class, 'edit'])->name('edit');
+                Route::put('/{id}', [CommentsController::class, 'update'])->name('update');
+                Route::delete('/bulk-delete', [CommentsController::class, 'bulkDelete'])->name('bulk-delete');
+                Route::delete('/{id}', [CommentsController::class, 'delete'])->name('delete');
+            });
     });

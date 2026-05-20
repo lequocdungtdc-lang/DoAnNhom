@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-
+use App\Models\ActivityLog;
 class UserController extends Controller
 {
     public function index(): View
@@ -40,8 +40,13 @@ class UserController extends Controller
 
         $validated['password'] = Hash::make($validated['password']);
 
-        User::create($validated);
-
+        $user = User::create($validated);
+        ActivityLog::create([
+            'module' => 'User',
+            'action' => 'CREATE',
+            'title' => 'User #' . $user->id,
+            'user_id' => auth()->id(),
+        ]);
         return redirect()->route('admin.users.index')->with([
             'status' => 'success',
             'message' => 'Tạo người dùng thành công.',
@@ -62,7 +67,7 @@ class UserController extends Controller
 
         $validated = $request->validate([
             'fullname' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email,'.$user->id],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $user->id],
             'phone' => ['nullable', 'string', 'max:20'],
             'address' => ['nullable', 'string', 'max:255'],
             'role' => ['required', 'in:admin,user'],
@@ -77,6 +82,12 @@ class UserController extends Controller
         }
 
         $user->update($validated);
+        ActivityLog::create([
+            'module' => 'User',
+            'action' => 'UPDATE',
+            'title' => 'User #' . $user->id,
+            'user_id' => auth()->id(),
+        ]);
 
         return redirect()->route('admin.users.index')->with([
             'status' => 'success',
@@ -86,7 +97,14 @@ class UserController extends Controller
 
     public function delete(int $id): RedirectResponse
     {
-        User::findOrFail($id)->delete();
+        $user = User::findOrFail($id);
+        $user->delete();
+        ActivityLog::create([
+            'module' => 'User',
+            'action' => 'DELETE',
+            'title' => 'User #' . $user->id,
+            'user_id' => auth()->id(),
+        ]);
 
         return redirect()->route('admin.users.index')->with([
             'status' => 'success',
@@ -101,7 +119,17 @@ class UserController extends Controller
             'ids.*' => ['integer', 'exists:users,id'],
         ]);
 
+        $users = User::whereIn('id', $validated['ids'])->get();
         User::whereIn('id', $validated['ids'])->delete();
+
+        foreach ($users as $user) {
+            ActivityLog::create([
+                'module' => 'User',
+                'action' => 'DELETE',
+                'title' => 'User #' . $user->id,
+                'user_id' => auth()->id(),
+            ]);
+        }
 
         return redirect()->route('admin.users.index')->with([
             'status' => 'success',

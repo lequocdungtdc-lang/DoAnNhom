@@ -62,4 +62,8 @@ class Song extends Model
     {
         return $this->songView ? $this->songView->views : 0;
     }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

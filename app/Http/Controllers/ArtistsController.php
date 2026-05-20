@@ -7,17 +7,17 @@ use App\Models\Categories;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-
+use App\Models\ActivityLog;
 class ArtistsController extends Controller
 {
-   public function index(Request $request): View
+    public function index(Request $request): View
     {
         // 1. Lấy từ khóa từ request
         $search = $request->query('search');
 
         // 2. Khởi tạo query với eager loading 'category'
-        $query = Artist::with(['songs','category'])->latest();
-        
+        $query = Artist::with(['songs', 'category'])->latest();
+
 
         // 3. Kiểm tra điều kiện: không trống và độ dài > 2
         if (!empty($search) && mb_strlen($search) > 2) {
@@ -49,8 +49,13 @@ class ArtistsController extends Controller
 
         $validated['status'] = $request->boolean('status');
 
-        Artist::create($validated);
-
+        $artist = Artist::create($validated);
+        ActivityLog::create([
+            'module' => 'Artist',
+            'action' => 'CREATE',
+            'title' => 'Artist #' . $artist->id,
+            'user_id' => auth()->id(),
+        ]);
         return redirect()->route('admin.artists.index')->with([
             'status' => 'success',
             'message' => 'Tạo nghệ sĩ thành công.',
@@ -77,7 +82,14 @@ class ArtistsController extends Controller
 
         $validated['status'] = $request->boolean('status');
 
-        Artist::findOrFail($id)->update($validated);
+        $artist = Artist::findOrFail($id);
+        $artist->update($validated);
+        ActivityLog::create([
+            'module' => 'Artist',
+            'action' => 'UPDATE',
+            'title' => 'Artist #' . $artist->id,
+            'user_id' => auth()->id(),
+        ]);
 
         return redirect()->route('admin.artists.index')->with([
             'status' => 'success',
@@ -87,7 +99,14 @@ class ArtistsController extends Controller
 
     public function delete(int $id): RedirectResponse
     {
-        Artist::findOrFail($id)->delete();
+        $artist = Artist::findOrFail($id);
+        $artist->delete();
+        ActivityLog::create([
+            'module' => 'Artist',
+            'action' => 'DELETE',
+            'title' => 'Artist #' . $artist->id,
+            'user_id' => auth()->id(),
+        ]);
 
         return redirect()->route('admin.artists.index')->with([
             'status' => 'success',
@@ -102,7 +121,17 @@ class ArtistsController extends Controller
             'ids.*' => ['integer', 'exists:artists,id'],
         ]);
 
+        $artists = Artist::whereIn('id', $validated['ids'])->get();
         Artist::whereIn('id', $validated['ids'])->delete();
+
+        foreach ($artists as $artist) {
+            ActivityLog::create([
+                'module' => 'Artist',
+                'action' => 'DELETE',
+                'title' => 'Artist #' . $artist->id,
+                'user_id' => auth()->id(),
+            ]);
+        }
 
         return redirect()->route('admin.artists.index')->with([
             'status' => 'success',

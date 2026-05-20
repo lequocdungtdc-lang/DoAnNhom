@@ -87,4 +87,8 @@ class User extends Authenticatable
 
         return view('admin.dashboard', compact('totalUsers'));
     }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

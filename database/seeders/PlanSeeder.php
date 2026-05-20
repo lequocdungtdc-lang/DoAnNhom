@@ -30,5 +30,11 @@ class PlanSeeder extends Seeder
             'price' => 899000,
             'status' => true,
         ]);
+        Plan::create([
+            'name' => 'Gói 2 năm',
+            'duration_days' => 730,
+            'price' => 1798000,
+            'status' => true,
+        ]);
     }
 }

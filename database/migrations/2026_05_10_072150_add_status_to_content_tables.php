@@ -23,9 +23,9 @@ return new class extends Migration
         //     $table->boolean('status')->default(1)->after('id');
         // });
 
-        Schema::table('comments', function (Blueprint $table) {
-            $table->boolean('status')->default(1)->after('id');
-        });
+        // Schema::table('comments', function (Blueprint $table) {
+        //     $table->boolean('status')->default(1)->after('id');
+        // });
 
         Schema::table('listening_history', function (Blueprint $table) {
             $table->boolean('status')->default(1)->after('id');
