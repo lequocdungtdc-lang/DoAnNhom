@@ -19,6 +19,7 @@ return new class extends Migration
             $table->boolean('status')->default(1)->after('thumbnail');
         });
 
+<<<<<<< HEAD
         // Schema::table('news', function (Blueprint $table) {
         //     $table->boolean('status')->default(1)->after('id');
         // });
@@ -26,6 +27,11 @@ return new class extends Migration
         // Schema::table('comments', function (Blueprint $table) {
         //     $table->boolean('status')->default(1)->after('id');
         // });
+=======
+        Schema::table('comments', function (Blueprint $table) {
+            $table->boolean('status')->default(1)->after('id');
+        });
+>>>>>>> QTuan/ui_tintuc
 
         Schema::table('listening_history', function (Blueprint $table) {
             $table->boolean('status')->default(1)->after('id');
