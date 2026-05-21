@@ -2,129 +2,137 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Models\Ad;
-
-use App\Models\Ad; // Khai báo chuẩn Model số ít
-
+use App\Support\ImageUpload;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 
 class AdController extends Controller
 {
-    public function index()
+    public function index(Request $request): View
     {
-
-        //  Đã sửa: Đổi Ads thành Ad
-
-        $ads = Ad::latest()->paginate(10);
-        return view('admin.ad.index', compact('ads'));
+        $search = $request->query('search');
+        $query = Ad::latest();
+        if (! empty($search) && mb_strlen($search) > 2) {
+            $query->where('name', 'like', '%' . $search . '%');
+        }
+        return view('admin.ad.index', [
+            'ads' => $query->paginate(10)->withQueryString(),
+        ]);
     }
 
-    public function create()
+    public function create(): View
     {
-        return view('admin.ad.create');
+        return view('admin.ad.form', [
+            'ad' => new Ad(),
+            'isEdit' => false,
+        ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'media_type' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:5120',
-            'link_url' => 'nullable|required|url',
-            'description' => 'nullable|string'
+            'name' => ['required', 'string', 'max:255'],
+            'media_type_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:5120'],
+            'link_url' => ['required', 'url'],
+            'description' => ['nullable', 'string'],
+            'is_active' => ['nullable', 'boolean'],
         ]);
 
-        if ($request->hasFile('media_type')) {
-            $validated['media_type'] = $request->file('media_type')->store('ads', 'public');
+        $validated['is_active'] = $request->boolean('is_active');
 
-        };
-
-        $validated['is_active'] = $request->has('is_active');
-
-        Ad::create($validated);
-
-        return redirect()->route('admin.ad.index')->with([
-            'status' => 'success',
-            'message' => 'Quảng cáo đã được tạo thành công.',
-        ]);
-    }
-
-
+        if ($request->hasFile('media_type_upload')) {
+            $validated['media_type'] = ImageUpload::store(
+                $request->file('media_type_upload'),
+                'ad_images',
+            );
         }
 
-        $validated['is_active'] = $request->has('is_active');
+        unset($validated['media_type_upload']);
 
-        //  Đã sửa: Đổi Ads thành Ad
         Ad::create($validated);
 
-        return redirect()->route('admin.ads.index')->with('success', 'Quảng cáo đã được tạo thành công');
+        return redirect()->route('admin.ads.index')->with([
+            'status' => 'success',
+            'message' => 'Tạo quảng cáo thành công.',
+        ]);
     }
 
-    //  Đã sửa: Thay đổi Type-hint từ Ads sang Ad để nhận diện đúng Model Binding
-
-    public function edit(Ad $ad)
+    public function edit(int $id): View
     {
-        return view('admin.ad.edit', compact('ad'));
+        return view('admin.ad.form', [
+            'ad' => Ad::findOrFail($id),
+            'isEdit' => true,
+        ]);
     }
 
-
-    //  Đã sửa: Thay đổi Type-hint từ Ads sang Ad
-
-    public function update(Request $request, Ad $ad)
+    public function update(Request $request, int $id): RedirectResponse
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'media_type' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:5120',
-            'link_url' => 'nullable|required|url',
-            'description' => 'nullable|string'
+            'name' => ['required', 'string', 'max:255'],
+            'media_type_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:5120'],
+            'link_url' => ['required', 'url'],
+            'description' => ['nullable', 'string'],
+            'is_active' => ['nullable', 'boolean'],
         ]);
 
-        if ($request->hasFile('media_type')) {
-            if ($ad->media_type && Storage::disk('public')->exists($ad->media_type)) {
-                Storage::disk('public')->delete($ad->media_type);
+        $validated['is_active'] = $request->boolean('is_active');
+
+        $ad = Ad::findOrFail($id);
+
+        if ($request->hasFile('media_type_upload')) {
+            $imagePath = ImageUpload::store(
+                $request->file('media_type_upload'),
+                'ad_images',
+                'public',
+                $ad->media_type,
+            );
+
+            if ($imagePath !== null) {
+                $validated['media_type'] = $imagePath;
             }
+        }
 
-            $validated['media_type'] = $request->file('media_type')->store('ads', 'public');
-
-        };
-
-        
-
-
-        $validated['is_active'] = $request->has('is_active');
+        unset($validated['media_type_upload']);
 
         $ad->update($validated);
 
-
-        return redirect()->route('admin.ad.index')->with([
+        return redirect()->route('admin.ads.index')->with([
             'status' => 'success',
-            'message' => 'Quảng cáo đã được cập nhật thành công.',
+            'message' => 'Cập nhật quảng cáo thành công.',
         ]);
     }
 
-
-        return redirect()->route('admin.ads.index');
-    }
-
-    //  Đã sửa: Thay đổi Type-hint từ Ads sang Ad
-
-    public function destroy(Ad $ad)
+    public function delete(int $id): RedirectResponse
     {
-        if ($ad->media_type && Storage::disk('public')->exists($ad->media_type)) {
-            Storage::disk('public')->delete($ad->media_type);
-        }
+        $ad = Ad::findOrFail($id);
+        ImageUpload::delete($ad->media_type);
         $ad->delete();
 
-        return redirect()->route('admin.ad.index')->with([
+        return redirect()->route('admin.ads.index')->with([
             'status' => 'success',
-            'message' => 'Quảng cáo đã được xóa thành công.',
+            'message' => 'Xóa quảng cáo thành công.',
         ]);
     }
-    
-}
 
-        return redirect()->route('admin.ads.index');
+    public function bulkDelete(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'ids' => ['required', 'array'],
+            'ids.*' => ['integer', 'exists:ads,id'],
+        ]);
+
+        $ads = Ad::whereIn('id', $validated['ids'])->get();
+
+        foreach ($ads as $ad) {
+            ImageUpload::delete($ad->media_type);
+            $ad->delete();
+        }
+
+        return redirect()->route('admin.ads.index')->with([
+            'status' => 'success',
+            'message' => 'Xóa các quảng cáo đã chọn thành công.',
+        ]);
     }
 }
-
