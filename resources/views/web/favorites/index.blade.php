@@ -26,15 +26,15 @@
         <div class="mt-5 space-y-2">
             @forelse ($songs as $index => $song)
                 <div class="group flex w-full items-center gap-4 rounded-2xl px-3 py-3 transition hover:bg-white/10" data-favorite-row>
-                    <button type="button" class="play-song flex min-w-0 flex-1 items-center gap-4 text-left" data-index="{{ $index }}">
+                    <button type="button" class="play-song flex min-w-0 flex-1 items-center gap-4 text-left {{ !$song['can_play'] ? 'cursor-not-allowed opacity-60' : '' }}" data-index="{{ $index }}" data-can-play="{{ $song['can_play'] ? '1' : '0' }}" @if (!$song['can_play']) onclick="showVipPrompt()" @endif>
                         <span class="w-6 text-center text-sm text-white/40 group-hover:text-fuchsia-200">{{ $index + 1 }}</span>
                         <img src="{{ $song['thumbnail'] ?? $fallbackCover }}" alt="{{ $song['title'] }}" class="h-14 w-14 rounded-xl object-cover">
                         <span class="min-w-0 flex-1">
-                            <span class="block truncate font-semibold">{{ $song['title'] }}</span>
+                            <span class="block truncate font-semibold">{{ $song['title'] }} @if ($song['is_vip']) <span class="ml-2 rounded-full bg-linear-to-r from-yellow-500 to-amber-500 px-2 py-0.5 text-[10px] font-bold text-black uppercase">VIP</span> @endif</span>
                             <span class="mt-1 block truncate text-sm text-white/55">{{ $song['artist'] }} • {{ $song['category'] }}</span>
                         </span>
                         <span class="hidden text-sm text-white/45 sm:block">{{ number_format((int) $song['listen_count']) }} lượt nghe</span>
-                        <span class="rounded-full border border-white/10 px-3 py-1 text-xs text-white/60 group-hover:border-fuchsia-300/50 group-hover:text-fuchsia-100">Play</span>
+                        <span class="rounded-full border border-white/10 px-3 py-1 text-xs text-white/60 group-hover:border-fuchsia-300/50 group-hover:text-fuchsia-100">{{ $song['can_play'] ? 'Play' : '🔒 VIP' }}</span>
                     </button>
 
                     <form action="{{ route('favorites.toggle', $song['id']) }}" method="POST" class="favorite-toggle-form" data-song-id="{{ $song['id'] }}" data-remove-on-unlike="true">
@@ -123,6 +123,10 @@
             return `${minutes}:${remainingSeconds}`;
         }
 
+        function showVipPrompt() {
+            window.showWebToast('Bài hát VIP. Vui lòng mua gói đăng ký để nghe và tắt quảng cáo.', 'error');
+        }
+
         function loadSong(index, shouldPlay = false) {
             if (!songs.length || !songs[index]) {
                 return;
@@ -130,6 +134,12 @@
 
             currentIndex = index;
             const song = songs[currentIndex];
+
+            if (!song.can_play || !song.audio_url) {
+                showVipPrompt();
+                return;
+            }
+
             audio.src = song.audio_url;
             playerCover.src = song.thumbnail || fallbackCover;
             playerTitle.textContent = song.title;

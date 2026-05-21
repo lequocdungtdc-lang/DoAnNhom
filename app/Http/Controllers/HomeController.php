@@ -6,6 +6,7 @@ use App\Models\Album;
 use App\Models\Artist;
 use App\Models\Categories;
 use App\Models\Song;
+use App\Models\Ad;
 use App\Support\AudioUpload;
 use App\Support\ImageUpload;
 use Illuminate\Http\Request;
@@ -16,6 +17,8 @@ class HomeController extends Controller
     public function index(Request $request): View
     {
         $query = trim($request->input('q'));
+        $user = auth()->user();
+        $hasActiveSubscription = $user && $user->activeSubscription ? true : false;
         $likedSongIds = auth()->check()
             ? auth()->user()->likedSongs()->pluck('songs.id')->all()
             : [];
@@ -42,7 +45,7 @@ class HomeController extends Controller
         }
 
         $songs = $songsQuery->get()
-            ->map(function (Song $song) use ($likedSongIds) {
+            ->map(function (Song $song) use ($likedSongIds, $hasActiveSubscription) {
                 return [
                     'id' => $song->id,
                     'title' => $song->title,
@@ -53,6 +56,8 @@ class HomeController extends Controller
                     'audio_url' => AudioUpload::url($song->audio_file),
                     'listen_count' => $song->listen_count,
                     'is_liked' => in_array($song->id, $likedSongIds, true),
+                    'is_vip' => (bool) $song->is_vip,
+                    'can_play' => !$song->is_vip || $hasActiveSubscription,
                 ];
             })
             ->filter(fn (array $song) => $song['audio_url'] !== null)
@@ -98,6 +103,8 @@ class HomeController extends Controller
                 ]);
         }
 
+        $activeAds = $hasActiveSubscription ? collect() : Ad::where('is_active', true)->get();
+
         return view('web.home.index', [
             'songs' => $songs,
             'featuredSong' => $songs->first(),
@@ -106,11 +113,15 @@ class HomeController extends Controller
             'searchArtists' => $searchArtists,
             'searchAlbums' => $searchAlbums,
             'searchCategories' => $searchCategories,
+            'activeAds' => $activeAds,
+            'hasActiveSubscription' => $hasActiveSubscription,
         ]);
     }
 
     public function rankings(): View
     {
+        $user = auth()->user();
+        $hasActiveSubscription = $user && $user->activeSubscription ? true : false;
         $likedSongIds = auth()->check()
             ? auth()->user()->likedSongs()->pluck('songs.id')->all()
             : [];
@@ -121,7 +132,7 @@ class HomeController extends Controller
             ->orderByDesc('listen_count')
             ->limit(50)
             ->get()
-            ->map(function (Song $song) use ($likedSongIds) {
+            ->map(function (Song $song) use ($likedSongIds, $hasActiveSubscription) {
                 return [
                     'id' => $song->id,
                     'title' => $song->title,
@@ -131,6 +142,8 @@ class HomeController extends Controller
                     'audio_url' => AudioUpload::url($song->audio_file),
                     'listen_count' => $song->listen_count,
                     'is_liked' => in_array($song->id, $likedSongIds, true),
+                    'is_vip' => (bool) $song->is_vip,
+                    'can_play' => !$song->is_vip || $hasActiveSubscription,
                 ];
             })
             ->filter(fn (array $song) => $song['audio_url'] !== null)

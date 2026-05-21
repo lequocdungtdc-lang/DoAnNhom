@@ -120,6 +120,7 @@
                         <th class="px-4 py-3">Album</th>
                         <th class="px-4 py-3">Lượt nghe</th>
                         <th class="px-4 py-3">Tệp âm thanh</th>
+                        <th class="px-4 py-3">VIP</th>
                         <th class="px-4 py-3">Trạng thái</th>
                         <th class="px-4 py-3 text-right">Thao tác</th>
                     </tr>
@@ -159,6 +160,13 @@
                                 <span class="text-xs text-red-300">File không tồn tại</span>
                             @else
                                 Chưa có
+                            @endif
+                        </td>
+                        <td class="px-4 py-4">
+                            @if ($song->is_vip)
+                                <span class="inline-flex items-center rounded-full bg-yellow-500/10 px-2.5 py-0.5 text-xs font-medium text-yellow-400">VIP</span>
+                            @else
+                                <span class="inline-flex items-center rounded-full bg-white/5 px-2.5 py-0.5 text-xs font-medium text-[#8a93a3]">Thường</span>
                             @endif
                         </td>
                         <td class="px-4 py-4">{{ $song->status ? 'Hiển thị' : 'Ẩn' }}</td>

@@ -12,6 +12,10 @@ class ListeningHistoryController extends Controller
 {
     public function store(Request $request, Song $song): JsonResponse
     {
+        if ($song->is_vip && !($request->user()->activeSubscription)) {
+            return response()->json(['ok' => false, 'message' => 'Gói VIP cần thiết để nghe bài hát này.'], 403);
+        }
+
         ListeningHistory::updateOrCreate(
             [
                 'user_id' => $request->user()->id,
@@ -29,6 +33,10 @@ class ListeningHistoryController extends Controller
 
     public function progress(Request $request, Song $song): JsonResponse
     {
+        if ($song->is_vip && !($request->user()->activeSubscription)) {
+            return response()->json(['ok' => false, 'message' => 'Gói VIP cần thiết để nghe bài hát này.'], 403);
+        }
+
         $user = $request->user();
         $seconds = (int) $request->input('seconds', 0);
 

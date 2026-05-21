@@ -14,6 +14,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\Web\PlanController as WebPlanController;
 use App\Http\Controllers\PodcastController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\ActivityLogController;
@@ -55,6 +56,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/favorites', [FavoriteSongController::class, 'index'])->name('favorites.index');
     Route::post('/favorites/{song}', [FavoriteSongController::class, 'toggle'])->name('favorites.toggle');
+    Route::get('/goi-dang-ky', [WebPlanController::class, 'index'])->name('plans.index');
+    Route::post('/goi-dang-ky/{plan}', [WebPlanController::class, 'subscribe'])->name('plans.subscribe');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 

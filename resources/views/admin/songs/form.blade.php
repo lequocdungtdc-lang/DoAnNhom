@@ -81,12 +81,21 @@
                     'value' => $song->thumbnail,
                 ])
 
-                <div>
-                    <label class="mb-2 block text-sm text-[#cfd5df]">Trạng thái</label>
-                    <select name="status" class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-admin-primary">
-                        <option value="1" @selected((string) old('status', (int) $song->status) === '1')>Hiển thị</option>
-                        <option value="0" @selected((string) old('status', (int) $song->status) === '0')>Ẩn</option>
-                    </select>
+                <div class="grid gap-5 md:grid-cols-2">
+                    <div>
+                        <label class="mb-2 block text-sm text-[#cfd5df]">Loại bài hát</label>
+                        <select name="is_vip" class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-admin-primary">
+                            <option value="0" @selected((string) old('is_vip', (int) $song->is_vip) === '0')>Thường</option>
+                            <option value="1" @selected((string) old('is_vip', (int) $song->is_vip) === '1')>VIP (Chỉ nghe khi có gói)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="mb-2 block text-sm text-[#cfd5df]">Trạng thái</label>
+                        <select name="status" class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-admin-primary">
+                            <option value="1" @selected((string) old('status', (int) $song->status) === '1')>Hiển thị</option>
+                            <option value="0" @selected((string) old('status', (int) $song->status) === '0')>Ẩn</option>
+                        </select>
+                    </div>
                 </div>
 
                 <button type="submit" class="rounded-2xl bg-admin-primary px-5 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">

@@ -20,11 +20,13 @@ class Song extends Model
         'thumbnail',
         'listen_count',
         'status',
+        'is_vip',
     ];
 
     protected $casts = [
         'listen_count' => 'integer',
         'status' => 'boolean',
+        'is_vip' => 'boolean',
     ];
 
     // Quan hệ với nghệ sĩ (Artist)
