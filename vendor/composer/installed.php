@@ -3,11 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-<<<<<<< HEAD
-        'reference' => 'b2d5325917385942d8d335cea81fecbbdb6aa275',
-=======
-        'reference' => 'cb1f2233d57c5b8c5990ec8c7c682268ee999cfc',
->>>>>>> QTuan/ui_tintuc
+        'reference' => 'fb5b8ef683863ab8dca5e2e712507f1edac9e327',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(
@@ -433,11 +429,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-<<<<<<< HEAD
-            'reference' => 'b2d5325917385942d8d335cea81fecbbdb6aa275',
-=======
-            'reference' => 'cb1f2233d57c5b8c5990ec8c7c682268ee999cfc',
->>>>>>> QTuan/ui_tintuc
+            'reference' => 'fb5b8ef683863ab8dca5e2e712507f1edac9e327',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(
@@ -1380,15 +1372,9 @@
             'dev_requirement' => false,
         ),
         'symfony/yaml' => array(
-<<<<<<< HEAD
-            'pretty_version' => 'v7.4.12',
-            'version' => '7.4.12.0',
-            'reference' => '8b6952b56ca6417f25f7a65758cadd0ce02edc51',
-=======
             'pretty_version' => 'v8.0.12',
             'version' => '8.0.12.0',
             'reference' => '2a36f4b8405d41fa31799b06874dbd45c1b16c30',
->>>>>>> QTuan/ui_tintuc
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/yaml',
             'aliases' => array(),

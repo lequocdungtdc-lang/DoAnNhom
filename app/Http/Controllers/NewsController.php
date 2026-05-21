@@ -3,19 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\News;
-<<<<<<< HEAD
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-=======
+
 use Illuminate\View\View;
-use Illuminate\Http\Request;
->>>>>>> QTuan/ui_tintuc
 
 class NewsController extends Controller
 {
     public function index()
     {
-<<<<<<< HEAD
+
         $news = News::where('status', 'published')
             ->latest()
             ->paginate(9);
@@ -23,13 +21,12 @@ class NewsController extends Controller
         return view('web.news.index', [
             'news' => $news,
         ]);
-=======
         $news = News::latest()->paginate(9);
 
         return view('admin.news.index', [
     'news' => $news
 ]);
->>>>>>> QTuan/ui_tintuc
+
     }
 
     public function create()
@@ -79,10 +76,6 @@ class NewsController extends Controller
             'relatedNews' => $relatedNews,
         ]);
     }
-    public function create()
-    {
-        return view('admin.news.create');
-    }
     /**
      * Form sửa tin tức
      */
@@ -119,25 +112,5 @@ class NewsController extends Controller
         return redirect()->route('admin.news.index')
             ->with('success', 'Xóa thành công');
     }
-    public function store(Request $request)
-    {
-        $slug = \Illuminate\Support\Str::slug($request->title);
-
-        $count = News::where('slug', 'LIKE', "{$slug}%")->count();
-
-        if ($count > 0) {
-        $slug = $slug . '-' . ($count + 1);
-        }
-
-            News::create([
-                'title' => $request->title,
-                'content' => $request->content,
-                'category' => $request->category,
-                'status' => $request->status ?? 1,
-                'slug' => $slug,
-        ]);
-
-        return redirect()->route('admin.news.index')
-                ->with('success', 'Thêm tin tức thành công');
-}
+    
 }

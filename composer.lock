@@ -8915,18 +8915,6 @@
         },
         {
             "name": "symfony/yaml",
-<<<<<<< HEAD
-            "version": "v7.4.12",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/yaml.git",
-                "reference": "8b6952b56ca6417f25f7a65758cadd0ce02edc51"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/8b6952b56ca6417f25f7a65758cadd0ce02edc51",
-                "reference": "8b6952b56ca6417f25f7a65758cadd0ce02edc51",
-=======
             "version": "v8.0.12",
             "source": {
                 "type": "git",
@@ -8937,7 +8925,6 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/yaml/zipball/2a36f4b8405d41fa31799b06874dbd45c1b16c30",
                 "reference": "2a36f4b8405d41fa31799b06874dbd45c1b16c30",
->>>>>>> QTuan/ui_tintuc
                 "shasum": ""
             },
             "require": {
@@ -8979,11 +8966,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
-<<<<<<< HEAD
-                "source": "https://github.com/symfony/yaml/tree/v7.4.12"
-=======
                 "source": "https://github.com/symfony/yaml/tree/v8.0.12"
->>>>>>> QTuan/ui_tintuc
             },
             "funding": [
                 {
@@ -9003,11 +8986,7 @@
                     "type": "tidelift"
                 }
             ],
-<<<<<<< HEAD
-            "time": "2026-05-20T07:20:23+00:00"
-=======
             "time": "2026-05-20T07:22:03+00:00"
->>>>>>> QTuan/ui_tintuc
         },
         {
             "name": "theseer/tokenizer",

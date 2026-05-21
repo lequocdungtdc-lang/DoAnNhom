@@ -26,18 +26,14 @@ Route::prefix('admin')->group(function () {
     Route::get('/news/create', [App\Http\Controllers\Admin\NewsController::class, 'create'])->name('admin.news.create');
     Route::post('/news', [App\Http\Controllers\Admin\NewsController::class, 'store'])->name('admin.news.store');
 });
-<<<<<<< HEAD
 // Tin tức
 Route::get('/tin-tuc', [NewsController::class, 'index'])->name('news.index');
 Route::get('/tin-tuc/{slug}', [NewsController::class, 'show'])->name('news.show');
-=======
+
 // Trang chủ - Dùng trang welcome mặc định của Laravel
 Route::get('/', function () {
     return view('welcome');
 });
-
->>>>>>> QTuan/ui_tintuc
-
 // Trang xếp hạng (nếu có)
 Route::get('/bang-xep-hang', [HomeController::class, 'rankings'])->name('rankings');
 
@@ -167,7 +163,7 @@ Route::prefix('admin')
             });
         Route::get('/activity_logs', [ActivityLogController::class, 'index'])
             ->name('activities.index');
-<<<<<<< HEAD
+
         Route::get('/podcast/{id}', [PodcastController::class, 'show'])
             ->name('podcasts.show');
         Route::prefix('comments')
@@ -182,10 +178,6 @@ Route::prefix('admin')
                 Route::delete('/{id}', [CommentsController::class, 'delete'])->name('delete');
             });
     });
-=======
-
-        
-
              Route::prefix('news')
             ->name('news.')
             ->group(function () {
@@ -204,5 +196,22 @@ Route::prefix('admin')
                 
 
             });
-    });
->>>>>>> QTuan/ui_tintuc
+            Route::get('/fix-db-ngay-lap-tuc', function () {
+    try {
+        if (!Illuminate\Support\Facades\Schema::hasColumn('song_user_likes', 'user_id')) {
+            Illuminate\Support\Facades\Schema::table('song_user_likes', function (Illuminate\Database\Schema\Blueprint $table) {
+                $table->bigInteger('user_id')->unsigned()->nullable();
+            });
+        }
+        
+        if (!Illuminate\Support\Facades\Schema::hasColumn('song_user_likes', 'song_id')) {
+            Illuminate\Support\Facades\Schema::table('song_user_likes', function (Illuminate\Database\Schema\Blueprint $table) {
+                $table->bigInteger('song_id')->unsigned()->nullable();
+            });
+        }
+        
+        return "Chúc mừng bạn! Đã tự động vá cột user_id và song_id vào MySQL thành công. Hãy bấm F5 quay lại trang chủ để tận hưởng thành quả!";
+    } catch (\Exception $e) {
+        return "Lỗi: " . $e->getMessage();
+    }
+});

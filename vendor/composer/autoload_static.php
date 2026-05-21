@@ -4,11 +4,7 @@
 
 namespace Composer\Autoload;
 
-<<<<<<< HEAD
-class ComposerStaticInit626b9e7ddd47fb7eff9aaa53cce0c9ad
-=======
-class ComposerStaticInit4acbac16f0f4dead9995488667007fd6
->>>>>>> QTuan/ui_tintuc
+class ComposerStaticInit609e53cc9d84e0b4ce322171ca02f196
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -605,7 +601,6 @@ class ComposerStaticInit4acbac16f0f4dead9995488667007fd6
         'App\\Http\\Controllers\\FavoriteSongController' => __DIR__ . '/../..' . '/app/Http/Controllers/FavoriteSongController.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
         'App\\Http\\Controllers\\ListeningHistoryController' => __DIR__ . '/../..' . '/app/Http/Controllers/ListeningHistoryController.php',
-        'App\\Http\\Controllers\\NewsController' => __DIR__ . '/../..' . '/app/Http/Controllers/NewsController.php',
         'App\\Http\\Controllers\\PlanController' => __DIR__ . '/../..' . '/app/Http/Controllers/PlanController.php',
         'App\\Http\\Controllers\\PodcastController' => __DIR__ . '/../..' . '/app/Http/Controllers/PodcastController.php',
         'App\\Http\\Controllers\\ProfileController' => __DIR__ . '/../..' . '/app/Http/Controllers/ProfileController.php',
@@ -8114,17 +8109,10 @@ class ComposerStaticInit4acbac16f0f4dead9995488667007fd6
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-<<<<<<< HEAD
-            $loader->prefixLengthsPsr4 = ComposerStaticInit626b9e7ddd47fb7eff9aaa53cce0c9ad::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit626b9e7ddd47fb7eff9aaa53cce0c9ad::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit626b9e7ddd47fb7eff9aaa53cce0c9ad::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit626b9e7ddd47fb7eff9aaa53cce0c9ad::$classMap;
-=======
-            $loader->prefixLengthsPsr4 = ComposerStaticInit4acbac16f0f4dead9995488667007fd6::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit4acbac16f0f4dead9995488667007fd6::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit4acbac16f0f4dead9995488667007fd6::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit4acbac16f0f4dead9995488667007fd6::$classMap;
->>>>>>> QTuan/ui_tintuc
+            $loader->prefixLengthsPsr4 = ComposerStaticInit609e53cc9d84e0b4ce322171ca02f196::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit609e53cc9d84e0b4ce322171ca02f196::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit609e53cc9d84e0b4ce322171ca02f196::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit609e53cc9d84e0b4ce322171ca02f196::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -22,7 +22,6 @@ return array(
     'App\\Http\\Controllers\\FavoriteSongController' => $baseDir . '/app/Http/Controllers/FavoriteSongController.php',
     'App\\Http\\Controllers\\HomeController' => $baseDir . '/app/Http/Controllers/HomeController.php',
     'App\\Http\\Controllers\\ListeningHistoryController' => $baseDir . '/app/Http/Controllers/ListeningHistoryController.php',
-    'App\\Http\\Controllers\\NewsController' => $baseDir . '/app/Http/Controllers/NewsController.php',
     'App\\Http\\Controllers\\PlanController' => $baseDir . '/app/Http/Controllers/PlanController.php',
     'App\\Http\\Controllers\\PodcastController' => $baseDir . '/app/Http/Controllers/PodcastController.php',
     'App\\Http\\Controllers\\ProfileController' => $baseDir . '/app/Http/Controllers/ProfileController.php',
