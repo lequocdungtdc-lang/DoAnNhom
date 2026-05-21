@@ -68,7 +68,7 @@
                         <p class="text-xs font-bold uppercase tracking-[0.35em] text-fuchsia-200/80">Playlist nổi bật</p>
                         <h1 class="mt-4 max-w-3xl text-4xl font-extrabold leading-tight sm:text-5xl">Chạm vào bài hát và phát nhạc ngay</h1>
                         <p class="mt-4 max-w-2xl text-sm leading-6 text-violet-100/75">
-                            Giao diện nghe nhạc lấy cảm hứng từ trải nghiệm khám phá và player cố định, tập trung trước vào phát nhạc.
+                            Giao diện nghe nhạc trực tuyến hiện đại, tối ưu cho trải nghiệm người dùng. Tìm kiếm, khám phá và thưởng thức hàng ngàn bài hát với chất lượng cao. Hãy bắt đầu hành trình âm nhạc của bạn ngay hôm nay!
                         </p>
                     </div>
 
@@ -166,7 +166,7 @@
 @section('player')
     <footer class="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-[#120b24]/95 px-4 py-3 shadow-2xl shadow-black/60 backdrop-blur-xl">
         <div class="mx-auto flex max-w-[1500px] flex-col gap-3 md:flex-row md:items-center md:justify-between">
-            <div class="flex min-w-0 items-center gap-3">
+            <div class="flex min-w-0 items-center gap-3 max-w-[300px] w-full">
                 <img id="playerCover" src="{{ $featuredSong['thumbnail'] ?? $fallbackCover }}" alt="Đang phát" class="h-14 w-14 rounded-2xl object-cover">
                 <div class="min-w-0">
                     <p id="playerTitle" class="truncate font-semibold">{{ $featuredSong['title'] ?? 'Chưa chọn bài hát' }}</p>
