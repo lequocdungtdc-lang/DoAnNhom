@@ -20,8 +20,11 @@ class DatabaseSeeder extends Seeder
             PlanSeeder::class,
             SubscriptionSeeder::class,
             SongSeeder::class,
-            PodcastSeeder::class,
             CommentSeeder::class,
+                PodcastSeeder::class,
+                UserSeeder::class,
+                NewsSeeder::class,
+                AdSeeder::class,
         ]);
     }
 }

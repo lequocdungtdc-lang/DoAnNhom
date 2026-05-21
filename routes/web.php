@@ -18,7 +18,10 @@ use App\Http\Controllers\PodcastController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\NewsController;
+
 use App\Http\Controllers\CommentsController;
+use App\Http\Controllers\AdController; 
+
 
 // === ADMIN NEWS ===
 Route::prefix('admin')->group(function () {
@@ -26,14 +29,18 @@ Route::prefix('admin')->group(function () {
     Route::get('/news/create', [App\Http\Controllers\Admin\NewsController::class, 'create'])->name('admin.news.create');
     Route::post('/news', [App\Http\Controllers\Admin\NewsController::class, 'store'])->name('admin.news.store');
 });
+
 // Tin tức
 Route::get('/tin-tuc', [NewsController::class, 'index'])->name('news.index');
 Route::get('/tin-tuc/{slug}', [NewsController::class, 'show'])->name('news.show');
 
-// Giữ route cũ nếu cần
-Route::get('/news', function () {
-    return redirect('/tin-tuc');
+// Trang chủ - Dùng trang welcome mặc định của Laravel
+Route::get('/', function () {
+    return view('welcome');
 });
+
+
+
 // Trang xếp hạng (nếu có)
 Route::get('/bang-xep-hang', [HomeController::class, 'rankings'])->name('rankings');
 
@@ -163,6 +170,7 @@ Route::prefix('admin')
             });
         Route::get('/activity_logs', [ActivityLogController::class, 'index'])
             ->name('activities.index');
+
         Route::get('/podcast/{id}', [PodcastController::class, 'show'])
             ->name('podcasts.show');
         Route::prefix('comments')
@@ -176,4 +184,40 @@ Route::prefix('admin')
                 Route::delete('/bulk-delete', [CommentsController::class, 'bulkDelete'])->name('bulk-delete');
                 Route::delete('/{id}', [CommentsController::class, 'delete'])->name('delete');
             });
+
+
+        
+
+             Route::prefix('news')
+            ->name('news.')
+            ->group(function () {
+
+                Route::get('/', [NewsController::class, 'index'])->name('index');
+
+                Route::get('/create', [NewsController::class, 'create'])->name('create');
+
+                Route::post('/', [NewsController::class, 'store'])->name('store');
+
+                Route::get('/{id}/edit', [NewsController::class, 'edit'])->name('edit');
+
+                Route::put('/{id}', [NewsController::class, 'update'])->name('update');
+
+                Route::delete('/{id}', [NewsController::class, 'destroy'])->name('destroy');
+                
+
+            });
+            
+
+Route::prefix('ads')
+    ->name('ads.')
+    ->group(function () {
+        Route::get('/', [AdController::class, 'index'])->name('index');
+        Route::get('/create', [AdController::class, 'create'])->name('create');
+        Route::post('/', [AdController::class, 'store'])->name('store');
+        // Sửa {id} thành {ad} để kích hoạt Route Model Binding tự động
+Route::get('/{ad}/edit', [AdController::class, 'edit'])->name('edit');
+Route::patch('/{ad}', [AdController::class, 'update'])->name('update'); 
+Route::delete('/{ad}', [AdController::class, 'destroy'])->name('destroy');
+
+    });
     });
