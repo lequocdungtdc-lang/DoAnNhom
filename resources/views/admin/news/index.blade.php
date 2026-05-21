@@ -3,8 +3,6 @@
 @section('content')
 <section class="py-4 md:py-6">
     <div class="admin-card">
-
-<<<<<<< HEAD
     <div class="bg-white shadow rounded-2xl overflow-hidden">
         <table class="w-full">
             <thead class="bg-gray-100">
@@ -44,7 +42,6 @@
             </tbody>
         </table>
     </div>
-=======
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
                 <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">
@@ -133,8 +130,6 @@
         <div class="mt-4">
             {{ $news->links() }}
         </div>
->>>>>>> QTuan/ui_tintuc
-
     </div>
 </section>
 @endsection
