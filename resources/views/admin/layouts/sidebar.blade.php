@@ -89,7 +89,7 @@
                 </span>
                 <span>Podcast</span>
             </a>
-<<<<<<< HEAD
+
             <a href="{{ route('admin.comments.index') }}" class="admin-nav-link {{ request()->routeIs('admin.comments.*') ? 'admin-nav-link-active' : '' }}">
                 <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-black/20">
                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -98,7 +98,7 @@
                     </svg>
                 </span>
                 <span>Comment</span>
-=======
+
             
             <a href="{{ route('admin.news.index') }}" class="admin-nav-link {{ request()->routeIs('admin.news.*') ? 'admin-nav-link-active' : '' }}">
                 <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-black/20">
@@ -108,7 +108,7 @@
                     </svg>
                 </span>
                 <span>Tin Tức</span>
->>>>>>> QTuan/ui_tintuc
+
             </a>
             <a href="{{ route('admin.ads.index') }}" class="admin-nav-link {{ request()->routeIs('admin.ads.*') ? 'admin-nav-link-active' : '' }}">
     <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-black/20">

@@ -214,5 +214,5 @@ Route::get('/{ad}/edit', [AdController::class, 'edit'])->name('edit');
 Route::patch('/{ad}', [AdController::class, 'update'])->name('update'); 
 Route::delete('/{ad}', [AdController::class, 'destroy'])->name('destroy');
     });
-    });
+
 
