@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
                 PodcastSeeder::class,
                 UserSeeder::class,
                 NewsSeeder::class,
+                AdSeeder::class,
         ]);
     }
 }

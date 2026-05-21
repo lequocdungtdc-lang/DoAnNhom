@@ -586,6 +586,7 @@ class ComposerStaticInit4acbac16f0f4dead9995488667007fd6
 
     public static $classMap = array (
         'App\\Http\\Controllers\\ActivityLogController' => __DIR__ . '/../..' . '/app/Http/Controllers/ActivityLogController.php',
+        'App\\Http\\Controllers\\AdController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdController.php',
         'App\\Http\\Controllers\\AdminDashboardController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdminDashboardController.php',
         'App\\Http\\Controllers\\Admin\\NewsController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/NewsController.php',
         'App\\Http\\Controllers\\AlbumController' => __DIR__ . '/../..' . '/app/Http/Controllers/AlbumController.php',
@@ -609,6 +610,7 @@ class ComposerStaticInit4acbac16f0f4dead9995488667007fd6
         'App\\Http\\Middleware\\AdminMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/AdminMiddleware.php',
         'App\\Http\\Middleware\\RoleMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/RoleMiddleware.php',
         'App\\Models\\ActivityLog' => __DIR__ . '/../..' . '/app/Models/ActivityLog.php',
+        'App\\Models\\Ad' => __DIR__ . '/../..' . '/app/Models/Ad.php',
         'App\\Models\\Album' => __DIR__ . '/../..' . '/app/Models/Album.php',
         'App\\Models\\Artist' => __DIR__ . '/../..' . '/app/Models/Artist.php',
         'App\\Models\\Categories' => __DIR__ . '/../..' . '/app/Models/Categories.php',

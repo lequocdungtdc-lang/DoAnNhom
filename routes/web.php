@@ -15,6 +15,7 @@ use App\Http\Controllers\PodcastController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\NewsController;
+use App\Http\Controllers\AdController; 
 
 // === ADMIN NEWS ===
 Route::prefix('admin')->group(function () {
@@ -163,4 +164,17 @@ Route::prefix('admin')
                 
 
             });
+            
+
+Route::prefix('ads')
+    ->name('ads.')
+    ->group(function () {
+        Route::get('/', [AdController::class, 'index'])->name('index');
+        Route::get('/create', [AdController::class, 'create'])->name('create');
+        Route::post('/', [AdController::class, 'store'])->name('store');
+        // Sửa {id} thành {ad} để kích hoạt Route Model Binding tự động
+Route::get('/{ad}/edit', [AdController::class, 'edit'])->name('edit');
+Route::patch('/{ad}', [AdController::class, 'update'])->name('update'); 
+Route::delete('/{ad}', [AdController::class, 'destroy'])->name('destroy');
+    });
     });

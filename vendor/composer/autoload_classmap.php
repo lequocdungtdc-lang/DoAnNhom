@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'App\\Http\\Controllers\\ActivityLogController' => $baseDir . '/app/Http/Controllers/ActivityLogController.php',
+    'App\\Http\\Controllers\\AdController' => $baseDir . '/app/Http/Controllers/AdController.php',
     'App\\Http\\Controllers\\AdminDashboardController' => $baseDir . '/app/Http/Controllers/AdminDashboardController.php',
     'App\\Http\\Controllers\\Admin\\NewsController' => $baseDir . '/app/Http/Controllers/Admin/NewsController.php',
     'App\\Http\\Controllers\\AlbumController' => $baseDir . '/app/Http/Controllers/AlbumController.php',
@@ -30,6 +31,7 @@ return array(
     'App\\Http\\Middleware\\AdminMiddleware' => $baseDir . '/app/Http/Middleware/AdminMiddleware.php',
     'App\\Http\\Middleware\\RoleMiddleware' => $baseDir . '/app/Http/Middleware/RoleMiddleware.php',
     'App\\Models\\ActivityLog' => $baseDir . '/app/Models/ActivityLog.php',
+    'App\\Models\\Ad' => $baseDir . '/app/Models/Ad.php',
     'App\\Models\\Album' => $baseDir . '/app/Models/Album.php',
     'App\\Models\\Artist' => $baseDir . '/app/Models/Artist.php',
     'App\\Models\\Categories' => $baseDir . '/app/Models/Categories.php',

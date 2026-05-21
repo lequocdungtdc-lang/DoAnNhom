@@ -99,6 +99,17 @@
                 </span>
                 <span>Tin Tức</span>
             </a>
+            <a href="{{ route('admin.ads.index') }}" class="admin-nav-link {{ request()->routeIs('admin.ads.*') ? 'admin-nav-link-active' : '' }}">
+    <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-black/20">
+        <!-- Icon đã đổi sang cái Loa phát thanh (Megaphone) phù hợp với Quảng cáo -->
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+        </svg>
+    </span>
+    <span>Quảng cáo</span>
+</a>
         </nav>
 
         <div class="mt-auto pt-6">
