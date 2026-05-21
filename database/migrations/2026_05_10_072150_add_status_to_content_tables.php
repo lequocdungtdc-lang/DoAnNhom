@@ -20,19 +20,6 @@ return new class extends Migration
         });
 
 
-        // Schema::table('news', function (Blueprint $table) {
-        //     $table->boolean('status')->default(1)->after('id');
-        // });
-
-        // Schema::table('comments', function (Blueprint $table) {
-        //     $table->boolean('status')->default(1)->after('id');
-        // });
-
-        Schema::table('comments', function (Blueprint $table) {
-            $table->boolean('status')->default(1)->after('id');
-        });
-
-
         Schema::table('news', function (Blueprint $table) {
             if (!Schema::hasColumn('news', 'status')) {
                 $table->enum('status', ['draft', 'published'])
@@ -63,13 +50,7 @@ return new class extends Migration
             $table->dropColumn('status');
         });
 
-        // Schema::table('news', function (Blueprint $table) {
-        //     $table->dropColumn('status');
-        // });
-
-        Schema::table('comments', function (Blueprint $table) {
-            $table->dropColumn('status');
-        });
+    
 
         Schema::table('listening_history', function (Blueprint $table) {
             $table->dropColumn('status');
