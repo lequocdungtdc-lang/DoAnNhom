@@ -65,9 +65,11 @@ class SongController extends Controller
             'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:4096'],
             'listen_count' => ['nullable', 'integer', 'min:0'],
             'status' => ['nullable', 'boolean'],
+            'is_vip' => ['nullable', 'boolean'],
         ]);
 
         $validated['status'] = $request->boolean('status');
+        $validated['is_vip'] = $request->boolean('is_vip');
         $validated['listen_count'] = (int) ($validated['listen_count'] ?? 0);
         $validated['audio_file'] = AudioUpload::store($request->file('audio_upload'), 'songs');
 
@@ -113,9 +115,11 @@ class SongController extends Controller
             'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:4096'],
             'listen_count' => ['nullable', 'integer', 'min:0'],
             'status' => ['nullable', 'boolean'],
+            'is_vip' => ['nullable', 'boolean'],
         ]);
 
         $validated['status'] = $request->boolean('status');
+        $validated['is_vip'] = $request->boolean('is_vip');
         $validated['listen_count'] = (int) ($validated['listen_count'] ?? 0);
 
         $song = Song::findOrFail($id);

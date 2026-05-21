@@ -14,12 +14,15 @@ class FavoriteSongController extends Controller
 {
     public function index(Request $request): View
     {
-        $songs = $request->user()
+        $user = $request->user();
+        $hasActiveSubscription = $user && $user->activeSubscription ? true : false;
+
+        $songs = $user
             ->likedSongs()
             ->with(['artist', 'category', 'album'])
             ->latest('song_user_likes.created_at')
             ->get()
-            ->map(function (Song $song) {
+            ->map(function (Song $song) use ($hasActiveSubscription) {
                 return [
                     'id' => $song->id,
                     'title' => $song->title,
@@ -27,9 +30,11 @@ class FavoriteSongController extends Controller
                     'category' => $song->category?->name ?? 'Chưa phân loại',
                     'album' => $song->album?->title,
                     'thumbnail' => ImageUpload::url($song->thumbnail),
-                    'audio_url' => AudioUpload::url($song->audio_file),
+                    'audio_url' => $song->is_vip && !$hasActiveSubscription ? null : AudioUpload::url($song->audio_file),
                     'listen_count' => $song->listen_count,
                     'is_liked' => true,
+                    'is_vip' => (bool) $song->is_vip,
+                    'can_play' => !$song->is_vip || $hasActiveSubscription,
                 ];
             })
             ->filter(fn (array $song) => $song['audio_url'] !== null)

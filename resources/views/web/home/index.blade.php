@@ -106,15 +106,26 @@
             <div class="mt-5 space-y-2">
                 @forelse ($songs as $index => $song)
                     <div class="group flex w-full items-center gap-4 rounded-2xl px-3 py-3 transition hover:bg-white/10">
-                        <button type="button" class="play-song flex min-w-0 flex-1 items-center gap-4 text-left" data-index="{{ $index }}">
+                        <button type="button"
+                            class="play-song flex min-w-0 flex-1 items-center gap-4 text-left {{ !$song['can_play'] ? 'cursor-not-allowed opacity-60' : '' }}"
+                            data-index="{{ $index }}"
+                            data-can-play="{{ $song['can_play'] ? '1' : '0' }}"
+                            @if (!$song['can_play']) onclick="showVipPrompt()" @endif>
                             <span class="w-6 text-center text-sm text-white/40 group-hover:text-fuchsia-200">{{ $index + 1 }}</span>
                             <img src="{{ $song['thumbnail'] ?? $fallbackCover }}" alt="{{ $song['title'] }}" class="h-14 w-14 rounded-xl object-cover">
                             <span class="min-w-0 flex-1">
-                                <span class="block truncate font-semibold">{{ $song['title'] }}</span>
+                                <span class="block truncate font-semibold">
+                                    {{ $song['title'] }}
+                                    @if ($song['is_vip'])
+                                        <span class="ml-2 rounded-full bg-linear-to-r from-yellow-500 to-amber-500 px-2 py-0.5 text-[10px] font-bold text-black uppercase">VIP</span>
+                                    @endif
+                                </span>
                                 <span class="mt-1 block truncate text-sm text-white/55">{{ $song['artist'] }} • {{ $song['category'] }}</span>
                             </span>
                             <span class="hidden text-sm text-white/45 sm:block">{{ number_format((int) $song['listen_count']) }} lượt nghe</span>
-                            <span class="rounded-full border border-white/10 px-3 py-1 text-xs text-white/60 group-hover:border-fuchsia-300/50 group-hover:text-fuchsia-100">Play</span>
+                            <span class="rounded-full border border-white/10 px-3 py-1 text-xs text-white/60 group-hover:border-fuchsia-300/50 group-hover:text-fuchsia-100">
+                                {{ $song['can_play'] ? 'Play' : '🔒 VIP' }}
+                            </span>
                         </button>
 
                         @auth
@@ -147,13 +158,16 @@
 
             <div class="mt-5 space-y-3">
                 @forelse ($topSongs as $index => $song)
-                    <button type="button" class="play-song flex w-full items-center gap-3 rounded-2xl bg-white/[0.05] p-3 text-left transition hover:bg-white/10" data-index="{{ $songs->search(fn ($item) => $item['id'] === $song['id']) }}">
+                    <button type="button" class="play-song flex w-full items-center gap-3 rounded-2xl bg-white/[0.05] p-3 text-left transition hover:bg-white/10 {{ !$song['can_play'] ? 'cursor-not-allowed opacity-60' : '' }}" data-index="{{ $songs->search(fn ($item) => $item['id'] === $song['id']) }}" data-can-play="{{ $song['can_play'] ? '1' : '0' }}" @if (!$song['can_play']) onclick="showVipPrompt()" @endif>
                         <span class="text-xl font-black text-fuchsia-300">{{ $index + 1 }}</span>
                         <img src="{{ $song['thumbnail'] ?? $fallbackCover }}" alt="{{ $song['title'] }}" class="h-12 w-12 rounded-xl object-cover">
                         <span class="min-w-0">
-                            <span class="block truncate text-sm font-semibold">{{ $song['title'] }}</span>
+                            <span class="block truncate text-sm font-semibold">{{ $song['title'] }} @if ($song['is_vip']) <span class="ml-2 rounded-full bg-linear-to-r from-yellow-500 to-amber-500 px-2 py-0.5 text-[10px] font-bold text-black uppercase">VIP</span> @endif</span>
                             <span class="mt-1 block truncate text-xs text-white/50">{{ $song['artist'] }}</span>
                         </span>
+                        @if (!$song['can_play'])
+                            <span class="text-xs text-yellow-400/70">🔒</span>
+                        @endif
                     </button>
                 @empty
                     <p class="text-sm text-white/55">Chưa có dữ liệu xếp hạng.</p>
@@ -161,6 +175,31 @@
             </div>
         </aside>
     </section>
+
+    @if (!$hasActiveSubscription && $activeAds->isNotEmpty())
+        <section class="mt-8 rounded-[2rem] border border-white/10 bg-white/[0.06] p-5 backdrop-blur-xl">
+            <div class="flex items-center justify-between">
+                <p class="text-xs font-bold uppercase tracking-[0.28em] text-violet-200/70">Quảng cáo</p>
+                <span class="text-xs text-white/50">Nâng cấp gói để tắt quảng cáo</span>
+            </div>
+
+            <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                @foreach ($activeAds as $ad)
+                    <a href="{{ $ad->link_url ?: '#' }}" target="_blank" rel="noopener noreferrer" class="group block overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] transition hover:bg-white/[0.08]">
+                        @if ($ad->image_url)
+                            <img src="{{ \App\Support\ImageUpload::url($ad->image_url) }}" alt="{{ $ad->title }}" class="h-44 w-full object-cover transition duration-300 group-hover:scale-[1.02]">
+                        @endif
+                        <div class="p-4">
+                            <h3 class="line-clamp-1 font-semibold text-white">{{ $ad->title }}</h3>
+                            @if ($ad->description)
+                                <p class="mt-1 line-clamp-2 text-sm text-white/60">{{ $ad->description }}</p>
+                            @endif
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+        </section>
+    @endif
 @endsection
 
 @section('player')
@@ -240,6 +279,10 @@
             @endauth
         }
 
+        function showVipPrompt() {
+            window.showWebToast('Bài hát VIP. Vui lòng mua gói đăng ký để nghe và tắt quảng cáo.', 'error');
+        }
+
         function loadSong(index, shouldPlay = false) {
             if (!songs.length || !songs[index]) {
                 return;
@@ -247,6 +290,12 @@
 
             currentIndex = index;
             const song = songs[currentIndex];
+
+            if (!song.can_play || !song.audio_url) {
+                showVipPrompt();
+                return;
+            }
+
             audio.src = song.audio_url;
             playerCover.src = song.thumbnail || fallbackCover;
             playerTitle.textContent = song.title;
@@ -261,6 +310,12 @@
         }
 
         function playCurrent() {
+            const song = songs[currentIndex];
+            if (!song || !song.can_play) {
+                showVipPrompt();
+                return;
+            }
+
             if (!audio.src) {
                 loadSong(currentIndex);
             }
@@ -270,6 +325,11 @@
 
         document.querySelectorAll('.play-song').forEach((button) => {
             button.addEventListener('click', () => {
+                const canPlay = button.dataset.canPlay === '1';
+                if (!canPlay) {
+                    showVipPrompt();
+                    return;
+                }
                 loadSong(Number(button.dataset.index), true);
             });
         });
