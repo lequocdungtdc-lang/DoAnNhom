@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ad extends Model
 {
+    protected $table = 'ads';
     protected $fillable = [
         'name',
         'media_type',

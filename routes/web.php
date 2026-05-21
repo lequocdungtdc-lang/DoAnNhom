@@ -18,7 +18,11 @@ use App\Http\Controllers\PodcastController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\NewsController;
+
 use App\Http\Controllers\CommentsController;
+
+use App\Http\Controllers\AdController; 
+
 
 // === ADMIN NEWS ===
 Route::prefix('admin')->group(function () {
@@ -196,22 +200,19 @@ Route::prefix('admin')
                 
 
             });
-            Route::get('/fix-db-ngay-lap-tuc', function () {
-    try {
-        if (!Illuminate\Support\Facades\Schema::hasColumn('song_user_likes', 'user_id')) {
-            Illuminate\Support\Facades\Schema::table('song_user_likes', function (Illuminate\Database\Schema\Blueprint $table) {
-                $table->bigInteger('user_id')->unsigned()->nullable();
-            });
-        }
-        
-        if (!Illuminate\Support\Facades\Schema::hasColumn('song_user_likes', 'song_id')) {
-            Illuminate\Support\Facades\Schema::table('song_user_likes', function (Illuminate\Database\Schema\Blueprint $table) {
-                $table->bigInteger('song_id')->unsigned()->nullable();
-            });
-        }
-        
-        return "Chúc mừng bạn! Đã tự động vá cột user_id và song_id vào MySQL thành công. Hãy bấm F5 quay lại trang chủ để tận hưởng thành quả!";
-    } catch (\Exception $e) {
-        return "Lỗi: " . $e->getMessage();
-    }
-});
+            
+            
+
+Route::prefix('ads')
+    ->name('ads.')
+    ->group(function () {
+        Route::get('/', [AdController::class, 'index'])->name('index');
+        Route::get('/create', [AdController::class, 'create'])->name('create');
+        Route::post('/', [AdController::class, 'store'])->name('store');
+        // Sửa {id} thành {ad} để kích hoạt Route Model Binding tự động
+Route::get('/{ad}/edit', [AdController::class, 'edit'])->name('edit');
+Route::patch('/{ad}', [AdController::class, 'update'])->name('update'); 
+Route::delete('/{ad}', [AdController::class, 'destroy'])->name('destroy');
+    });
+    });
+

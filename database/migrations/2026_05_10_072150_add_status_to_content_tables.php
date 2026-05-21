@@ -33,6 +33,14 @@ return new class extends Migration
         });
 >>>>>>> QTuan/ui_tintuc
 
+        Schema::table('news', function (Blueprint $table) {
+            if (!Schema::hasColumn('news', 'status')) {
+                $table->enum('status', ['draft', 'published'])
+                    ->default('published')
+                    ->after('views');
+            }
+        });
+        
         Schema::table('listening_history', function (Blueprint $table) {
             $table->boolean('status')->default(1)->after('id');
         });
