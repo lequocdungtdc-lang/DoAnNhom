@@ -18,15 +18,11 @@ class SampleDataSeeder extends Seeder
 {
     public function run(): void
     {
-
-
-        DB::table('song_views')->delete();
-
-        DB::table('news')->delete();
-
-        DB::table('artists')->delete();
-
-        DB::table('albums')->delete();
+        // Comment out deletes to preserve data from previous seeders
+        // DB::table('song_views')->delete();
+        // DB::table('news')->delete();
+        // DB::table('artists')->delete();
+        // DB::table('albums')->delete();
 
 
 

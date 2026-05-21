@@ -13,7 +13,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserSeeder::class,
-
             CategorySeeder::class,
             ArtistSeeder::class,
             SampleDataSeeder::class,
@@ -21,10 +20,9 @@ class DatabaseSeeder extends Seeder
             SubscriptionSeeder::class,
             SongSeeder::class,
             CommentSeeder::class,
-                PodcastSeeder::class,
-                UserSeeder::class,
-                NewsSeeder::class,
-                AdSeeder::class,
+            PodcastSeeder::class,
+            NewsSeeder::class,
+            AdSeeder::class,
         ]);
     }
 }
