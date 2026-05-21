@@ -126,6 +126,24 @@ class SampleDataSeeder extends Seeder
         ])->map(fn($item) => Album::create($item));
 
 
+        News::insert([
+            [
+                'title' => 'Tiêu đề tin tức mẫu 1',
+                'slug' => 'tieu-de-tin-tuc-mau-1', // <-- Thêm dòng này
+                'content' => 'Nội dung chi tiết của tin tức mẫu 1',
+                'status' => 'published', 
+                'created_at' => now(), 
+                'updated_at' => now()
+            ],
+            [
+                'title' => 'Tiêu đề tin tức mẫu 2',
+                'slug' => 'tieu-de-tin-tuc-mau-2', // <-- Thêm dòng này
+                'content' => 'Nội dung chi tiết của tin tức mẫu 2',
+                'status' => 'published', 
+                'created_at' => now(), 
+                'updated_at' => now()
+            ],
+        ]);
 
         $user = User::where('email', 'user@gmail.com')->first();
 
