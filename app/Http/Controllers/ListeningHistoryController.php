@@ -20,7 +20,7 @@ class ListeningHistoryController extends Controller
             [
                 'user_id' => $request->user()->id,
                 'song_id' => $song->id,
-                'listened_at' => now()->toDateString(),
+                'listened_at' => now(),
             ],
             [
                 'listened_seconds' => 0,
@@ -46,7 +46,7 @@ class ListeningHistoryController extends Controller
 
         $history = ListeningHistory::where('user_id', $user->id)
             ->where('song_id', $song->id)
-            ->whereDate('listened_at', now()->toDateString())
+            ->whereDate('listened_at', now())
             ->first();
 
         if (!$history) {
