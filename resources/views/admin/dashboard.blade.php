@@ -119,11 +119,11 @@
                         <div>
 
                             <p class="text-sm font-medium text-white">
-                                {{ $comment->user->fullname }}
+                                {{ $comment->user->fullname??'Người dùng không xác định' }}
                             </p>
 
                             <p class="text-xs text-[#7f8898]">
-                                {{ $comment->song->title }}
+                                {{ $comment->song->title??'Bài hát không xác định' }}
                             </p>
 
                         </div>

@@ -47,6 +47,8 @@
                         <option value="0" @selected((string) old('status', (int) $category->status) === '0')>Ẩn</option>
                     </select>
                 </div>
+                {{-- updated_at hidden --}}
+                <input type="hidden" name="updated_at" value="{{ $category->updated_at }}">
 
                 <button type="submit" class="rounded-2xl bg-admin-primary px-5 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">
                     {{ $isEdit ? 'Lưu thay đổi' : 'Tạo thể loại' }}
