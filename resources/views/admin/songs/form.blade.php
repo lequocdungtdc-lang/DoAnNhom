@@ -97,6 +97,8 @@
                         </select>
                     </div>
                 </div>
+                <input type="hidden" name="updated_at" value="{{ $song->updated_at }}">
+                
 
                 <button type="submit" class="rounded-2xl bg-admin-primary px-5 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">
                     {{ $isEdit ? 'Lưu thay đổi' : 'Tạo bài hát' }}

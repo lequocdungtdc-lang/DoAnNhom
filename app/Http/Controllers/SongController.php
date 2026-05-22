@@ -56,17 +56,54 @@ class SongController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'artist_id' => ['nullable', 'exists:artists,id'],
-            'category_id' => ['required', 'exists:categories,id'],
-            'album_id' => ['nullable', 'exists:albums,id'],
-            'audio_upload' => ['required', 'file', 'mimes:mp3', 'max:512000'],
-            'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:4096'],
-            'listen_count' => ['nullable', 'integer', 'min:0'],
-            'status' => ['nullable', 'boolean'],
-            'is_vip' => ['nullable', 'boolean'],
-        ]);
+       $validated = $request->validate(
+            [
+                'title' => ['required', 'string', 'max:255'],
+                'artist_id' => ['nullable', 'exists:artists,id'],
+                'category_id' => ['required', 'exists:categories,id'],
+                'album_id' => ['nullable', 'exists:albums,id'],
+                'audio_upload' => ['required', 'file', 'mimes:mp3', 'max:512000'],
+                'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:4096'],
+                'listen_count' => ['nullable', 'integer', 'min:0'],
+                'status' => ['nullable', 'boolean'],
+                'is_vip' => ['nullable', 'boolean'],
+            ],
+            [
+                // title
+                'title.required' => 'Vui lòng nhập tên bài hát.',
+                'title.string' => 'Tên bài hát không hợp lệ.',
+                'title.max' => 'Tên bài hát không được vượt quá 255 ký tự.',
+
+                // artist
+                'artist_id.exists' => 'Nghệ sĩ được chọn không tồn tại.',
+
+                // category
+                'category_id.required' => 'Vui lòng chọn thể loại.',
+                'category_id.exists' => 'Thể loại được chọn không tồn tại.',
+
+                // album
+                'album_id.exists' => 'Album được chọn không tồn tại.',
+
+                // audio
+                'audio_upload.required' => 'Vui lòng tải lên file nhạc.',
+                'audio_upload.file' => 'File nhạc không hợp lệ.',
+                'audio_upload.mimes' => 'File nhạc phải có định dạng MP3.',
+                'audio_upload.max' => 'File nhạc không được vượt quá 500MB.',
+
+                // image
+                'image_upload.image' => 'Tệp tải lên phải là hình ảnh.',
+                'image_upload.mimes' => 'Ảnh phải có định dạng jpg, jpeg, png, gif hoặc webp.',
+                'image_upload.max' => 'Ảnh không được vượt quá 4MB.',
+
+                // listen count
+                'listen_count.integer' => 'Lượt nghe phải là số nguyên.',
+                'listen_count.min' => 'Lượt nghe không được nhỏ hơn 0.',
+
+                // boolean
+                'status.boolean' => 'Trạng thái không hợp lệ.',
+                'is_vip.boolean' => 'Giá trị VIP không hợp lệ.',
+            ]
+        );
 
         $validated['status'] = $request->boolean('status');
         $validated['is_vip'] = $request->boolean('is_vip');
@@ -95,6 +132,11 @@ class SongController extends Controller
 
     public function edit(int $id): View
     {
+        if (!Song::where('id', $id)->exists()) {
+            return view('admin.layouts.404', [
+                'message' => 'Bài hát không tồn tại.'
+            ]);
+        }
         return view('admin.songs.form', [
             'song' => Song::findOrFail($id),
             'albums' => Album::orderBy('title')->get(),
@@ -106,6 +148,13 @@ class SongController extends Controller
 
     public function update(Request $request, int $id): RedirectResponse
     {
+        if (!Song::where('id', $id)->exists()) {
+            return redirect()->route('admin.songs.index')->with([
+                'status' => 'error',
+                'message' => 'Bài hát không tồn tại.',
+            ]);
+        }
+
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'artist_id' => ['nullable', 'exists:artists,id'],
@@ -116,6 +165,43 @@ class SongController extends Controller
             'listen_count' => ['nullable', 'integer', 'min:0'],
             'status' => ['nullable', 'boolean'],
             'is_vip' => ['nullable', 'boolean'],
+            'updated_at' => ['required'],
+        ],
+            [
+            // title
+            'title.required' => 'Vui lòng nhập tên bài hát.',
+            'title.string' => 'Tên bài hát không hợp lệ.',
+            'title.max' => 'Tên bài hát không được vượt quá 255 ký tự.',
+
+            // artist
+            'artist_id.exists' => 'Nghệ sĩ được chọn không tồn tại.',
+
+            // category
+            'category_id.required' => 'Vui lòng chọn thể loại.',
+            'category_id.exists' => 'Thể loại được chọn không tồn tại.',
+
+            // album
+            'album_id.exists' => 'Album được chọn không tồn tại.',
+
+            // audio
+            'audio_upload.file' => 'File nhạc không hợp lệ.',
+            'audio_upload.mimes' => 'File nhạc phải có định dạng MP3.',
+            'audio_upload.max' => 'File nhạc không được vượt quá 500MB.',
+
+            // image
+            'image_upload.image' => 'Tệp tải lên phải là hình ảnh.',
+            'image_upload.mimes' => 'Ảnh phải có định dạng jpg, jpeg, png, gif hoặc webp.',
+            'image_upload.max' => 'Ảnh không được vượt quá 4MB.',
+
+            // listen count
+            'listen_count.integer' => 'Lượt nghe phải là số nguyên.',
+            'listen_count.min' => 'Lượt nghe không được nhỏ hơn 0.',
+
+            // boolean
+            'status.boolean' => 'Trạng thái không hợp lệ.',
+            'is_vip.boolean' => 'Giá trị VIP không hợp lệ.',
+            // updated_at
+            'updated_at.required' => 'Dữ liệu cập nhật không hợp lệ.',
         ]);
 
         $validated['status'] = $request->boolean('status');
@@ -123,6 +209,13 @@ class SongController extends Controller
         $validated['listen_count'] = (int) ($validated['listen_count'] ?? 0);
 
         $song = Song::findOrFail($id);
+        // CHECK CONFLICT
+        if ($request->updated_at != $song->updated_at->toDateTimeString()) {
+            return redirect()->route('admin.songs.edit', $id)->with([
+                'status' => 'error',
+                'message' => 'Bài hát đã được cập nhật bởi người khác. Vui lòng tải lại trang và thử lại.',
+            ]);
+        }
         ActivityLog::create([
             'module' => 'Song',
             'action' => 'UPDATE',
@@ -154,6 +247,12 @@ class SongController extends Controller
 
         unset($validated['audio_upload'], $validated['image_upload']);
 
+        if (!Song::where('id', $id)->exists()) {
+            return view('admin.layouts.404', [
+                'message' => 'Bài hát không tồn tại.'
+            ]);
+        }
+        
         $song->update($validated);
 
         return redirect()->route('admin.songs.index')->with([
@@ -164,6 +263,12 @@ class SongController extends Controller
 
     public function delete(int $id): RedirectResponse
     {
+        if (!Song::where('id', $id)->exists()) {
+            return redirect()->route('admin.songs.index')->with([
+                'status' => 'error',
+                'message' => 'Bài hát không tồn tại.',
+            ]);
+        }
         $song = Song::findOrFail($id);
 
         AudioUpload::delete($song->audio_file);

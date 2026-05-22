@@ -26,7 +26,7 @@
                         </div>
 
                         <div class="py-2">
-                            <a href="{{ route(auth()->user()->role === 'admin' ? 'admin.dashboard' : 'dashboard') }}" class="flex items-center justify-between rounded-2xl px-3 py-2.5 text-sm text-white/75 transition hover:bg-white/10 hover:text-white">
+                            <a href="{{ route('dashboard') }}" class="flex items-center justify-between rounded-2xl px-3 py-2.5 text-sm text-white/75 transition hover:bg-white/10 hover:text-white">
                                 <span>Tổng quan tài khoản</span>
                                 <span class="text-xs text-white/35">›</span>
                             </a>
