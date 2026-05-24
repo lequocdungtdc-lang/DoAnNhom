@@ -1,0 +1,4 @@
+*
+!.gitignore
+!category_images/
+!category_images/.gitignore
