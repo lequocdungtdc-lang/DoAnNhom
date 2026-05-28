@@ -20,10 +20,14 @@
             <span>○</span>
             BXH nhạc mới
         </a>
-        <span class="flex items-center gap-3 rounded-2xl px-4 py-3 text-white/35">
+        <a href="{{ route('podcasts.index') }}" class="flex items-center gap-3 rounded-2xl px-4 py-3 transition {{ request()->routeIs('podcasts.*') ? 'bg-white/10 text-white shadow-lg shadow-violet-950/30' : 'text-white/55 hover:bg-white/10 hover:text-white' }}">
             <span>○</span>
-            Radio
-        </span>
+            Podcast
+        </a>
+        <a href="{{ route('artists.index') }}" class="flex items-center gap-3 rounded-2xl px-4 py-3 transition {{ request()->routeIs('artists.*') ? 'bg-white/10 text-white shadow-lg shadow-violet-950/30' : 'text-white/55 hover:bg-white/10 hover:text-white' }}">
+            <span>○</span>
+            Nghệ sĩ
+        </a>
         <span class="flex items-center gap-3 rounded-2xl px-4 py-3 text-white/35">
             <span>○</span>
             Thư viện

@@ -2,6 +2,8 @@
 
 @php
     $fallbackCover = 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=600&q=80';
+    $songCount = $songs->count();
+    $initialTrack = $featuredSong ?? $podcasts->first();
 @endphp
 
 @section('content')
@@ -19,8 +21,13 @@
                 <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
                     @foreach ($searchArtists as $artist)
                         <div class="group flex flex-col items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.05] p-4 transition hover:bg-white/10">
-                            <img src="{{ $artist['image'] ?? $fallbackCover }}" alt="{{ $artist['name'] }}" class="h-20 w-20 rounded-full object-cover shadow-lg">
-                            <p class="truncate text-center text-sm font-semibold text-white">{{ $artist['name'] }}</p>
+                            <a href="{{ route('artists.show', $artist['id']) }}">
+                                <img src="{{ $artist['image'] ?? $fallbackCover }}" alt="{{ $artist['name'] }}" class="h-20 w-20 rounded-full object-cover shadow-lg">
+                            </a>
+                            <a href="{{ route('artists.show', $artist['id']) }}" class="truncate text-center text-sm font-semibold text-white hover:text-fuchsia-100">{{ $artist['name'] }}</a>
+                            <button type="button" class="play-artist rounded-full border border-white/10 px-4 py-2 text-xs font-semibold text-white/70 transition hover:border-fuchsia-300/50 hover:text-fuchsia-100" data-artist-id="{{ $artist['id'] }}">
+                                Phát nghệ sĩ
+                            </button>
                         </div>
                     @endforeach
                 </div>
@@ -75,7 +82,7 @@
                     <div class="mt-8 flex flex-wrap items-center gap-3">
                         <button type="button"
                             class="play-song rounded-full bg-gradient-to-r from-fuchsia-500 to-violet-500 px-6 py-3 text-sm font-bold shadow-lg shadow-fuchsia-950/40 transition hover:brightness-110"
-                            data-index="0">
+                            data-track-index="0">
                             Phát ngay
                         </button>
                         <span class="rounded-full border border-white/10 px-4 py-3 text-sm text-white/70">
@@ -108,7 +115,7 @@
                     <div class="group flex w-full items-center gap-4 rounded-2xl px-3 py-3 transition hover:bg-white/10">
                         <button type="button"
                             class="play-song flex min-w-0 flex-1 items-center gap-4 text-left {{ !$song['can_play'] ? 'cursor-not-allowed opacity-60' : '' }}"
-                            data-index="{{ $index }}"
+                            data-track-index="{{ $index }}"
                             data-can-play="{{ $song['can_play'] ? '1' : '0' }}"
                             @if (!$song['can_play']) onclick="showVipPrompt()" @endif>
                             <span class="w-6 text-center text-sm text-white/40 group-hover:text-fuchsia-200">{{ $index + 1 }}</span>
@@ -158,7 +165,7 @@
 
             <div class="mt-5 space-y-3">
                 @forelse ($topSongs as $index => $song)
-                    <button type="button" class="play-song flex w-full items-center gap-3 rounded-2xl bg-white/[0.05] p-3 text-left transition hover:bg-white/10 {{ !$song['can_play'] ? 'cursor-not-allowed opacity-60' : '' }}" data-index="{{ $songs->search(fn ($item) => $item['id'] === $song['id']) }}" data-can-play="{{ $song['can_play'] ? '1' : '0' }}" @if (!$song['can_play']) onclick="showVipPrompt()" @endif>
+                    <button type="button" class="play-song flex w-full items-center gap-3 rounded-2xl bg-white/[0.05] p-3 text-left transition hover:bg-white/10 {{ !$song['can_play'] ? 'cursor-not-allowed opacity-60' : '' }}" data-track-index="{{ $songs->search(fn ($item) => $item['id'] === $song['id']) }}" data-can-play="{{ $song['can_play'] ? '1' : '0' }}" @if (!$song['can_play']) onclick="showVipPrompt()" @endif>
                         <span class="text-xl font-black text-fuchsia-300">{{ $index + 1 }}</span>
                         <img src="{{ $song['thumbnail'] ?? $fallbackCover }}" alt="{{ $song['title'] }}" class="h-12 w-12 rounded-xl object-cover">
                         <span class="min-w-0">
@@ -175,6 +182,63 @@
             </div>
         </aside>
     </section>
+
+    @if (!$searchQuery && $artists->isNotEmpty())
+        <section id="artists" class="mt-8 rounded-[2rem] border border-white/10 bg-white/[0.07] p-5 backdrop-blur-xl sm:p-6">
+            <div class="flex items-center justify-between gap-4">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-[0.28em] text-violet-200/70">Nghệ sĩ</p>
+                    <h2 class="mt-2 text-2xl font-bold">Phát theo nghệ sĩ</h2>
+                </div>
+                <p class="text-sm text-white/50">{{ $artists->count() }} nghệ sĩ</p>
+            </div>
+
+            <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                @foreach ($artists as $artist)
+                    <article class="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.05] p-4">
+                        <img src="{{ $artist['image'] ?? $fallbackCover }}" alt="{{ $artist['name'] }}" class="h-16 w-16 rounded-full object-cover">
+                        <div class="min-w-0 flex-1">
+                            <a href="{{ route('artists.show', $artist['id']) }}" class="truncate font-semibold text-white hover:text-fuchsia-100">{{ $artist['name'] }}</a>
+                            <p class="mt-1 text-sm text-white/50">{{ $artist['songs_count'] }} bài hát</p>
+                        </div>
+                        <button type="button" class="play-artist rounded-full bg-white px-4 py-2 text-xs font-bold text-[#170f2f] transition hover:bg-violet-100" data-artist-id="{{ $artist['id'] }}">
+                            Play
+                        </button>
+                    </article>
+                @endforeach
+            </div>
+        </section>
+    @endif
+
+    @if ($podcasts->isNotEmpty())
+        <section id="podcasts" class="mt-8 rounded-[2rem] border border-white/10 bg-black/20 p-5 backdrop-blur-xl sm:p-6">
+            <div class="flex items-center justify-between gap-4">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-[0.28em] text-violet-200/70">Podcast</p>
+                    <h2 class="mt-2 text-2xl font-bold">Podcast mới</h2>
+                </div>
+                <p class="text-sm text-white/50">{{ $podcasts->count() }} tập</p>
+            </div>
+
+            <div class="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                @foreach ($podcasts as $index => $podcast)
+                    <article class="group flex gap-4 rounded-2xl border border-white/10 bg-white/[0.05] p-4 transition hover:bg-white/10">
+                        <img src="{{ $podcast['thumbnail'] ?? $fallbackCover }}" alt="{{ $podcast['title'] }}" class="h-20 w-20 rounded-2xl object-cover">
+                        <div class="min-w-0 flex-1">
+                            <a href="{{ route('podcasts.show', $podcast['id']) }}" class="line-clamp-1 font-semibold text-white hover:text-fuchsia-100">{{ $podcast['title'] }}</a>
+                            <p class="mt-1 line-clamp-2 text-sm text-white/55">{{ $podcast['description'] ?: 'Podcast' }}</p>
+                            <div class="mt-3 flex items-center gap-3">
+                                <button type="button" class="play-song rounded-full border border-white/10 px-4 py-2 text-xs font-semibold text-white/70 transition group-hover:border-fuchsia-300/50 group-hover:text-fuchsia-100" data-track-index="{{ $songCount + $index }}" data-can-play="1">
+                                    Phát podcast
+                                </button>
+                                <span class="text-xs text-white/45">{{ number_format((int) $podcast['listen_count']) }} lượt nghe</span>
+                            </div>
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+        </section>
+    @endif
 
     @if (!$hasActiveSubscription && $activeAds->isNotEmpty())
         <section class="mt-8 rounded-[2rem] border border-white/10 bg-white/[0.06] p-5 backdrop-blur-xl">
@@ -206,10 +270,10 @@
     <footer class="fixed inset-x-0 bottom-0 z-50 border-t border-white/10 bg-[#120b24]/95 px-4 py-3 shadow-2xl shadow-black/60 backdrop-blur-xl">
         <div class="mx-auto flex max-w-[1500px] flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div class="flex min-w-0 items-center gap-3 max-w-[300px] w-full">
-                <img id="playerCover" src="{{ $featuredSong['thumbnail'] ?? $fallbackCover }}" alt="Đang phát" class="h-14 w-14 rounded-2xl object-cover">
+                <img id="playerCover" src="{{ $initialTrack['thumbnail'] ?? $fallbackCover }}" alt="Đang phát" class="h-14 w-14 rounded-2xl object-cover">
                 <div class="min-w-0">
-                    <p id="playerTitle" class="truncate font-semibold">{{ $featuredSong['title'] ?? 'Chưa chọn bài hát' }}</p>
-                    <p id="playerArtist" class="truncate text-sm text-white/55">{{ $featuredSong['artist'] ?? 'Chọn một bài trong danh sách' }}</p>
+                    <p id="playerTitle" class="truncate font-semibold">{{ $initialTrack['title'] ?? 'Chưa chọn nội dung' }}</p>
+                    <p id="playerArtist" class="truncate text-sm text-white/55">{{ $initialTrack['subtitle'] ?? 'Chọn một bài hát hoặc podcast' }}</p>
                 </div>
             </div>
 
@@ -238,6 +302,8 @@
 @push('scripts')
     <script>
         const songs = @json($songs);
+        const podcasts = @json($podcasts);
+        const tracks = [...songs, ...podcasts];
         const fallbackCover = @json($fallbackCover);
         const audio = document.getElementById('audioPlayer');
         const playButton = document.getElementById('playButton');
@@ -251,6 +317,7 @@
         const playerTitle = document.getElementById('playerTitle');
         const playerArtist = document.getElementById('playerArtist');
         let currentIndex = 0;
+        let activeQueue = tracks.map((track, index) => index);
         let isSeeking = false;
         let progressInterval = null;
 
@@ -284,22 +351,28 @@
         }
 
         function loadSong(index, shouldPlay = false) {
-            if (!songs.length || !songs[index]) {
+            loadTrack(index, shouldPlay);
+        }
+
+        function loadTrack(index, shouldPlay = false) {
+            if (!tracks.length || !tracks[index]) {
                 return;
             }
 
             currentIndex = index;
-            const song = songs[currentIndex];
+            const track = tracks[currentIndex];
 
-            if (!song.can_play || !song.audio_url) {
+            if (!track.can_play || !track.audio_url) {
                 showVipPrompt();
                 return;
             }
 
-            audio.src = song.audio_url;
-            playerCover.src = song.thumbnail || fallbackCover;
-            playerTitle.textContent = song.title;
-            playerArtist.textContent = song.artist;
+            audio.src = track.audio_url;
+            playerCover.src = track.thumbnail || fallbackCover;
+            playerTitle.textContent = track.title;
+            playerArtist.textContent = track.type === 'podcast'
+                ? 'Podcast'
+                : track.artist;
             seekBar.value = 0;
             currentTime.textContent = '0:00';
             duration.textContent = '0:00';
@@ -309,9 +382,20 @@
             }
         }
 
+        function playNextInQueue(direction = 1) {
+            if (!activeQueue.length) {
+                return;
+            }
+
+            const queuePosition = activeQueue.indexOf(currentIndex);
+            const safePosition = queuePosition === -1 ? 0 : queuePosition;
+            const nextPosition = (safePosition + direction + activeQueue.length) % activeQueue.length;
+            loadTrack(activeQueue[nextPosition], true);
+        }
+
         function playCurrent() {
-            const song = songs[currentIndex];
-            if (!song || !song.can_play) {
+            const track = tracks[currentIndex];
+            if (!track || !track.can_play) {
                 showVipPrompt();
                 return;
             }
@@ -330,7 +414,44 @@
                     showVipPrompt();
                     return;
                 }
-                loadSong(Number(button.dataset.index), true);
+                activeQueue = tracks.map((track, index) => index);
+                loadTrack(Number(button.dataset.trackIndex), true);
+            });
+        });
+
+        document.querySelectorAll('.play-artist').forEach((button) => {
+            button.addEventListener('click', () => {
+                const artistId = Number(button.dataset.artistId);
+                const artistQueue = tracks
+                    .map((track, index) => ({ track, index }))
+                    .filter(({ track }) => {
+                        return track.type === 'song'
+                            && Number(track.artist_id) === artistId
+                            && track.can_play
+                            && track.audio_url;
+                    })
+                    .map(({ index }) => index);
+
+                const artistTrackIndex = artistQueue[0] ?? -1;
+
+                const hasBlockedSongs = tracks.some((track) => {
+                    return track.type === 'song'
+                        && Number(track.artist_id) === artistId
+                        && track.audio_url;
+                });
+
+                if (artistTrackIndex === -1) {
+                    window.showWebToast(
+                        hasBlockedSongs
+                            ? 'Bài hát của nghệ sĩ này cần gói VIP để phát.'
+                            : 'Nghệ sĩ này chưa có bài hát khả dụng để phát.',
+                        'error'
+                    );
+                    return;
+                }
+
+                activeQueue = artistQueue;
+                loadTrack(artistTrackIndex, true);
             });
         });
 
@@ -343,19 +464,19 @@
         });
 
         prevButton.addEventListener('click', () => {
-            if (!songs.length) {
+            if (!tracks.length) {
                 return;
             }
 
-            loadSong((currentIndex - 1 + songs.length) % songs.length, true);
+            playNextInQueue(-1);
         });
 
         nextButton.addEventListener('click', () => {
-            if (!songs.length) {
+            if (!tracks.length) {
                 return;
             }
 
-            loadSong((currentIndex + 1) % songs.length, true);
+            playNextInQueue(1);
         });
 
         audio.addEventListener('play', () => {
@@ -363,9 +484,9 @@
 
             // Track listening history
             @auth
-            const song = songs[currentIndex];
-            if (song && song.id) {
-                fetch(`/listening-history/${song.id}`, {
+            const track = tracks[currentIndex];
+            if (track && track.type === 'song' && track.id) {
+                fetch(`/listening-history/${track.id}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -378,7 +499,7 @@
                     clearInterval(progressInterval);
                 }
                 progressInterval = setInterval(() => {
-                    sendProgress(song.id);
+                    sendProgress(track.id);
                 }, 10000);
             }
             @endauth
@@ -408,11 +529,11 @@
         });
 
         audio.addEventListener('ended', () => {
-            if (!songs.length) {
+            if (!tracks.length) {
                 return;
             }
 
-            loadSong((currentIndex + 1) % songs.length, true);
+            playNextInQueue(1);
         });
 
         seekBar.addEventListener('input', () => {
@@ -432,6 +553,10 @@
         });
 
         audio.volume = Number(volumeBar.value);
-        loadSong(0);
+        const firstPlayableIndex = tracks.findIndex((track) => track.can_play && track.audio_url);
+        if (firstPlayableIndex !== -1) {
+            currentIndex = firstPlayableIndex;
+            loadTrack(firstPlayableIndex);
+        }
     </script>
 @endpush
