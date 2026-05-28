@@ -50,7 +50,7 @@
                 <img id="playerCover" src="{{ $featuredPodcast['thumbnail'] ?? $fallbackCover }}" alt="Đang phát" class="h-14 w-14 rounded-2xl object-cover">
                 <div class="min-w-0">
                     <p id="playerTitle" class="truncate font-semibold">{{ $featuredPodcast['title'] ?? 'Chưa chọn podcast' }}</p>
-                    <p class="truncate text-sm text-white/55">Podcast</p>
+                    <p id="playerArtist" class="truncate text-sm text-white/55">{{ $featuredPodcast['artist'] ?? 'Podcast' }}</p>
                 </div>
             </div>
 
@@ -90,14 +90,46 @@
         const duration = document.getElementById('duration');
         const playerCover = document.getElementById('playerCover');
         const playerTitle = document.getElementById('playerTitle');
+        const playerArtist = document.getElementById('playerArtist');
         let currentIndex = 0;
         let isSeeking = false;
+        let progressInterval = null;
+        let simulatedCurrentTime = 0;
+        let simulatedDuration = 0;
 
         function formatTime(seconds) {
             if (!Number.isFinite(seconds)) return '0:00';
             const minutes = Math.floor(seconds / 60);
             const remainingSeconds = Math.floor(seconds % 60).toString().padStart(2, '0');
             return `${minutes}:${remainingSeconds}`;
+        }
+
+        function updateSimulatedProgress() {
+            const maxDuration = simulatedDuration || 180;
+            simulatedCurrentTime = Math.min(simulatedCurrentTime + 0.5, maxDuration);
+            seekBar.value = maxDuration > 0 ? (simulatedCurrentTime / maxDuration) * 100 : 0;
+            currentTime.textContent = formatTime(simulatedCurrentTime);
+            if (simulatedCurrentTime >= maxDuration) {
+                stopProgressSimulation();
+            }
+        }
+
+        function startProgressSimulation() {
+            stopProgressSimulation();
+            progressInterval = setInterval(() => {
+                if (audio.paused) return;
+                if (audio.duration && Number.isFinite(audio.duration) && audio.duration > 0) {
+                    return;
+                }
+                updateSimulatedProgress();
+            }, 500);
+        }
+
+        function stopProgressSimulation() {
+            if (progressInterval) {
+                clearInterval(progressInterval);
+                progressInterval = null;
+            }
         }
 
         function loadPodcast(index, shouldPlay = false) {
@@ -107,9 +139,12 @@
             audio.src = podcast.audio_url;
             playerCover.src = podcast.thumbnail || fallbackCover;
             playerTitle.textContent = podcast.title;
+            playerArtist.textContent = podcast.artist || 'Podcast';
             seekBar.value = 0;
             currentTime.textContent = '0:00';
-            duration.textContent = '0:00';
+            duration.textContent = podcast.duration ? formatTime(podcast.duration) : '0:00';
+            simulatedCurrentTime = 0;
+            simulatedDuration = podcast.duration || 0;
             if (shouldPlay) audio.play();
         }
 
@@ -118,20 +153,43 @@
         });
 
         playButton.addEventListener('click', () => {
-            if (!audio.src) loadPodcast(currentIndex);
-            audio.paused ? audio.play() : audio.pause();
+            if (!audio.src) {
+                loadPodcast(currentIndex, true);
+                return;
+            }
+
+            if (audio.paused) {
+                audio.play();
+            } else {
+                audio.pause();
+            }
         });
         prevButton.addEventListener('click', () => podcasts.length && loadPodcast((currentIndex - 1 + podcasts.length) % podcasts.length, true));
         nextButton.addEventListener('click', () => podcasts.length && loadPodcast((currentIndex + 1) % podcasts.length, true));
-        audio.addEventListener('play', () => playButton.textContent = '❚❚');
-        audio.addEventListener('pause', () => playButton.textContent = '▶');
-        audio.addEventListener('loadedmetadata', () => duration.textContent = formatTime(audio.duration));
+        audio.addEventListener('play', () => {
+            playButton.textContent = '❚❚';
+            startProgressSimulation();
+        });
+        audio.addEventListener('pause', () => {
+            playButton.textContent = '▶';
+            stopProgressSimulation();
+        });
+        audio.addEventListener('loadedmetadata', () => {
+            duration.textContent = formatTime(audio.duration);
+            if (Number.isFinite(audio.duration) && audio.duration > 0) {
+                simulatedDuration = audio.duration;
+            }
+        });
         audio.addEventListener('timeupdate', () => {
             if (isSeeking || !audio.duration) return;
             seekBar.value = (audio.currentTime / audio.duration) * 100;
             currentTime.textContent = formatTime(audio.currentTime);
+            simulatedCurrentTime = audio.currentTime;
         });
-        audio.addEventListener('ended', () => podcasts.length && loadPodcast((currentIndex + 1) % podcasts.length, true));
+        audio.addEventListener('ended', () => {
+            stopProgressSimulation();
+            podcasts.length && loadPodcast((currentIndex + 1) % podcasts.length, true);
+        });
         seekBar.addEventListener('input', () => isSeeking = true);
         seekBar.addEventListener('change', () => {
             if (audio.duration) audio.currentTime = (Number(seekBar.value) / 100) * audio.duration;
@@ -140,6 +198,7 @@
         volumeBar.addEventListener('input', () => audio.volume = Number(volumeBar.value));
 
         audio.volume = Number(volumeBar.value);
-        loadPodcast(0);
+        audio.autoplay = true;
+        loadPodcast(0, true);
     </script>
 @endpush
