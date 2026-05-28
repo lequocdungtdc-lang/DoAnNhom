@@ -3,7 +3,6 @@
 @php
     $fallbackCover = 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=600&q=80';
 @endphp
-
 @section('content')
     <section class="mt-8 rounded-[2rem] border border-white/10 bg-white/[0.08] p-6 shadow-2xl shadow-violet-950/30 backdrop-blur-xl sm:p-8">
         <p class="text-xs font-bold uppercase tracking-[0.35em] text-fuchsia-200/80">Podcast</p>
