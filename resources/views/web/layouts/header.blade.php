@@ -48,9 +48,9 @@
                                 <span>Bài hát yêu thích</span>
                                 <span class="text-xs text-white/35">›</span>
                             </a>
-                            <a href="#" class="flex items-center justify-between rounded-2xl px-3 py-2.5 text-sm text-white/55 transition hover:bg-white/10 hover:text-white">
+                            <a href="{{ route('playlists.index') }}" class="flex items-center justify-between rounded-2xl px-3 py-2.5 text-sm text-white/75 transition hover:bg-white/10 hover:text-white">
                                 <span>Danh sách phát của tôi</span>
-                                <span class="rounded-full bg-white/10 px-2 py-0.5 text-[10px] text-white/45">Sắp có</span>
+                                <span class="text-xs text-white/35">›</span>
                             </a>
                         </div>
 

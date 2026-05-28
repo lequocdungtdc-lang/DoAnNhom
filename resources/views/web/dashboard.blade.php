@@ -60,16 +60,16 @@
                 <span class="text-white/35 transition group-hover:text-white/70">›</span>
             </a>
 
-            <div class="group flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5 opacity-60">
+            <a href="{{ route('playlists.index') }}" class="group flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.05] p-5 transition hover:bg-white/10">
                 <div class="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-purple-500">
-                    <span class="text-xl">⚙️</span>
+                    <span class="text-xl">♪</span>
                 </div>
                 <div class="flex-1">
-                    <p class="font-semibold text-white">Cài đặt</p>
-                    <p class="mt-1 text-xs text-white/55">Tùy chỉnh tài khoản</p>
+                    <p class="font-semibold text-white">Danh sách phát</p>
+                    <p class="mt-1 text-xs text-white/55">Tạo và quản lý playlist</p>
                 </div>
-                <span class="rounded-full bg-white/10 px-2 py-0.5 text-[10px] text-white/45">Sắp có</span>
-            </div>
+                <span class="text-white/35 transition group-hover:text-white/70">›</span>
+            </a>
         </div>
     </section>
 

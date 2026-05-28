@@ -73,6 +73,11 @@ class User extends Authenticatable
         return $this->hasMany(ListeningHistory::class);
     }
 
+    public function playlists()
+    {
+        return $this->hasMany(Playlist::class);
+    }
+
     public function activeSubscription()
     {
         return $this->hasOne(Subscription::class)

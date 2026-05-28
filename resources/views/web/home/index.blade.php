@@ -150,6 +150,8 @@
                         @else
                             <a href="{{ route('login') }}" class="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-white/45 transition hover:bg-white/10 hover:text-fuchsia-100" title="Đăng nhập để yêu thích">♡</a>
                         @endauth
+
+                        @include('web.playlists._add-song', ['song' => $song, 'userPlaylists' => $userPlaylists])
                     </div>
                 @empty
                     <div class="rounded-3xl border border-dashed border-white/15 p-8 text-center text-white/60">
