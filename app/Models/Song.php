@@ -50,6 +50,12 @@ class Song extends Model
         return $this->belongsToMany(User::class, 'song_user_likes', 'song_id', 'user_id');
     }
 
+    public function playlists()
+    {
+        return $this->belongsToMany(Playlist::class, 'playlist_song')
+            ->withTimestamps();
+    }
+
     public function listeningHistory()
     {
         return $this->hasMany(ListeningHistory::class);

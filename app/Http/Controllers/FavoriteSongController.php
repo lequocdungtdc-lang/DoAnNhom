@@ -42,6 +42,7 @@ class FavoriteSongController extends Controller
 
         return view('web.favorites.index', [
             'songs' => $songs,
+            'userPlaylists' => $user->playlists()->orderBy('name')->get(),
         ]);
     }
 

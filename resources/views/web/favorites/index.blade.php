@@ -46,6 +46,8 @@
                             class="flex h-10 w-10 items-center justify-center rounded-full border border-fuchsia-300/40 bg-fuchsia-500/20 text-fuchsia-100 transition hover:bg-fuchsia-500/30 disabled:cursor-not-allowed disabled:opacity-60"
                             title="Bỏ yêu thích">♥</button>
                     </form>
+
+                    @include('web.playlists._add-song', ['song' => $song, 'userPlaylists' => $userPlaylists])
                 </div>
             @empty
                 <div id="favoriteEmptyState" class="rounded-3xl border border-dashed border-white/15 p-8 text-center text-white/60">

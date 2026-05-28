@@ -147,6 +147,7 @@ class HomeController extends Controller
             'songs' => $songs,
             'podcasts' => $podcasts,
             'artists' => $artists,
+            'userPlaylists' => $user ? $user->playlists()->orderBy('name')->get() : collect(),
             'featuredSong' => $songs->first(),
             'topSongs' => $songs->sortByDesc('listen_count')->take(5)->values(),
             'searchQuery' => $query,
@@ -250,6 +251,7 @@ class HomeController extends Controller
             'artist' => $artist,
             'artistImage' => ImageUpload::url($artist->image),
             'songs' => $songs,
+            'userPlaylists' => $user ? $user->playlists()->orderBy('name')->get() : collect(),
             'featuredSong' => $songs->first(),
             'hasActiveSubscription' => $hasActiveSubscription,
         ]);
