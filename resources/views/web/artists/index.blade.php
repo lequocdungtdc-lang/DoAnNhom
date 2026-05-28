@@ -21,7 +21,9 @@
 
         <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             @forelse ($artists as $artist)
+
                 <a href="{{ route('artists.show', $artist['id']) }}" class="group flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.05] p-4 transition hover:bg-white/10">
+                    
                     <img src="{{ $artist['image'] ?? $fallbackCover }}" alt="{{ $artist['name'] }}" class="h-16 w-16 rounded-full object-cover">
                     <span class="min-w-0 flex-1">
                         <span class="block truncate font-semibold text-white group-hover:text-fuchsia-100">{{ $artist['name'] }}</span>

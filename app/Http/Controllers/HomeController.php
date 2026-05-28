@@ -290,12 +290,11 @@ class HomeController extends Controller
                 'subtitle' => 'Podcast',
                 'description' => $podcast->description,
                 'thumbnail' => ImageUpload::url($podcast->thumbnail),
-                'audio_url' => AudioUpload::url($podcast->audio_file),
+                'audio_url' => AudioUpload::url($podcast->audio_file) ?? $podcast->audio_file,
                 'listen_count' => $podcast->views ?? 0,
                 'duration' => $podcast->duration,
                 'can_play' => true,
             ])
-            ->filter(fn (array $podcast) => $podcast['audio_url'] !== null)
             ->values();
 
         return view('web.podcasts.index', [
