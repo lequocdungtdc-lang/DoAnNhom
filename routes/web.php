@@ -37,6 +37,10 @@ Route::get('/', function () {
 
 // Trang xếp hạng (nếu có)
 Route::get('/bang-xep-hang', [HomeController::class, 'rankings'])->name('rankings');
+Route::get('/artists', [HomeController::class, 'artistsIndex'])->name('artists.index');
+Route::get('/nghe-si/{artist}', [HomeController::class, 'artistShow'])->name('artists.show');
+Route::get('/podcasts', [HomeController::class, 'podcastsIndex'])->name('podcasts.index');
+Route::get('/podcasts/{podcast}', [HomeController::class, 'podcastShow'])->name('podcasts.show');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
