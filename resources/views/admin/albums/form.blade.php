@@ -11,7 +11,7 @@
                 <a href="{{ route('admin.albums.index') }}" class="rounded-2xl border border-white/10 px-4 py-3 text-sm text-white transition hover:bg-white/5">Quay lại</a>
             </div>
 
-            <form action="{{ $isEdit ? route('admin.albums.update', $album->id) : route('admin.albums.store') }}" method="POST" class="mt-8 space-y-5">
+            <form action="{{ $isEdit ? route('admin.albums.update', $album->id) : route('admin.albums.store') }}" method="POST" enctype="multipart/form-data" class="mt-8 space-y-5">
                 @csrf
                 @if ($isEdit)
                     @method('PUT')
@@ -20,30 +20,33 @@
                 <div class="grid gap-5 md:grid-cols-2">
                     <div>
                         <label class="mb-2 block text-sm text-[#cfd5df]">Tên album</label>
-                        <input name="title" value="{{ old('title', $album->title) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
+                        <input name="title" value="{{ old('title', $album->title) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-admin-primary">
                         @error('title') <p class="mt-2 text-sm text-red-300">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="mb-2 block text-sm text-[#cfd5df]">Nghệ sĩ</label>
-                        <input name="artist_name" value="{{ old('artist_name', $album->artist_name) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
+                        <input name="artist_name" value="{{ old('artist_name', $album->artist_name) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-admin-primary">
                         @error('artist_name') <p class="mt-2 text-sm text-red-300">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
-                <div>
-                    <label class="mb-2 block text-sm text-[#cfd5df]">Ảnh bìa (URL)</label>
-                    <input name="cover_image" value="{{ old('cover_image', $album->cover_image) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
-                </div>
+                @include('admin.partials.image-upload', [
+                    'name' => 'image_upload',
+                    'label' => 'Ảnh bìa',
+                    'value' => $album->cover_image,
+                ])
 
                 <div>
                     <label class="mb-2 block text-sm text-[#cfd5df]">Trạng thái</label>
-                    <select name="status" class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-[#10a37f]">
+                    <select name="status" class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-admin-primary">
                         <option value="1" @selected((string) old('status', (int) $album->status) === '1')>Hiển thị</option>
                         <option value="0" @selected((string) old('status', (int) $album->status) === '0')>Ẩn</option>
                     </select>
                 </div>
 
-                <button type="submit" class="rounded-2xl bg-[#10a37f] px-5 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">
+                <input type="hidden" name="updated_at" value="{{ $album->updated_at }}">
+
+                <button type="submit" class="rounded-2xl bg-admin-primary px-5 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">
                     {{ $isEdit ? 'Lưu thay đổi' : 'Tạo album' }}
                 </button>
             </form>

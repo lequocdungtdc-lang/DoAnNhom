@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categories;
+use App\Models\ActivityLog;
 use App\Support\ImageUpload;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -45,11 +46,11 @@ class CategoriesController extends Controller
             // name
             'name.required' => 'Vui lòng nhập tên thể loại.',
             'name.string' => 'Tên thể loại không hợp lệ.',
-            'name.max' => 'Tên thể loại không được vuien quá 255 ký tự.',
+            'name.max' => 'Tên thể loại không được vượt quá 255 ký tự.',
 
             // group_name
             'group_name.string' => 'Nhóm thể loại không hợp lệ.',
-            'group_name.max' => 'Nhóm thể loại không được vuien quá 255 ký tự.',
+            'group_name.max' => 'Nhóm thể loại không được vượt quá 255 ký tự.',
         ]);
 
         $validated['status'] = $request->boolean('status');
@@ -61,6 +62,12 @@ class CategoriesController extends Controller
         unset($validated['image_upload']);
 
         Categories::create($validated);
+        ActivityLog::create([
+            'module' => 'Category',
+            'action' => 'CREATE',
+            'title' => $validated['name'],
+            'user_id' => auth()->id(),
+        ]);
 
         return redirect()->route('admin.categories.index')->with([
             'status' => 'success',
@@ -101,10 +108,10 @@ class CategoriesController extends Controller
             // name
             'name.required' => 'Vui lòng nhập tên thể loại.',
             'name.string' => 'Tên thể loại không hợp lệ.',
-            'name.max' => 'Tên thể loại không được vuien quá 255 ký tự.',
+            'name.max' => 'Tên thể loại không được vượt quá 255 ký tự.',
             // group_name
             'group_name.string' => 'Nhóm thể loại không hợp lệ.',
-            'group_name.max' => 'Nhóm thể loại không được vuien quá 255 ký tự.',
+            'group_name.max' => 'Nhóm thể loại không được vượt quá 255 ký tự.',
             // updated_at
             'updated_at.required' => 'Dữ liệu cập nhật không hợp lệ.',
         ]);
@@ -138,6 +145,12 @@ class CategoriesController extends Controller
         unset($validated['image_upload']);
 
         $category->update($validated);
+        ActivityLog::create([
+            'module' => 'Category',
+            'action' => 'UPDATE',
+            'title' => $validated['name'],
+            'user_id' => auth()->id(),
+        ]);
 
         return redirect()->route('admin.categories.index')->with([
             'status' => 'success',
@@ -158,6 +171,12 @@ class CategoriesController extends Controller
         ImageUpload::delete($category->image);
 
         $category->delete();
+        ActivityLog::create([
+            'module' => 'Category',
+            'action' => 'DELETE',
+            'title' => $category->name,
+            'user_id' => auth()->id(),
+        ]);
 
         return redirect()->route('admin.categories.index')->with([
             'status' => 'success',
@@ -183,6 +202,13 @@ class CategoriesController extends Controller
         foreach ($categories as $category) {
             ImageUpload::delete($category->image);
             $category->delete();
+
+            ActivityLog::create([
+                'module' => 'Category',
+                'action' => 'DELETE',
+                'title' => $category->name,
+                'user_id' => auth()->id(),
+            ]);
         }
 
         return redirect()->route('admin.categories.index')->with([

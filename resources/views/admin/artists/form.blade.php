@@ -11,7 +11,7 @@
                 <a href="{{ route('admin.artists.index') }}" class="rounded-2xl border border-white/10 px-4 py-3 text-sm text-white transition hover:bg-white/5">Quay lại</a>
             </div>
 
-            <form action="{{ $isEdit ? route('admin.artists.update', $artist->id) : route('admin.artists.store') }}" method="POST" class="mt-8 space-y-5">
+            <form action="{{ $isEdit ? route('admin.artists.update', $artist->id) : route('admin.artists.store') }}" method="POST" enctype="multipart/form-data" class="mt-8 space-y-5">
                 @csrf
                 @if ($isEdit)
                     @method('PUT')
@@ -20,12 +20,12 @@
                 <div class="grid gap-5 md:grid-cols-2">
                     <div>
                         <label class="mb-2 block text-sm text-[#cfd5df]">Tên nghệ sĩ</label>
-                        <input name="name" value="{{ old('name', $artist->name) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
+                        <input name="name" value="{{ old('name', $artist->name) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-admin-primary">
                         @error('name') <p class="mt-2 text-sm text-red-300">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="mb-2 block text-sm text-[#cfd5df]">Thể loại</label>
-                        <select name="category_id" class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-[#10a37f]">
+                        <select name="category_id" class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-admin-primary">
                             <option value="">Chọn thể loại</option>
                             @foreach ($categories as $category)
                                 <option value="{{ $category->id }}" @selected((string) old('category_id', $artist->category_id) === (string) $category->id)>{{ $category->name }}</option>
@@ -35,20 +35,23 @@
                     </div>
                 </div>
 
-                <div>
-                    <label class="mb-2 block text-sm text-[#cfd5df]">Ảnh nghệ sĩ (URL)</label>
-                    <input name="image" value="{{ old('image', $artist->image) }}" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
-                </div>
+                @include('admin.partials.image-upload', [
+                    'name' => 'image_upload',
+                    'label' => 'Ảnh nghệ sĩ',
+                    'value' => $artist->image,
+                ])
 
                 <div>
                     <label class="mb-2 block text-sm text-[#cfd5df]">Trạng thái</label>
-                    <select name="status" class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-[#10a37f]">
+                    <select name="status" class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-admin-primary">
                         <option value="1" @selected((string) old('status', (int) $artist->status) === '1')>Hiển thị</option>
                         <option value="0" @selected((string) old('status', (int) $artist->status) === '0')>Ẩn</option>
                     </select>
                 </div>
 
-                <button type="submit" class="rounded-2xl bg-[#10a37f] px-5 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">
+                <input type="hidden" name="updated_at" value="{{ $artist->updated_at }}">
+
+                <button type="submit" class="rounded-2xl bg-admin-primary px-5 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">
                     {{ $isEdit ? 'Lưu thay đổi' : 'Tạo nghệ sĩ' }}
                 </button>
             </form>

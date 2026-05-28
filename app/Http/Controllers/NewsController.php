@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\News;
+use App\Models\ActivityLog;
 use App\Support\ImageUpload;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -59,6 +60,12 @@ class NewsController extends Controller
         unset($validated['image_upload']);
 
         News::create($validated);
+        ActivityLog::create([
+            'module' => 'News',
+            'action' => 'CREATE',
+            'title' => $validated['title'],
+            'user_id' => auth()->id(),
+        ]);
 
         return redirect()->route('admin.news.index')->with([
             'status' => 'success',
@@ -68,6 +75,12 @@ class NewsController extends Controller
 
     public function edit(int $id): View
     {
+        if (! News::where('id', $id)->exists()) {
+            return view('admin.layouts.404', [
+                'message' => 'Tin tức không tồn tại.'
+            ]);
+        }
+
         return view('admin.news.form', [
             'news' => News::findOrFail($id),
             'isEdit' => true,
@@ -76,6 +89,13 @@ class NewsController extends Controller
 
     public function update(Request $request, int $id): RedirectResponse
     {
+        if (! News::where('id', $id)->exists()) {
+            return redirect()->route('admin.news.index')->with([
+                'status' => 'error',
+                'message' => 'Tin tức không tồn tại.',
+            ]);
+        }
+
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'content' => ['required', 'string'],
@@ -83,9 +103,17 @@ class NewsController extends Controller
             'category' => ['nullable', 'string', 'max:255'],
             'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:4096'],
             'status' => ['required', 'in:draft,published,archived'],
+            'updated_at' => ['required'],
         ]);
 
         $news = News::findOrFail($id);
+
+        if ($request->updated_at != $news->updated_at->toDateTimeString()) {
+            return redirect()->route('admin.news.edit', $id)->with([
+                'status' => 'error',
+                'message' => 'Tin tức đã được cập nhật bởi người khác. Vui lòng tải lại trang và thử lại.',
+            ]);
+        }
 
         if ($request->hasFile('image_upload')) {
             $imagePath = ImageUpload::store(
@@ -111,6 +139,12 @@ class NewsController extends Controller
         }
 
         $news->update($validated);
+        ActivityLog::create([
+            'module' => 'News',
+            'action' => 'UPDATE',
+            'title' => $validated['title'],
+            'user_id' => auth()->id(),
+        ]);
 
         return redirect()->route('admin.news.index')->with([
             'status' => 'success',
@@ -120,9 +154,22 @@ class NewsController extends Controller
 
     public function delete(int $id): RedirectResponse
     {
+        if (! News::where('id', $id)->exists()) {
+            return redirect()->route('admin.news.index')->with([
+                'status' => 'error',
+                'message' => 'Tin tức không tồn tại.',
+            ]);
+        }
+
         $news = News::findOrFail($id);
         ImageUpload::delete($news->image);
         $news->delete();
+        ActivityLog::create([
+            'module' => 'News',
+            'action' => 'DELETE',
+            'title' => $news->title,
+            'user_id' => auth()->id(),
+        ]);
 
         return redirect()->route('admin.news.index')->with([
             'status' => 'success',
@@ -132,6 +179,13 @@ class NewsController extends Controller
 
     public function bulkDelete(Request $request): RedirectResponse
     {
+        if (! $request->filled('ids')) {
+            return redirect()->route('admin.news.index')->with([
+                'status' => 'error',
+                'message' => 'Vui lòng chọn ít nhất một tin tức để xóa.',
+            ]);
+        }
+
         $validated = $request->validate([
             'ids' => ['required', 'array'],
             'ids.*' => ['integer', 'exists:news,id'],
@@ -142,6 +196,13 @@ class NewsController extends Controller
         foreach ($newsList as $news) {
             ImageUpload::delete($news->image);
             $news->delete();
+
+            ActivityLog::create([
+                'module' => 'News',
+                'action' => 'DELETE',
+                'title' => $news->title,
+                'user_id' => auth()->id(),
+            ]);
         }
 
         return redirect()->route('admin.news.index')->with([

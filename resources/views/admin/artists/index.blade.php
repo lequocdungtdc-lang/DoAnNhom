@@ -14,7 +14,7 @@
                         @method('DELETE')
                     </form>
                     <button type="submit" form="bulk-delete-artists-form" class="rounded-2xl border border-red-400/20 px-4 py-3 text-sm font-semibold text-red-200 transition hover:bg-red-500/10">Xóa đã chọn</button>
-                    <a href="{{ route('admin.artists.create') }}" class="rounded-2xl bg-[#10a37f] px-4 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">Thêm nghệ sĩ</a>
+                    <a href="{{ route('admin.artists.create') }}" class="rounded-2xl bg-admin-primary px-4 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">Thêm nghệ sĩ</a>
                 </div>
             </div>
 
@@ -41,7 +41,18 @@
                                 </td>
                                 <td class="px-4 py-4">{{ $artist->name }}</td>
                                 <td class="px-4 py-4 text-[#a8b1bf]">{{ $artist->category?->name ?: 'Chưa có' }}</td>
-                                <td class="px-4 py-4 text-[#a8b1bf]">{{ $artist->image ?: 'Chưa có' }}</td>
+                                <td class="px-4 py-4">
+                                    @php
+                                        $artistImage = trim((string) $artist->image);
+                                        $artistImageUrl = \App\Support\ImageUpload::url($artistImage);
+                                    @endphp
+
+                                    @if ($artistImageUrl)
+                                        <img src="{{ $artistImageUrl }}" alt="{{ $artist->name }}" class="h-14 w-14 rounded-xl border border-white/10 object-cover">
+                                    @else
+                                        <span class="inline-flex h-14 w-14 items-center justify-center rounded-xl border border-dashed border-white/10 text-xs text-[#8a93a3]">No img</span>
+                                    @endif
+                                </td>
                                 <td class="px-4 py-4">{{ $artist->status ? 'Hiển thị' : 'Ẩn' }}</td>
                                 <td class="px-4 py-4 text-[#a8b1bf]">{{ optional($artist->updated_at)->format('d/m/Y H:i') }}</td>
                                 <td class="px-4 py-4">

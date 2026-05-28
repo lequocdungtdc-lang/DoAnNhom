@@ -12,9 +12,16 @@
 
         <div class="mt-4 flex items-center gap-4">
 
-            <img
-                src="{{ $mostViewedPodcast->thumbnail }}"
-                class="h-20 w-20 rounded-2xl object-cover border border-white/10">
+            @php
+                $podcastImage = trim((string) $mostViewedPodcast->thumbnail);
+                $podcastImageUrl = \App\Support\ImageUpload::url($podcastImage);
+            @endphp
+
+            @if ($podcastImageUrl)
+                <img src="{{ $podcastImageUrl }}" alt="{{ $mostViewedPodcast->title }}" class="h-14 w-14 rounded-xl border border-white/10 object-cover">
+            @else
+                <span class="inline-flex h-14 w-14 items-center justify-center rounded-xl border border-dashed border-white/10 text-xs text-[#8a93a3]">No img</span>
+            @endif
 
             <div>
 
@@ -61,7 +68,7 @@
                     Xóa đã chọn
                 </button>
                 <a href="{{ route('admin.podcasts.create') }}"
-                    class="rounded-2xl bg-[#10a37f] px-4 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">
+                    class="rounded-2xl bg-admin-primary px-4 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">
                     Thêm podcast
                 </a>
             </div>
@@ -98,14 +105,15 @@
                         </td>
 
                         <td class="px-4 py-4">
-                            @if ($podcast->thumbnail)
-                            <img
-                                src="{{ $podcast->thumbnail }}"
-                                class="h-14 w-14 rounded-xl object-cover">
+                            @php
+                                $podcastImage = trim((string) $podcast->thumbnail);
+                                $podcastImageUrl = \App\Support\ImageUpload::url($podcastImage);
+                            @endphp
+
+                            @if ($podcastImageUrl)
+                                <img src="{{ $podcastImageUrl }}" alt="{{ $podcast->title }}" class="h-14 w-14 rounded-xl border border-white/10 object-cover">
                             @else
-                            <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-white/5 text-xs text-[#8a93a3]">
-                                No Image
-                            </div>
+                                <span class="inline-flex h-14 w-14 items-center justify-center rounded-xl border border-dashed border-white/10 text-xs text-[#8a93a3]">No img</span>
                             @endif
                         </td>
 
@@ -114,7 +122,18 @@
                         </td>
 
                         <td class="px-4 py-4 text-[#a8b1bf]">
-                            {{ $podcast->audio_file }}
+                            @php
+                                $podcastAudio = trim((string) $podcast->audio_file);
+                                $podcastAudioUrl = \App\Support\AudioUpload::url($podcastAudio);
+                            @endphp
+
+                            @if ($podcastAudioUrl)
+                                <audio src="{{ $podcastAudioUrl }}" controls class="w-52"></audio>
+                            @elseif ($podcastAudio !== '')
+                                <span class="text-xs text-red-300">File không tồn tại</span>
+                            @else
+                                Chưa có
+                            @endif
                         </td>
 
                         <td class="px-4 py-4 text-[#a8b1bf]">

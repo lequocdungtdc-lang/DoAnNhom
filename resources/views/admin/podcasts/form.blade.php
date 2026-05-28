@@ -21,6 +21,7 @@
 
         <form action="{{ $isEdit ? route('admin.podcasts.update', $podcast->id) : route('admin.podcasts.store') }}"
             method="POST"
+            enctype="multipart/form-data"
             class="mt-8 space-y-5">
 
             @csrf
@@ -37,7 +38,7 @@
                 <input
                     name="title"
                     value="{{ old('title', $podcast->title) }}"
-                    class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
+                    class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-admin-primary">
 
                 @error('title')
                 <p class="mt-2 text-sm text-red-300">{{ $message }}</p>
@@ -52,31 +53,14 @@
                 <textarea
                     name="description"
                     rows="5"
-                    class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">{{ old('description', $podcast->description) }}</textarea>
+                    class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-admin-primary">{{ old('description', $podcast->description) }}</textarea>
 
                 @error('description')
                 <p class="mt-2 text-sm text-red-300">{{ $message }}</p>
                 @enderror
             </div>
 
-            <div class="grid gap-5 md:grid-cols-3">
-
-                <div>
-                    <label class="mb-2 block text-sm text-[#cfd5df]">
-                        File âm thanh
-                    </label>
-
-                    <input
-                        name="audio_file"
-                        value="{{ old('audio_file', $podcast->audio_file) }}"
-                        placeholder="podcasts/demo.mp3"
-                        class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
-
-                    @error('audio_file')
-                    <p class="mt-2 text-sm text-red-300">{{ $message }}</p>
-                    @enderror
-                </div>
-
+            <div class="grid gap-5 md:grid-cols-2">
                 <div>
                     <label class="mb-2 block text-sm text-[#cfd5df]">
                         Thời lượng (giây)
@@ -84,9 +68,10 @@
 
                     <input
                         type="number"
+                        min="0"
                         name="duration"
                         value="{{ old('duration', $podcast->duration) }}"
-                        class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
+                        class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-admin-primary">
 
                     @error('duration')
                     <p class="mt-2 text-sm text-red-300">{{ $message }}</p>
@@ -99,9 +84,10 @@
 
                     <input
                         type="number"
+                        min="0"
                         name="views"
                         value="{{ old('views', $podcast->views ?? 0) }}"
-                        class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
+                        class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-admin-primary">
 
                     @error('views')
                     <p class="mt-2 text-sm text-red-300">{{ $message }}</p>
@@ -110,28 +96,18 @@
 
             </div>
 
-            <div>
-                <label class="mb-2 block text-sm text-[#cfd5df]">
-                    Ảnh đại diện (URL)
-                </label>
+            @include('admin.partials.audio-upload', [
+                'name' => 'audio_upload',
+                'label' => 'Tệp âm thanh MP3',
+                'value' => $podcast->audio_file,
+                'help' => $isEdit ? 'MP3 - tối đa 500MB. Bỏ trống nếu không đổi audio.' : 'MP3 - tối đa 500MB.',
+            ])
 
-                <input
-                    name="thumbnail"
-                    value="{{ old('thumbnail', $podcast->thumbnail) }}"
-                    class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]">
-
-                @error('thumbnail')
-                <p class="mt-2 text-sm text-red-300">{{ $message }}</p>
-                @enderror
-            </div>
-
-            @if ($podcast->thumbnail)
-            <div>
-                <img
-                    src="{{ $podcast->thumbnail }}"
-                    class="h-32 w-32 rounded-2xl object-cover border border-white/10">
-            </div>
-            @endif
+            @include('admin.partials.image-upload', [
+                'name' => 'image_upload',
+                'label' => 'Ảnh đại diện',
+                'value' => $podcast->thumbnail,
+            ])
 
             <div>
                 <label class="mb-2 block text-sm text-[#cfd5df]">
@@ -140,7 +116,7 @@
 
                 <select
                     name="status"
-                    class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-[#10a37f]">
+                    class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-admin-primary">
                     <option value="1" @selected((string) old('status', (int) $podcast->status) === '1')>
                         Hiển thị
                     </option>
@@ -151,9 +127,11 @@
                 </select>
             </div>
 
+            <input type="hidden" name="updated_at" value="{{ $podcast->updated_at }}">
+
             <button
                 type="submit"
-                class="rounded-2xl bg-[#10a37f] px-5 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">
+                class="rounded-2xl bg-admin-primary px-5 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">
                 {{ $isEdit ? 'Lưu thay đổi' : 'Tạo podcast' }}
             </button>
 
