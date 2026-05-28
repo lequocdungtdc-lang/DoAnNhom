@@ -237,14 +237,13 @@ class HomeController extends Controller
                     'category' => $song->category?->name ?? 'Chưa phân loại',
                     'album' => $song->album?->title ?? null,
                     'thumbnail' => ImageUpload::url($song->thumbnail),
-                    'audio_url' => AudioUpload::url($song->audio_file),
+                    'audio_url' => AudioUpload::url($song->audio_file) ?? $song->audio_file,
                     'listen_count' => $song->listen_count,
                     'is_liked' => in_array($song->id, $likedSongIds, true),
                     'is_vip' => (bool) $song->is_vip,
                     'can_play' => ! $song->is_vip || $hasActiveSubscription,
                 ];
             })
-            ->filter(fn (array $song) => $song['audio_url'] !== null)
             ->values();
 
         return view('web.artists.show', [
