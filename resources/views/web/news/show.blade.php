@@ -19,7 +19,8 @@
             @endif
 
             <div class="prose prose-invert mt-8 max-w-none text-white/80">
-                {!! nl2br(e($news->content)) !!}
+                {!! $news->content !!}
+                {{-- {!! nl2br(e($news->content)) !!} --}}
             </div>
         </div>
     </article>

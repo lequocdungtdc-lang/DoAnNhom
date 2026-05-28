@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Podcast;
+use App\Support\AudioUpload;
+use App\Support\ImageUpload;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -53,13 +55,22 @@ class PodcastController extends Controller
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'audio_file' => ['required', 'string', 'max:255'],
-            'thumbnail' => ['nullable', 'string', 'max:255'],
-            'duration' => ['nullable', 'integer'],
+            'audio_upload' => ['required', 'file', 'mimes:mp3', 'max:512000'],
+            'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:4096'],
+            'duration' => ['nullable', 'integer', 'min:0'],
+            'views' => ['nullable', 'integer', 'min:0'],
             'status' => ['nullable', 'boolean'],
         ]);
 
         $validated['status'] = $request->boolean('status');
+        $validated['views'] = (int) ($validated['views'] ?? 0);
+        $validated['audio_file'] = AudioUpload::store($request->file('audio_upload'), 'podcasts');
+
+        if ($request->hasFile('image_upload')) {
+            $validated['thumbnail'] = ImageUpload::store($request->file('image_upload'), 'podcast_images');
+        }
+
+        unset($validated['audio_upload'], $validated['image_upload']);
 
         Podcast::create($validated);
         ActivityLog::create([
@@ -78,6 +89,12 @@ class PodcastController extends Controller
 
     public function edit(int $id): View
     {
+        if (! Podcast::where('id', $id)->exists()) {
+            return view('admin.layouts.404', [
+                'message' => 'Podcast không tồn tại.'
+            ]);
+        }
+
         return view('admin.podcasts.form', [
             'podcast' => Podcast::findOrFail($id),
             'isEdit' => true,
@@ -86,18 +103,59 @@ class PodcastController extends Controller
 
     public function update(Request $request, int $id): RedirectResponse
     {
+        if (! Podcast::where('id', $id)->exists()) {
+            return redirect()->route('admin.podcasts.index')->with([
+                'status' => 'error',
+                'message' => 'Podcast không tồn tại.',
+            ]);
+        }
+
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'audio_file' => ['required', 'string', 'max:255'],
-            'thumbnail' => ['nullable', 'string', 'max:255'],
-            'duration' => ['nullable', 'integer'],
+            'audio_upload' => ['nullable', 'file', 'mimes:mp3', 'max:512000'],
+            'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:4096'],
+            'duration' => ['nullable', 'integer', 'min:0'],
+            'views' => ['nullable', 'integer', 'min:0'],
             'status' => ['nullable', 'boolean'],
+            'updated_at' => ['required'],
         ]);
 
         $validated['status'] = $request->boolean('status');
+        $validated['views'] = (int) ($validated['views'] ?? 0);
 
         $podcast = Podcast::findOrFail($id);
+
+        if ($request->updated_at != $podcast->updated_at->toDateTimeString()) {
+            return redirect()->route('admin.podcasts.edit', $id)->with([
+                'status' => 'error',
+                'message' => 'Podcast đã được cập nhật bởi người khác. Vui lòng tải lại trang và thử lại.',
+            ]);
+        }
+
+        if ($request->hasFile('audio_upload')) {
+            $validated['audio_file'] = AudioUpload::store(
+                $request->file('audio_upload'),
+                'podcasts',
+                'public',
+                $podcast->audio_file,
+            );
+        }
+
+        if ($request->hasFile('image_upload')) {
+            $imagePath = ImageUpload::store(
+                $request->file('image_upload'),
+                'podcast_images',
+                'public',
+                $podcast->thumbnail,
+            );
+
+            if ($imagePath !== null) {
+                $validated['thumbnail'] = $imagePath;
+            }
+        }
+
+        unset($validated['audio_upload'], $validated['image_upload']);
 
         $podcast->update($validated);
         ActivityLog::create([
@@ -118,9 +176,19 @@ class PodcastController extends Controller
 
     public function delete(int $id): RedirectResponse
     {
+        if (! Podcast::where('id', $id)->exists()) {
+            return redirect()->route('admin.podcasts.index')->with([
+                'status' => 'error',
+                'message' => 'Podcast không tồn tại.',
+            ]);
+        }
+
         $podcast = Podcast::findOrFail($id);
 
         $title = $podcast->title;
+
+        AudioUpload::delete($podcast->audio_file);
+        ImageUpload::delete($podcast->thumbnail);
 
         $podcast->delete();
 
@@ -141,6 +209,13 @@ class PodcastController extends Controller
 
     public function bulkDelete(Request $request): RedirectResponse
     {
+        if (! $request->filled('ids')) {
+            return redirect()->route('admin.podcasts.index')->with([
+                'status' => 'error',
+                'message' => 'Vui lòng chọn ít nhất một podcast để xóa.',
+            ]);
+        }
+
         $validated = $request->validate([
             'ids' => ['required', 'array'],
             'ids.*' => ['integer', 'exists:podcasts,id'],
@@ -150,6 +225,8 @@ class PodcastController extends Controller
 
         foreach ($podcasts as $podcast) {
             $title = $podcast->title;
+            AudioUpload::delete($podcast->audio_file);
+            ImageUpload::delete($podcast->thumbnail);
             $podcast->delete();
 
             ActivityLog::create([

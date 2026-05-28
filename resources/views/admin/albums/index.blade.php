@@ -14,7 +14,7 @@
                         @method('DELETE')
                     </form>
                     <button type="submit" form="bulk-delete-albums-form" class="rounded-2xl border border-red-400/20 px-4 py-3 text-sm font-semibold text-red-200 transition hover:bg-red-500/10">Xóa đã chọn</button>
-                    <a href="{{ route('admin.albums.create') }}" class="rounded-2xl bg-[#10a37f] px-4 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">Thêm album</a>
+                    <a href="{{ route('admin.albums.create') }}" class="rounded-2xl bg-admin-primary px-4 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">Thêm album</a>
                 </div>
             </div>
 
@@ -25,6 +25,7 @@
                             <th class="px-4 py-3">
                                 <input type="checkbox" data-check-all="album_ids" class="h-4 w-4 rounded border-white/10 bg-white/5">
                             </th>
+                            <th class="px-4 py-3">Ảnh</th>
                             <th class="px-4 py-3">Tên album</th>
                             <th class="px-4 py-3">Nghệ sĩ</th>
                             <th class="px-4 py-3">Trạng thái</th>
@@ -37,6 +38,18 @@
                             <tr class="text-sm text-white">
                                 <td class="px-4 py-4">
                                     <input form="bulk-delete-albums-form" type="checkbox" name="ids[]" value="{{ $album->id }}" data-check-item="album_ids" class="h-4 w-4 rounded border-white/10 bg-white/5">
+                                </td>
+                                <td class="px-4 py-4">
+                                    @php
+                                        $albumImage = trim((string) $album->cover_image);
+                                        $albumImageUrl = \App\Support\ImageUpload::url($albumImage);
+                                    @endphp
+
+                                    @if ($albumImageUrl)
+                                        <img src="{{ $albumImageUrl }}" alt="{{ $album->title }}" class="h-14 w-14 rounded-xl border border-white/10 object-cover">
+                                    @else
+                                        <span class="inline-flex h-14 w-14 items-center justify-center rounded-xl border border-dashed border-white/10 text-xs text-[#8a93a3]">No img</span>
+                                    @endif
                                 </td>
                                 <td class="px-4 py-4">{{ $album->title }}</td>
                                 <td class="px-4 py-4 text-[#a8b1bf]">{{ $album->artist_name }}</td>
@@ -55,7 +68,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="px-4 py-10 text-center text-sm text-[#8a93a3]">Chưa có album nào.</td>
+                                <td colspan="7" class="px-4 py-10 text-center text-sm text-[#8a93a3]">Chưa có album nào.</td>
                             </tr>
                         @endforelse
                     </tbody>
