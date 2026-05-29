@@ -9,6 +9,7 @@ use App\Models\Song;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use App\Models\News;
 
 class CommentsController extends Controller
 {
@@ -18,7 +19,7 @@ class CommentsController extends Controller
 
         $query = Comment::with([
             'user',
-            'song'
+            'news',
         ])->latest();
 
         // Search
@@ -28,8 +29,8 @@ class CommentsController extends Controller
                     ->orWhereHas('user', function ($user) use ($search) {
                         $user->where('fullname', 'like', '%' . $search . '%');
                     })
-                    ->orWhereHas('song', function ($song) use ($search) {
-                        $song->where('title', 'like', '%' . $search . '%');
+                    ->orWhereHas('news', function ($news) use ($search) {
+                        $news->where('title', 'like', '%' . $search . '%');
                     });
             });
         }
@@ -57,7 +58,7 @@ class CommentsController extends Controller
         return view('admin.comments.form', [
             'comment' => new Comment(),
             'isEdit' => false,
-            'songs' => Song::all(),
+            'news' => News::all(),
         ]);
     }
 
@@ -65,7 +66,7 @@ class CommentsController extends Controller
     {
         $validated = $request->validate([
             'user_id' => ['required', 'exists:users,id'],
-            'song_id' => ['required', 'exists:songs,id'],
+            'new_id' => ['required', 'exists:news,id'],
             'content' => ['required', 'string'],
             'status' => ['nullable', 'boolean'],
         ]);
@@ -94,7 +95,7 @@ class CommentsController extends Controller
         return view('admin.comments.form', [
             'comment' => Comment::findOrFail($id),
             'isEdit' => true,
-            'songs' => Song::all(),
+            'news' => News::all(),
         ]);
     }
 
@@ -102,7 +103,7 @@ class CommentsController extends Controller
     {
         $validated = $request->validate([
             'user_id' => ['required', 'exists:users,id'],
-            'song_id' => ['required', 'exists:songs,id'],
+            'new_id' => ['required', 'exists:news,id'],
             'content' => ['required', 'string'],
             'status' => ['nullable', 'boolean'],
         ]);
