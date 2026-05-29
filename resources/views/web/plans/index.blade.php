@@ -68,12 +68,11 @@
                     </li>
                 </ul>
 
-                <form action="{{ route('plans.subscribe', $plan->id) }}" method="POST" class="mt-6">
-                    @csrf
-                    <button type="submit" class="w-full rounded-full bg-gradient-to-r from-fuchsia-500 to-violet-500 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-fuchsia-950/40 transition hover:brightness-110">
+                <div class="mt-6">
+                    <a href="{{ route('plans.payment', $plan->id) }}" class="block w-full rounded-full bg-gradient-to-r from-fuchsia-500 to-violet-500 px-6 py-3 text-center text-sm font-bold text-white shadow-lg shadow-fuchsia-950/40 transition hover:brightness-110">
                         Đăng ký ngay
-                    </button>
-                </form>
+                    </a>
+                </div>
             </div>
         @endforeach
     </section>

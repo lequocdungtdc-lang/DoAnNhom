@@ -12,6 +12,7 @@ class Subscription extends Model
         'starts_at',
         'expires_at',
         'status',
+        'payment_method',
     ];
 
     protected $casts = [

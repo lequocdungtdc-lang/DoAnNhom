@@ -68,6 +68,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/playlists/{playlist}/songs/{song}', [PlaylistController::class, 'removeSong'])->name('playlists.songs.remove');
     Route::delete('/playlists/{playlist}', [PlaylistController::class, 'delete'])->name('playlists.delete');
     Route::get('/goi-dang-ky', [WebPlanController::class, 'index'])->name('plans.index');
+    Route::get('/goi-dang-ky/{plan}/thanh-toan', [WebPlanController::class, 'showPayment'])->name('plans.payment');
+    Route::get('/goi-dang-ky/vnpay-return', [WebPlanController::class, 'vnpayReturn'])->name('plans.vnpay.return');
     Route::post('/goi-dang-ky/{plan}', [WebPlanController::class, 'subscribe'])->name('plans.subscribe');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
