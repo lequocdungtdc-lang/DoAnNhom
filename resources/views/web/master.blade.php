@@ -104,6 +104,58 @@
             @if (session('message'))
                 window.showWebToast(@json(session('message')), @json(session('status') ?? 'success'));
             @endif
+
+            // AJAX Add to Playlist
+            document.querySelectorAll('.add-to-playlist-btn').forEach((btn) => {
+                btn.addEventListener('click', async function() {
+                    const wrapper = this.closest('.add-to-playlist-wrapper');
+                    const songId = wrapper.dataset.songId;
+                    const select = wrapper.querySelector('.playlist-select');
+                    const playlistId = select.value;
+
+                    if (!playlistId) {
+                        window.showWebToast('Vui lòng chọn playlist.', 'error');
+                        return;
+                    }
+
+                    const selectedOption = select.options[select.selectedIndex];
+                    if (selectedOption.dataset.added === '1') {
+                        window.showWebToast('Bài hát đã có trong playlist này.', 'info');
+                        return;
+                    }
+
+                    btn.disabled = true;
+                    btn.textContent = '...';
+
+                    try {
+                        const response = await fetch(`/playlists/songs/${songId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
+                            body: JSON.stringify({ playlist_id: playlistId })
+                        });
+
+                        const data = await response.json();
+
+                        if (response.ok && data.status === 'success') {
+                            selectedOption.dataset.added = '1';
+                            selectedOption.textContent = selectedOption.textContent.replace(' ✓', '') + ' ✓';
+                            window.showWebToast(data.message, 'success');
+                        } else {
+                            window.showWebToast(data.message || 'Có lỗi xảy ra.', 'error');
+                        }
+                    } catch (error) {
+                        window.showWebToast('Có lỗi xảy ra. Vui lòng thử lại.', 'error');
+                    } finally {
+                        btn.disabled = false;
+                        btn.textContent = 'Thêm';
+                    }
+                });
+            });
         </script>
         @stack('scripts')
     </body>

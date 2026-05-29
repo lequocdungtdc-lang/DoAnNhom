@@ -62,10 +62,12 @@ class ListeningHistoryController extends Controller
         $history->listened_seconds += $seconds;
         $history->save();
 
+
         if ($history->listened_seconds >= 30 && !$history->has_counted) {
             DB::table('songs')->where('id', $song->id)->increment('listen_count');
             $history->has_counted = true;
             $history->save();
+            
         }
 
         return response()->json([

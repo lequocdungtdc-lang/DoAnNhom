@@ -81,7 +81,7 @@ class PlaylistController extends Controller
         ]);
     }
 
-    public function addSong(Request $request, Song $song): RedirectResponse
+    public function addSong(Request $request, Song $song): RedirectResponse|\Illuminate\Http\JsonResponse
     {
         $validated = $request->validate([
             'playlist_id' => ['required', 'integer', 'exists:playlists,id'],
@@ -94,7 +94,18 @@ class PlaylistController extends Controller
             ->whereKey($validated['playlist_id'])
             ->firstOrFail();
 
+        $alreadyExists = $playlist->songs()->where('songs.id', $song->id)->exists();
         $playlist->songs()->syncWithoutDetaching([$song->id]);
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => $alreadyExists ? 'Bài hát đã có trong danh sách phát.' : 'Đã thêm bài hát vào danh sách phát.',
+                'already_exists' => $alreadyExists,
+                'playlist_id' => $playlist->id,
+                'song_id' => $song->id,
+            ]);
+        }
 
         return back()->with([
             'status' => 'success',
