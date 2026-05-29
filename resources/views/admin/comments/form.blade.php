@@ -42,7 +42,7 @@
             <div>
 
                 <label class="mb-2 block text-sm text-[#cfd5df]">
-                    User ID
+                    Người dùng
                 </label>
 
                 <input
@@ -56,18 +56,18 @@
             <div>
 
                 <label class="mb-2 block text-sm text-[#cfd5df]">
-                    Bài hát
+                    Tin tức
                 </label>
 
                 <select
-                    name="song_id"
+                    name="new_id"
                     class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white">
 
-                    <option value="">-- Chọn bài hát --</option>
+                    <option value="">-- Chọn tin tức --</option>
 
-                    @foreach ($songs as $song)
-                    <option value="{{ $song->id }}" @selected((string) old('song_id', (string) $comment->song_id) === (string) $song->id)>
-                        {{ $song->title }}
+                    @foreach ($news as $new)
+                    <option value="{{ $new->id }}" @selected((string) old('new_id', (string) $comment->new_id) === (string) $new->id)>
+                        {{ $new->title }}
                     </option>
                     @endforeach
 

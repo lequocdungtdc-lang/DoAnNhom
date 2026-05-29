@@ -64,7 +64,7 @@
                         </th>
 
                         <th class="px-4 py-3">Người dùng</th>
-                        <th class="px-4 py-3">Bài hát</th>
+                        <th class="px-4 py-3">Tin tức</th>
                         <th class="px-4 py-3">Nội dung</th>
                         <th class="px-4 py-3">Trạng thái</th>
                         <th class="px-4 py-3 text-right">Thao tác</th>
@@ -93,7 +93,7 @@
                         </td>
 
                         <td class="px-4 py-4">
-                            {{ $comment->song->title ?? '---' }}
+                            {{ $comment->news->title ?? '---' }}
                         </td>
 
                         <td class="px-4 py-4 text-[#a8b1bf] max-w-[300px]">
