@@ -180,14 +180,13 @@ class HomeController extends Controller
                     'artist' => $song->artist?->name ?? 'Nghệ sĩ chưa cập nhật',
                     'category' => $song->category?->name ?? 'Chưa phân loại',
                     'thumbnail' => ImageUpload::url($song->thumbnail),
-                    'audio_url' => AudioUpload::url($song->audio_file),
+                    'audio_url' => AudioUpload::url($song->audio_file) ?? $song->audio_file,
                     'listen_count' => $song->listen_count,
                     'is_liked' => in_array($song->id, $likedSongIds, true),
                     'is_vip' => (bool) $song->is_vip,
                     'can_play' => !$song->is_vip || $hasActiveSubscription,
                 ];
             })
-            ->filter(fn (array $song) => $song['audio_url'] !== null)
             ->values();
 
         $topArtists = Artist::withCount(['songs as listen_count' => function ($query) {
@@ -237,14 +236,13 @@ class HomeController extends Controller
                     'category' => $song->category?->name ?? 'Chưa phân loại',
                     'album' => $song->album?->title ?? null,
                     'thumbnail' => ImageUpload::url($song->thumbnail),
-                    'audio_url' => AudioUpload::url($song->audio_file),
+                    'audio_url' => AudioUpload::url($song->audio_file) ?? $song->audio_file,
                     'listen_count' => $song->listen_count,
                     'is_liked' => in_array($song->id, $likedSongIds, true),
                     'is_vip' => (bool) $song->is_vip,
                     'can_play' => ! $song->is_vip || $hasActiveSubscription,
                 ];
             })
-            ->filter(fn (array $song) => $song['audio_url'] !== null)
             ->values();
 
         return view('web.artists.show', [
@@ -290,12 +288,11 @@ class HomeController extends Controller
                 'subtitle' => 'Podcast',
                 'description' => $podcast->description,
                 'thumbnail' => ImageUpload::url($podcast->thumbnail),
-                'audio_url' => AudioUpload::url($podcast->audio_file),
+                'audio_url' => AudioUpload::url($podcast->audio_file) ?? $podcast->audio_file,
                 'listen_count' => $podcast->views ?? 0,
                 'duration' => $podcast->duration,
                 'can_play' => true,
             ])
-            ->filter(fn (array $podcast) => $podcast['audio_url'] !== null)
             ->values();
 
         return view('web.podcasts.index', [
