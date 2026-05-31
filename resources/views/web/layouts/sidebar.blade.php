@@ -28,10 +28,11 @@
             <span>○</span>
             Nghệ sĩ
         </a>
-        <span class="flex items-center gap-3 rounded-2xl px-4 py-3 text-white/35">
+        <a href="{{ route('playlists.index') }}" class="flex items-center gap-3 rounded-2xl px-4 py-3 transition {{ request()->routeIs('artists.*') ? 'bg-white/10 text-white shadow-lg shadow-violet-950/30' : 'text-white/55 hover:bg-white/10 hover:text-white' }}">
             <span>○</span>
-            Thư viện
-        </span>
+            Danh sách phát của tôi
+        </a>
+       
     </nav>
 
     <div class="mt-8 rounded-3xl border border-white/10 bg-white/[0.06] p-4">

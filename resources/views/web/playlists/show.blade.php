@@ -83,7 +83,7 @@
                 </div>
                 <div class="flex w-full items-center gap-3 text-xs text-white/45">
                     <span id="currentTime">0:00</span>
-                    <input id="seekBar" type="range" min="0" max="100" value="0" class="h-1 w-full accent-fuchsia-400">
+                    <input id="seekBar" type="range" min="0" max="100" value="0" class="h-1 w-full accent-fuchsia-400 pointer-events-none">
                     <span id="duration">0:00</span>
                 </div>
             </div>
@@ -170,15 +170,15 @@
         audio.addEventListener('pause', () => playButton.textContent = '▶');
         audio.addEventListener('loadedmetadata', () => duration.textContent = formatTime(audio.duration));
         audio.addEventListener('timeupdate', () => {
-            if (isSeeking || !audio.duration) return;
+            if (!audio.duration) return;
             seekBar.value = (audio.currentTime / audio.duration) * 100;
             currentTime.textContent = formatTime(audio.currentTime);
         });
         audio.addEventListener('ended', () => songs.length && loadSong((currentIndex + 1) % songs.length, true));
-        seekBar.addEventListener('input', () => isSeeking = true);
-        seekBar.addEventListener('change', () => {
-            if (audio.duration) audio.currentTime = (Number(seekBar.value) / 100) * audio.duration;
-            isSeeking = false;
+        seekBar.addEventListener('change', function() {
+            if (audio.duration) {
+                audio.currentTime = (this.value / 100) * audio.duration;
+            }
         });
         volumeBar.addEventListener('input', () => audio.volume = Number(volumeBar.value));
         audio.volume = Number(volumeBar.value);

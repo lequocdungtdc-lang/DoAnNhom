@@ -24,9 +24,9 @@
                 </div>
 
                 @include('admin.partials.image-upload', [
-                    'name' => 'media_type_upload',
+                    'name' => 'image_upload',
                     'label' => 'Ảnh quảng cáo',
-                    'value' => $ad->media_type,
+                    'value' => $ad->image,
                 ])
 
                 <div>
