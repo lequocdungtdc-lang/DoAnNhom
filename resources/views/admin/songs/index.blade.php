@@ -199,7 +199,112 @@
             {{ $songs->links() }}
         </div>
     </div>
+
+    {{-- Thống kê lượt nghe theo tháng --}}
+    <div class="admin-card mb-6">
+
+        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+
+            <div>
+                <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">
+                    Listen Analytics
+                </p>
+
+                <h2 class="mt-2 text-2xl font-semibold text-white">
+                    Thống kê lượt nghe theo tháng
+                </h2>
+            </div>
+
+            <form method="GET" action="{{ route('admin.songs.index') }}" class="flex items-center gap-2">
+                @if (request('search'))
+                    <input type="hidden" name="search" value="{{ request('search') }}">
+                @endif
+                <label for="year" class="text-sm text-[#8a93a3]">Năm</label>
+                <select name="year" id="year" onchange="this.form.submit()"
+                    class="rounded-2xl border border-white/10 bg-[#13161d] px-4 py-2 text-sm text-white outline-none focus:border-admin-primary">
+                    @foreach ($availableYears as $year)
+                        <option value="{{ $year }}" @selected((int) $selectedYear === (int) $year)>{{ $year }}</option>
+                    @endforeach
+                </select>
+            </form>
+
+        </div>
+
+        <div class="mt-6 h-[400px]">
+            <canvas id="listenChart"></canvas>
+        </div>
+
+        <div class="mt-6 overflow-x-auto">
+            <table class="w-full">
+                <thead class="text-left text-sm text-[#7f8898]">
+                    <tr>
+                        <th class="py-3">Tháng</th>
+                        <th class="py-3">Lượt nghe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($monthlyListens as $item)
+                        <tr class="border-t border-white/5 text-white">
+                            <td class="py-4">Tháng {{ $item->month }}</td>
+                            <td class="py-4 font-semibold text-admin-primary">{{ number_format($item->total) }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="2" class="py-6 text-center text-sm text-[#7f8898]">Chưa có dữ liệu lượt nghe trong năm {{ $selectedYear }}.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+    </div>
 </section>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const listenCtx = document.getElementById('listenChart');
+
+    new Chart(listenCtx, {
+        type: 'bar',
+        data: {
+            labels: @json($chartLabels).map((m) => 'Tháng ' + m),
+            datasets: [{
+                label: 'Lượt nghe',
+                data: @json($chartData),
+                borderWidth: 2,
+                borderRadius: 12,
+                backgroundColor: 'rgba(16, 163, 127, 0.5)',
+                borderColor: '#10a37f',
+                hoverBackgroundColor: '#10a37f',
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: { color: '#ffffff' }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: { color: '#cfd5df' },
+                    grid: { color: 'rgba(255,255,255,0.05)' }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: '#cfd5df',
+                        precision: 0,
+                        callback: function(value) {
+                            return value.toLocaleString();
+                        }
+                    },
+                    grid: { color: 'rgba(255,255,255,0.05)' }
+                }
+            }
+        }
+    });
+</script>
 <script>
     document.querySelectorAll('[data-check-all]').forEach((checkbox) => {
         checkbox.addEventListener('change', () => {

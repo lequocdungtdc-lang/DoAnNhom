@@ -7,6 +7,7 @@
     <meta property="og:description" content="Modern admin workspace">
     <meta property="og:type" content="website">
     <title>{{ $title ?? 'Admin Workspace' }}</title>
+    <link rel="icon" href="{{ asset('imgs/favicon.png') }}" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
