@@ -41,9 +41,10 @@
                                     <input form="bulk-delete-ads-form" type="checkbox" name="ids[]" value="{{ $ad->id }}" data-check-item="ads_ids" class="h-4 w-4 rounded border-white/10 bg-white/5">
                                 </td>
                                 <td class="px-4 py-4">{{ $ad->name }}</td>
+                               
                                 <td class="px-4 py-4">
                                     @php
-                                        $adImage = trim((string) $ad->media_type);
+                                        $adImage = trim((string) $ad->image);
                                         $adImageUrl = \App\Support\ImageUpload::url($adImage);
                                     @endphp
                                     @if ($adImageUrl)

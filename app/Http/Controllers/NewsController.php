@@ -42,6 +42,20 @@ class NewsController extends Controller
             'category' => ['nullable', 'string', 'max:255'],
             'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:4096'],
             'status' => ['required', 'in:draft,published,archived'],
+        ], [
+            'title.required' => 'Vui lòng nhập tiêu đề.',
+            'title.string' => 'Tiêu đề không hợp lệ.',
+            'title.max' => 'Tiêu đề không được vượt quá 255 ký tự.',
+            'content.required' => 'Vui lòng nhập nội dung.',
+            'content.string' => 'Nội dung không hợp lệ.',
+            'summary.string' => 'Tóm tắt không hợp lệ.',
+            'category.string' => 'Danh mục không hợp lệ.',
+            'category.max' => 'Danh mục không được vượt quá 255 ký tự.',
+            'image_upload.image' => 'Tệp tải lên phải là hình ảnh.',
+            'image_upload.mimes' => 'Ảnh phải có định dạng jpg, jpeg, png, gif hoặc webp.',
+            'image_upload.max' => 'Ảnh không được vượt quá 4MB.',
+            'status.required' => 'Vui lòng chọn trạng thái.',
+            'status.in' => 'Trạng thái không hợp lệ.',
         ]);
 
         $slug = Str::slug($request->title);
@@ -104,6 +118,21 @@ class NewsController extends Controller
             'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:4096'],
             'status' => ['required', 'in:draft,published,archived'],
             'updated_at' => ['required'],
+        ], [
+            'title.required' => 'Vui lòng nhập tiêu đề.',
+            'title.string' => 'Tiêu đề không hợp lệ.',
+            'title.max' => 'Tiêu đề không được vượt quá 255 ký tự.',
+            'content.required' => 'Vui lòng nhập nội dung.',
+            'content.string' => 'Nội dung không hợp lệ.',
+            'summary.string' => 'Tóm tắt không hợp lệ.',
+            'category.string' => 'Danh mục không hợp lệ.',
+            'category.max' => 'Danh mục không được vượt quá 255 ký tự.',
+            'image_upload.image' => 'Tệp tải lên phải là hình ảnh.',
+            'image_upload.mimes' => 'Ảnh phải có định dạng jpg, jpeg, png, gif hoặc webp.',
+            'image_upload.max' => 'Ảnh không được vượt quá 4MB.',
+            'status.required' => 'Vui lòng chọn trạng thái.',
+            'status.in' => 'Trạng thái không hợp lệ.',
+            'updated_at.required' => 'Dữ liệu cập nhật không hợp lệ.',
         ]);
 
         $news = News::findOrFail($id);
