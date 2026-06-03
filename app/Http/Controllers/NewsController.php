@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use App\Models\Comment;
 
 class NewsController extends Controller
 {
@@ -262,7 +263,14 @@ class NewsController extends Controller
             ->latest()
             ->take(3)
             ->get();
-
-        return view('web.news.show', compact('news', 'relatedNews'));
+        $comments = Comment::with('user')
+            ->where('new_id', $news->id) // hoặc news_id tùy DB của bạn
+            ->latest()
+            ->get();
+        return view('web.news.show', compact(
+            'news', 
+            'relatedNews',
+            'comments'
+        ));
     }
 }
