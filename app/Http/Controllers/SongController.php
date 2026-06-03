@@ -15,6 +15,7 @@ use App\Models\ActivityLog;
 use App\Exports\SongsExport;
 use App\Imports\SongsImport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\DB;
 
 class SongController extends Controller
 {
@@ -22,17 +23,37 @@ class SongController extends Controller
 
     public function index(Request $request): View
     {
-        // Lấy từ khóa từ URL
         $search = $request->query('search');
+        $selectedYear = (int) $request->query('year', now()->year);
 
-        // Khởi tạo query với các quan hệ liên quan
         $query = Song::with(['artist', 'category', 'album'])->latest();
 
-        // Nếu từ khóa > 2 ký tự (giống logic Categories bạn vừa đưa)
         if (! empty($search) && mb_strlen($search) > 2) {
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', '%' . $search . '%');
             });
+        }
+
+        $monthlyListens = DB::table('listening_history')
+            ->whereYear('listened_at', $selectedYear)
+            ->where('has_counted', true)
+            ->select(
+                DB::raw('MONTH(listened_at) as month'),
+                DB::raw('COUNT(*) as total')
+            )
+            ->groupBy(DB::raw('MONTH(listened_at)'))
+            ->orderBy('month')
+            ->get();
+
+        $availableYears = DB::table('listening_history')
+            ->where('has_counted', true)
+            ->selectRaw('YEAR(listened_at) as year')
+            ->groupBy(DB::raw('YEAR(listened_at)'))
+            ->orderByDesc('year')
+            ->pluck('year');
+
+        if ($availableYears->isEmpty()) {
+            $availableYears = collect([now()->year]);
         }
 
         return view('admin.songs.index', [
@@ -40,6 +61,11 @@ class SongController extends Controller
             'mostPopular' => Song::where('status', true)
                 ->orderBy('listen_count', 'desc')
                 ->first(),
+            'monthlyListens' => $monthlyListens,
+            'chartLabels' => $monthlyListens->pluck('month'),
+            'chartData' => $monthlyListens->pluck('total'),
+            'selectedYear' => $selectedYear,
+            'availableYears' => $availableYears,
         ]);
     }
 

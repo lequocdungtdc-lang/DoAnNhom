@@ -3,6 +3,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title ?? 'Âm nhạc trực tuyến' }}</title>
+    {{-- favicon --}}
+    <link rel="icon" href="{{ asset('imgs/favicon.png') }}" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700,800" rel="stylesheet" />
     @vite(['resources/css/web.css', 'resources/css/style.css', 'resources/js/app.js'])

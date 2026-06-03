@@ -48,7 +48,7 @@ class AdSeeder extends Seeder
         ];
 
         // Lấy danh sách ảnh quảng cáo từ thư mục storage/app/public/ad_images
-        $images = Storage::disk('public')->files('ad_images');
+        $images = Storage::disk('public')->files('banner_images');
 
         if (empty($images)) {
             // Nếu bạn chưa chuẩn bị ảnh trong thư mục, hệ thống sẽ báo cảnh báo và dùng chuỗi mặc định
@@ -67,7 +67,7 @@ class AdSeeder extends Seeder
 
             $data[] = [
                 'name'        => $randomName . ' #' . ($i + 1), // Thêm số để phân biệt
-                'media_type'  => basename($randomImage),         // Lưu tên file ảnh
+                'image'       => $randomImage,                   // Lưu path đầy đủ ad_images/xxx.jpg
                 'link_url'    => $randomLink,
                 'is_active'   => rand(0, 1),                     // Ngẫu nhiên Bật (1) hoặc Tắt (0)
                 'description' => $randomDesc,

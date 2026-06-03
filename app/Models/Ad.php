@@ -9,10 +9,10 @@ class Ad extends Model
     protected $table = 'ads';
     protected $fillable = [
         'name',
-        'media_type',
+        'image',
         'link_url',
         'is_active',
-        'description'
+        'description',
     ];
     
 }

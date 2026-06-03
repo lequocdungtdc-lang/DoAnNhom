@@ -178,6 +178,46 @@
                 </select>
             </div>
 
+            {{-- PAYMENT METHOD --}}
+            <div>
+                <label class="mb-2 block text-sm text-[#cfd5df]">
+                    Hình thức thanh toán
+                </label>
+
+                <select
+                    name="payment_method"
+                    class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-[#10a37f]"
+                >
+                    <option value="" @selected(empty(old('payment_method', $subscription->payment_method)))>
+                        -- Chọn hình thức --
+                    </option>
+                    <option value="qr" @selected(old('payment_method', $subscription->payment_method) == 'qr')>
+                        Quét mã QR
+                    </option>
+                    <option value="atm" @selected(old('payment_method', $subscription->payment_method) == 'atm')>
+                        Thẻ ATM / Internet Banking
+                    </option>
+                    <option value="credit" @selected(old('payment_method', $subscription->payment_method) == 'credit')>
+                        Thẻ quốc tế (Visa/Mastercard)
+                    </option>
+                    <option value="vnpay_wallet" @selected(old('payment_method', $subscription->payment_method) == 'vnpay_wallet')>
+                        Ví VNPay
+                    </option>
+                    <option value="cash" @selected(old('payment_method', $subscription->payment_method) == 'cash')>
+                        Tiền mặt
+                    </option>
+                    <option value="transfer" @selected(old('payment_method', $subscription->payment_method) == 'transfer')>
+                        Chuyển khoản
+                    </option>
+                </select>
+
+                @error('payment_method')
+                    <p class="mt-2 text-sm text-red-300">
+                        {{ $message }}
+                    </p>
+                @enderror
+            </div>
+
             <button
                 type="submit"
                 class="rounded-2xl bg-[#10a37f] px-5 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110"

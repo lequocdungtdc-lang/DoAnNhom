@@ -8,10 +8,10 @@
     </div>
 
     <div class="flex items-center gap-3">
-        <a href="{{ route('home') }}" class="hidden rounded-full border border-white/10 px-4 py-2 text-sm text-white/70 transition hover:bg-white/10 sm:inline-flex">Home</a>
-        <a href="{{ route('artists.index') }}" class="hidden rounded-full border border-white/10 px-4 py-2 text-sm text-white/70 transition hover:bg-white/10 sm:inline-flex">Artists</a>
+        <a href="{{ route('home') }}" class="hidden rounded-full border border-white/10 px-4 py-2 text-sm text-white/70 transition hover:bg-white/10 sm:inline-flex">Trang chủ</a>
+        <a href="{{ route('artists.index') }}" class="hidden rounded-full border border-white/10 px-4 py-2 text-sm text-white/70 transition hover:bg-white/10 sm:inline-flex">Nghệ sĩ</a>
         <a href="{{ route('podcasts.index') }}" class="hidden rounded-full border border-white/10 px-4 py-2 text-sm text-white/70 transition hover:bg-white/10 sm:inline-flex">Podcast</a>
-        <a href="{{ route('news.index') }}" class="hidden rounded-full border border-white/10 px-4 py-2 text-sm text-white/70 transition hover:bg-white/10 sm:inline-flex">News</a>
+        <a href="{{ route('news.index') }}" class="hidden rounded-full border border-white/10 px-4 py-2 text-sm text-white/70 transition hover:bg-white/10 sm:inline-flex">Tin tức</a>
 
         @auth
             <div class="group relative">

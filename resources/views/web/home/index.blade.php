@@ -252,11 +252,14 @@
             <div class="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                 @foreach ($activeAds as $ad)
                     <a href="{{ $ad->link_url ?: '#' }}" target="_blank" rel="noopener noreferrer" class="group block overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] transition hover:bg-white/[0.08]">
-                        @if ($ad->image_url)
-                            <img src="{{ \App\Support\ImageUpload::url($ad->image_url) }}" alt="{{ $ad->title }}" class="h-44 w-full object-cover transition duration-300 group-hover:scale-[1.02]">
+                        @php
+                            $adImageUrl = \App\Support\ImageUpload::url($ad->image);
+                        @endphp
+                        @if ($adImageUrl)
+                            <img src="{{ $adImageUrl }}" alt="{{ $ad->name }}" class="h-44 w-full object-cover transition duration-300 group-hover:scale-[1.02]">
                         @endif
                         <div class="p-4">
-                            <h3 class="line-clamp-1 font-semibold text-white">{{ $ad->title }}</h3>
+                            <h3 class="line-clamp-1 font-semibold text-white">{{ $ad->name }}</h3>
                             @if ($ad->description)
                                 <p class="mt-1 line-clamp-2 text-sm text-white/60">{{ $ad->description }}</p>
                             @endif
@@ -287,7 +290,7 @@
                 </div>
                 <div class="flex w-full items-center gap-3 text-xs text-white/45">
                     <span id="currentTime">0:00</span>
-                    <input id="seekBar" type="range" min="0" max="100" value="0" class="h-1 w-full accent-fuchsia-400">
+                    <input id="seekBar" type="range" min="0" max="100" value="0" class="h-1 w-full accent-fuchsia-400 pointer-events-none">
                     <span id="duration">0:00</span>
                 </div>
             </div>
@@ -522,10 +525,7 @@
         });
 
         audio.addEventListener('timeupdate', () => {
-            if (isSeeking || !audio.duration) {
-                return;
-            }
-
+            if (!audio.duration) return;
             seekBar.value = (audio.currentTime / audio.duration) * 100;
             currentTime.textContent = formatTime(audio.currentTime);
         });
@@ -538,16 +538,10 @@
             playNextInQueue(1);
         });
 
-        seekBar.addEventListener('input', () => {
-            isSeeking = true;
-        });
-
         seekBar.addEventListener('change', () => {
             if (audio.duration) {
-                audio.currentTime = (Number(seekBar.value) / 100) * audio.duration;
+                audio.currentTime = (seekBar.value / 100) * audio.duration;
             }
-
-            isSeeking = false;
         });
 
         volumeBar.addEventListener('input', () => {

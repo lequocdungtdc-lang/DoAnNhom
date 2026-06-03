@@ -18,14 +18,14 @@ class AdController extends Controller
         if (! empty($search) && mb_strlen($search) > 2) {
             $query->where('name', 'like', '%' . $search . '%');
         }
-        return view('admin.ad.index', [
+        return view('admin.ads.index', [
             'ads' => $query->paginate(10)->withQueryString(),
         ]);
     }
 
     public function create(): View
     {
-        return view('admin.ad.form', [
+        return view('admin.ads.form', [
             'ad' => new Ad(),
             'isEdit' => false,
         ]);
@@ -35,22 +35,33 @@ class AdController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'media_type_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:5120'],
+            'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:5120'],
             'link_url' => ['required', 'url'],
             'description' => ['nullable', 'string'],
             'is_active' => ['nullable', 'boolean'],
+        ], [
+            'name.required' => 'Vui lòng nhập tên quảng cáo.',
+            'name.string' => 'Tên quảng cáo không hợp lệ.',
+            'name.max' => 'Tên quảng cáo không được vượt quá 255 ký tự.',
+            'image_upload.image' => 'Tệp tải lên phải là hình ảnh.',
+            'image_upload.mimes' => 'Ảnh phải có định dạng jpg, jpeg, png, gif hoặc webp.',
+            'image_upload.max' => 'Ảnh không được vượt quá 5MB.',
+            'link_url.required' => 'Vui lòng nhập liên kết.',
+            'link_url.url' => 'Liên kết không hợp lệ.',
+            'description.string' => 'Mô tả không hợp lệ.',
+            'is_active.boolean' => 'Trạng thái không hợp lệ.',
         ]);
 
         $validated['is_active'] = $request->boolean('is_active');
 
-        if ($request->hasFile('media_type_upload')) {
-            $validated['media_type'] = ImageUpload::store(
-                $request->file('media_type_upload'),
-                'ad_images',
+        if ($request->hasFile('image_upload')) {
+            $validated['image'] = ImageUpload::store(
+                $request->file('image_upload'),
+                'banner_images',
             );
         }
 
-        unset($validated['media_type_upload']);
+        unset($validated['image_upload']);
 
         Ad::create($validated);
         ActivityLog::create([
@@ -74,7 +85,7 @@ class AdController extends Controller
             ]);
         }
 
-        return view('admin.ad.form', [
+        return view('admin.ads.form', [
             'ad' => Ad::findOrFail($id),
             'isEdit' => true,
         ]);
@@ -91,11 +102,23 @@ class AdController extends Controller
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'media_type_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:5120'],
+            'image_upload' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:5120'],
             'link_url' => ['required', 'url'],
             'description' => ['nullable', 'string'],
             'is_active' => ['nullable', 'boolean'],
             'updated_at' => ['required'],
+        ], [
+            'name.required' => 'Vui lòng nhập tên quảng cáo.',
+            'name.string' => 'Tên quảng cáo không hợp lệ.',
+            'name.max' => 'Tên quảng cáo không được vượt quá 255 ký tự.',
+            'image_upload.image' => 'Tệp tải lên phải là hình ảnh.',
+            'image_upload.mimes' => 'Ảnh phải có định dạng jpg, jpeg, png, gif hoặc webp.',
+            'image_upload.max' => 'Ảnh không được vượt quá 5MB.',
+            'link_url.required' => 'Vui lòng nhập liên kết.',
+            'link_url.url' => 'Liên kết không hợp lệ.',
+            'description.string' => 'Mô tả không hợp lệ.',
+            'is_active.boolean' => 'Trạng thái không hợp lệ.',
+            'updated_at.required' => 'Dữ liệu cập nhật không hợp lệ.',
         ]);
 
         $validated['is_active'] = $request->boolean('is_active');
@@ -109,20 +132,20 @@ class AdController extends Controller
             ]);
         }
 
-        if ($request->hasFile('media_type_upload')) {
+        if ($request->hasFile('image_upload')) {
             $imagePath = ImageUpload::store(
-                $request->file('media_type_upload'),
-                'ad_images',
+                $request->file('image_upload'),
+                'banner_images',
                 'public',
-                $ad->media_type,
+                $ad->image,
             );
 
             if ($imagePath !== null) {
-                $validated['media_type'] = $imagePath;
+                $validated['image'] = $imagePath;
             }
         }
 
-        unset($validated['media_type_upload']);
+        unset($validated['image_upload']);
 
         $ad->update($validated);
         ActivityLog::create([
@@ -148,7 +171,7 @@ class AdController extends Controller
         }
 
         $ad = Ad::findOrFail($id);
-        ImageUpload::delete($ad->media_type);
+        ImageUpload::delete($ad->image);
         $ad->delete();
         ActivityLog::create([
             'module' => 'Ad',
@@ -177,10 +200,10 @@ class AdController extends Controller
             'ids.*' => ['integer', 'exists:ads,id'],
         ]);
 
-        $ads = Ad::whereIn('id', $validated['ids'])->get();
+        $adList = Ad::whereIn('id', $validated['ids'])->get();
 
-        foreach ($ads as $ad) {
-            ImageUpload::delete($ad->media_type);
+        foreach ($adList as $ad) {
+            ImageUpload::delete($ad->image);
             $ad->delete();
 
             ActivityLog::create([

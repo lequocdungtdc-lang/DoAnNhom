@@ -8,7 +8,7 @@ class Comment extends Model
 {
     protected $fillable = [
         'user_id',
-        'song_id',
+        'new_id',
         'content',
         'status',
     ];
@@ -18,8 +18,8 @@ class Comment extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function song()
+    public function news()
     {
-        return $this->belongsTo(Song::class);
+        return $this->belongsTo(News::class);
     }
 }
