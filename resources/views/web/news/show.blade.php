@@ -26,6 +26,54 @@
 
 
 </article>
+{{-- Form bình luận --}}
+<div class="mt-8 rounded-[2rem] border border-white/10 bg-white/[0.08] p-6 backdrop-blur-xl">
+    <h3 class="text-xl font-bold text-white">
+        Viết bình luận
+    </h3>
+
+    @auth
+    <form action="{{ route('web.comments.store') }}" method="POST" class="mt-5 space-y-4">
+        @csrf
+
+        {{-- ID bài viết --}}
+        <input type="hidden" name="new_id" value="{{ $news->id }}">
+
+        <textarea
+            name="content"
+            rows="4"
+            placeholder="Chia sẻ cảm nghĩ của bạn về bài viết này..."
+            class="w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white placeholder:text-white/40 focus:border-fuchsia-400 focus:outline-none">{{ old('content') }}</textarea>
+
+        @error('content')
+        <p class="text-sm text-red-400">
+            {{ $message }}
+        </p>
+        @enderror
+
+        <div class="flex justify-end">
+            <button
+                type="submit"
+                class="rounded-full bg-gradient-to-r from-fuchsia-500 to-violet-500 px-6 py-3 text-sm font-semibold text-white transition hover:scale-105">
+                Gửi bình luận
+            </button>
+        </div>
+    </form>
+    @else
+    <div class="mt-4 rounded-2xl border border-yellow-400/20 bg-yellow-500/10 p-4 text-center">
+        <p class="text-sm text-yellow-100">
+            Bạn cần đăng nhập để bình luận.
+        </p>
+
+        <a href="{{ route('login') }}"
+            class="mt-3 inline-block rounded-full bg-fuchsia-500 px-5 py-2 text-sm font-semibold text-white hover:bg-fuchsia-600">
+            Đăng nhập
+        </a>
+    </div>
+    @endauth
+</div>
+
+{{-- Danh sách bình luận --}}
 <div class="mt-6 space-y-4">
 
     @foreach ($comments as $comment)
@@ -35,19 +83,17 @@
         <div class="flex items-center gap-3">
 
             <img
-                src="{{ $comment->user->avatar }}"
+                src="{{ $comment->user?->avatar ?? asset('images/default-avatar.png') }}"
                 class="h-10 w-10 rounded-full object-cover">
 
             <div>
-
                 <p class="text-sm font-medium text-white">
-                    {{ $comment->user->fullname??'Người dùng không xác định' }}
+                    {{ $comment->user?->fullname ?? 'Người dùng không xác định' }}
                 </p>
 
                 <p class="text-xs text-[#7f8898]">
-                    {{ $comment->song->title??'Bài hát không xác định' }}
+                    {{ $comment->created_at?->diffForHumans() }}
                 </p>
-
             </div>
 
         </div>

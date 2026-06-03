@@ -22,7 +22,7 @@ use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\NewsController;
 
 use App\Http\Controllers\CommentsController;
-use App\Http\Controllers\AdController; 
+use App\Http\Controllers\AdController;
 
 
 // Tin tức (Web - User)
@@ -72,6 +72,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/goi-dang-ky/vnpay-return', [WebPlanController::class, 'vnpayReturn'])->name('plans.vnpay.return');
     Route::post('/goi-dang-ky/{plan}', [WebPlanController::class, 'subscribe'])->name('plans.subscribe');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/news/comment', [CommentsController::class, 'storeWeb'])->name('web.comments.store');
 });
 
 Route::prefix('admin')
@@ -195,7 +196,7 @@ Route::prefix('admin')
             });
 
 
-        
+
 
         Route::prefix('news')
             ->name('news.')
