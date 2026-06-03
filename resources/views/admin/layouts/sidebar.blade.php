@@ -1,18 +1,19 @@
 <aside class="border-b border-white/8 bg-[#13161d] lg:border-b-0 lg:border-r">
     <div class="flex h-full flex-col p-4 md:p-5">
-        <div class="mb-6 flex items-center gap-3 px-2 pt-1">
-            <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#10a37f] font-semibold text-[#08110d]">
-                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M9 18V5l12-2v13M9 18a3 3 0 1 1-6 0a3 3 0 0 1 6 0Zm12-2a3 3 0 1 1-6 0a3 3 0 0 1 6 0Z" />
-                </svg>
+        <a href="{{ route('admin.dashboard') }}">
+            <div class="mb-6 flex items-center gap-3 px-2 pt-1">
+                <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#10a37f] font-semibold text-[#08110d]">
+                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 18V5l12-2v13M9 18a3 3 0 1 1-6 0a3 3 0 0 1 6 0Zm12-2a3 3 0 1 1-6 0a3 3 0 0 1 6 0Z" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="text-sm font-semibold text-white">Quản trị hiện đại</p>
+                    <p class="text-xs text-[#8a93a3]">Gọn, rõ và tập trung</p>
+                </div>
             </div>
-            <div>
-                <p class="text-sm font-semibold text-white">Quản trị hiện đại</p>
-                <p class="text-xs text-[#8a93a3]">Gọn, rõ và tập trung</p>
-            </div>
-        </div>
-
+        </a>
         <nav class="space-y-1.5">
             <a href="{{ route('admin.dashboard') }}" class="admin-nav-link {{ request()->routeIs('admin.dashboard') ? 'admin-nav-link-active' : '' }}">
                 <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-black/20">
@@ -100,7 +101,7 @@
                 <span>Comment</span>
             </a>
 
-            
+
             <a href="{{ route('admin.news.index') }}" class="admin-nav-link {{ request()->routeIs('admin.news.*') ? 'admin-nav-link-active' : '' }}">
                 <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-black/20">
                     <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -111,16 +112,16 @@
                 <span>Tin Tức</span>
             </a>
             <a href="{{ route('admin.ads.index') }}" class="admin-nav-link {{ request()->routeIs('admin.ads.*') ? 'admin-nav-link-active' : '' }}">
-    <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-black/20">
-        <!-- Icon đã đổi sang cái Loa phát thanh (Megaphone) phù hợp với Quảng cáo -->
-        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
-            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-        </svg>
-    </span>
-    <span>Quảng cáo</span>
-</a>
+                <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-black/20">
+                    <!-- Icon đã đổi sang cái Loa phát thanh (Megaphone) phù hợp với Quảng cáo -->
+                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M11 5L6 9H2v6h4l5 4V5z"></path>
+                        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                    </svg>
+                </span>
+                <span>Quảng cáo</span>
+            </a>
         </nav>
 
         <div class="mt-auto pt-6">
