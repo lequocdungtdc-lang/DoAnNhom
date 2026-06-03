@@ -18,7 +18,7 @@ class NewsSeeder extends Seeder
             'content' => '<p>Nội dung chi tiết về trí tuệ nhân tạo...</p>',
             'summary' => 'Trí tuệ nhân tạo tiếp tục phát triển mạnh mẽ trong năm 2026.',
             'category' => 'Công nghệ',
-            'user_id' => 1,
+            'user_id' => 3,
             'status' => 'published',
         ]);
 
@@ -28,7 +28,7 @@ class NewsSeeder extends Seeder
             'content' => '<p>Chi tiết tin kinh tế...</p>',
             'summary' => 'Giá vàng trong nước và thế giới đồng loạt tăng mạnh.',
             'category' => 'Kinh tế',
-            'user_id' => 1,
+            'user_id' => 2,
             'status' => 'published',
         ]);
 

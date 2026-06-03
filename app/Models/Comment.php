@@ -20,6 +20,6 @@ class Comment extends Model
 
     public function news()
     {
-        return $this->belongsTo(News::class);
+        return $this->belongsTo(News::class, 'new_id');
     }
 }

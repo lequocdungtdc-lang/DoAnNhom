@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Models\News;
+use App\Models\User;
 
 class CommentsController extends Controller
 {
@@ -59,6 +60,7 @@ class CommentsController extends Controller
             'comment' => new Comment(),
             'isEdit' => false,
             'news' => News::all(),
+            'users' => User::all(),
         ]);
     }
 
@@ -96,6 +98,7 @@ class CommentsController extends Controller
             'comment' => Comment::findOrFail($id),
             'isEdit' => true,
             'news' => News::all(),
+            'users' => User::all(),
         ]);
     }
 

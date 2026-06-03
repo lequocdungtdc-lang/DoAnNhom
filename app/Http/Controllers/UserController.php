@@ -22,6 +22,7 @@ class UserController extends Controller
     {
         return view('admin.users.form', [
             'userItem' => new User(),
+            
             'isEdit' => false,
         ]);
     }

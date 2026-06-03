@@ -16,7 +16,10 @@ class FavoriteSongController extends Controller
     {
         $user = $request->user();
         $hasActiveSubscription = $user && $user->activeSubscription ? true : false;
-
+        // dd(
+        //     $user->likedSongs()->count(),
+        //     $user->likedSongs()->get()->pluck('id')
+        // );
         $songs = $user
             ->likedSongs()
             ->with(['artist', 'category', 'album'])
@@ -37,7 +40,7 @@ class FavoriteSongController extends Controller
                     'can_play' => !$song->is_vip || $hasActiveSubscription,
                 ];
             })
-            ->filter(fn (array $song) => $song['audio_url'] !== null)
+            // ->filter(fn(array $song) => $song['audio_url'] !== null)
             ->values();
 
         return view('web.favorites.index', [

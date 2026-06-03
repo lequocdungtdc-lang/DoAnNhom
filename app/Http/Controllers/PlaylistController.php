@@ -70,7 +70,7 @@ class PlaylistController extends Controller
                     'can_play' => ! $song->is_vip || $hasActiveSubscription,
                 ];
             })
-            ->filter(fn (array $song) => $song['audio_url'] !== null)
+             ->filter(fn (array $song) => $song['audio_url'] !== null)
             ->values();
 
         return view('web.playlists.show', [

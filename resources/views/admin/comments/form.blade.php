@@ -42,14 +42,22 @@
             <div>
 
                 <label class="mb-2 block text-sm text-[#cfd5df]">
-                    Người dùng
+                   Nguời bình luận
                 </label>
 
-                <input
-                    type="number"
+                <select
                     name="user_id"
-                    value="{{ old('user_id', $comment->user_id) }}"
-                    class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none">
+                    class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white">
+
+                    <option value="">-- Chọn người dùng --</option>
+
+                    @foreach ($users as $user)
+                    <option value="{{ $user->id }}" @selected((string) old('user_id', (string) $comment->user_id) === (string) $user->id)>
+                        {{ $user->fullname }}
+                    </option>
+                    @endforeach
+
+                </select>
 
             </div>
 
