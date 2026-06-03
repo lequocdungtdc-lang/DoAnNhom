@@ -1,10 +1,12 @@
 <aside class="hidden border-r border-white/10 bg-black/15 px-5 py-6 backdrop-blur-xl lg:block">
     <div class="flex items-center gap-3">
-        <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-fuchsia-500 to-violet-500 text-xl font-black">M</div>
-        <div>
-            <p class="text-lg font-bold tracking-tight">Music Hub</p>
-            <p class="text-xs text-violet-200/70">Nghe nhạc online</p>
-        </div>
+        <a href="{{ route('home') }}" class="flex items-center gap-3">
+            <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-fuchsia-500 to-violet-500 text-xl font-black">M</div>
+            <div>
+                <p class="text-lg font-bold tracking-tight">Music Hub</p>
+                <p class="text-xs text-violet-200/70">Nghe nhạc online</p>
+            </div>
+        </a>
     </div>
 
     <nav class="mt-8 space-y-2 text-sm font-medium">
@@ -32,7 +34,7 @@
             <span>○</span>
             Danh sách phát của tôi
         </a>
-       
+
     </nav>
 
     <div class="mt-8 rounded-3xl border border-white/10 bg-white/[0.06] p-4">
