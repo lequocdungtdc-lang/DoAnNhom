@@ -24,6 +24,7 @@
         </div>
 
         <div class="mt-5 space-y-2">
+            <!-- <pre>{{ print_r($songs, true) }}</pre> -->
             @forelse ($songs as $index => $song)
                 <div class="group flex w-full items-center gap-4 rounded-2xl px-3 py-3 transition hover:bg-white/10" data-favorite-row>
                     <button type="button" class="play-song flex min-w-0 flex-1 items-center gap-4 text-left {{ !$song['can_play'] ? 'cursor-not-allowed opacity-60' : '' }}" data-index="{{ $index }}" data-can-play="{{ $song['can_play'] ? '1' : '0' }}" @if (!$song['can_play']) onclick="showVipPrompt()" @endif>
