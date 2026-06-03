@@ -185,4 +185,26 @@ class CommentsController extends Controller
                 'message' => 'Xóa các comment đã chọn thành công.',
             ]);
     }
+    public function storeWeb(Request $request)
+    {
+        $request->validate([
+            'new_id' => 'required|exists:news,id',
+            'content' => 'required|max:1000',
+        ]);
+
+        $comment = Comment::create([
+            'user_id' => auth()->id(),
+            'new_id' => $request->new_id,
+            'content' => $request->content,
+            'status' => true,
+        ]);
+        ActivityLog::create([
+            'module' => 'Web-Comment',
+            'action' => 'CREATE',
+            'title' => $comment->content,
+            'user_id' => auth()->id(),
+        ]);
+
+        return back()->with('success', 'Đã gửi bình luận!');
+    }
 }
