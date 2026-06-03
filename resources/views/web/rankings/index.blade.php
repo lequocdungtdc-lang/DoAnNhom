@@ -49,6 +49,7 @@
                                     {{ $song['is_liked'] ? '♥' : '♡' }}
                                 </button>
                             </form>
+                             @include('web.playlists._add-song', ['song' => $song, 'userPlaylists' => $userPlaylists])
                         @else
                             <a href="{{ route('login') }}" class="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-white/45 transition hover:bg-white/10 hover:text-fuchsia-100" title="Đăng nhập để yêu thích">♡</a>
                         @endauth
@@ -67,6 +68,7 @@
 
             <div class="mt-5 space-y-3">
                 @forelse ($topArtists as $index => $artist)
+               <a href="{{ route('artists.show', $artist['id']) }}" class="block">
                     <div class="flex w-full items-center gap-3 rounded-2xl bg-white/[0.05] p-3 transition hover:bg-white/10">
                         <span class="text-xl font-black {{ $index === 0 ? 'text-amber-300' : ($index === 1 ? 'text-gray-300' : ($index === 2 ? 'text-orange-300' : 'text-fuchsia-300')) }}">
                             {{ $index + 1 }}
@@ -77,6 +79,7 @@
                             <span class="mt-1 block truncate text-xs text-white/50">{{ number_format((int) $artist['listen_count']) }} lượt nghe</span>
                         </span>
                     </div>
+                   </a>
                 @empty
                     <p class="text-sm text-white/55">Chưa có dữ liệu nghệ sĩ.</p>
                 @endforelse

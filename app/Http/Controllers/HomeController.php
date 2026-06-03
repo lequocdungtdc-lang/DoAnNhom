@@ -64,13 +64,13 @@ class HomeController extends Controller
                     'can_play' => !$song->is_vip || $hasActiveSubscription,
                 ];
             })
-                ->filter(fn (array $song) => $song['audio_url'] !== null)
-                ->values();
+            ->filter(fn(array $song) => $song['audio_url'] !== null)
+            ->values();
 
         $podcasts = Podcast::where('status', true)
             ->latest()
             ->get()
-            ->map(fn (Podcast $podcast) => [
+            ->map(fn(Podcast $podcast) => [
                 'id' => $podcast->id,
                 'type' => 'podcast',
                 'title' => $podcast->title,
@@ -83,17 +83,17 @@ class HomeController extends Controller
                 'duration' => $podcast->duration,
                 'can_play' => true,
             ])
-            ->filter(fn (array $podcast) => $podcast['audio_url'] !== null)
+            ->filter(fn(array $podcast) => $podcast['audio_url'] !== null)
             ->values();
 
         $artists = Artist::withCount(['songs' => function ($query) {
-                $query->where('status', true);
-            }])
+            $query->where('status', true);
+        }])
             ->where('status', true)
             ->orderBy('name')
             ->limit(12)
             ->get()
-            ->map(fn (Artist $artist) => [
+            ->map(fn(Artist $artist) => [
                 'id' => $artist->id,
                 'name' => $artist->name,
                 'image' => ImageUpload::url($artist->image),
@@ -110,7 +110,7 @@ class HomeController extends Controller
                 ->where('status', true)
                 ->limit(5)
                 ->get()
-                ->map(fn ($a) => [
+                ->map(fn($a) => [
                     'id' => $a->id,
                     'name' => $a->name,
                     'image' => ImageUpload::url($a->image),
@@ -122,7 +122,7 @@ class HomeController extends Controller
                 ->where('status', true)
                 ->limit(5)
                 ->get()
-                ->map(fn ($a) => [
+                ->map(fn($a) => [
                     'id' => $a->id,
                     'title' => $a->title,
                     'cover_image' => ImageUpload::url($a->cover_image),
@@ -134,7 +134,7 @@ class HomeController extends Controller
                 ->where('status', true)
                 ->limit(5)
                 ->get()
-                ->map(fn ($c) => [
+                ->map(fn($c) => [
                     'id' => $c->id,
                     'name' => $c->name,
                     'type' => 'category',
@@ -189,24 +189,27 @@ class HomeController extends Controller
             })
             ->values();
 
-        $topArtists = Artist::withCount(['songs as listen_count' => function ($query) {
-                $query->selectRaw('sum(songs.listen_count)');
-            }])
+        $topArtists = Artist::withSum([
+            'songs' => function ($query) {
+                $query->where('status', true);
+            }
+        ], 'listen_count')
             ->where('status', true)
-            ->orderByDesc('listen_count')
+            ->orderByDesc('songs_sum_listen_count')
             ->limit(10)
             ->get()
-            ->map(fn ($a) => [
-                'id' => $a->id,
-                'name' => $a->name,
-                'image' => ImageUpload::url($a->image),
-                'listen_count' => $a->listen_count ?? 0,
+            ->map(fn($artist) => [
+                'id' => $artist->id,
+                'name' => $artist->name,
+                'image' => ImageUpload::url($artist->image),
+                'listen_count' => $artist->songs_sum_listen_count ?? 0,
             ]);
 
         return view('web.rankings.index', [
             'topSongs' => $topSongs,
             'topArtists' => $topArtists,
             'featuredSong' => $topSongs->first(),
+            'userPlaylists' => $user->playlists()->orderBy('name')->get(),
         ]);
     }
 
@@ -258,12 +261,12 @@ class HomeController extends Controller
     public function artistsIndex(): View
     {
         $artists = Artist::withCount(['songs' => function ($query) {
-                $query->where('status', true);
-            }])
+            $query->where('status', true);
+        }])
             ->where('status', true)
             ->orderBy('name')
             ->paginate(24)
-            ->through(fn (Artist $artist) => [
+            ->through(fn(Artist $artist) => [
                 'id' => $artist->id,
                 'name' => $artist->name,
                 'image' => ImageUpload::url($artist->image),
@@ -280,7 +283,7 @@ class HomeController extends Controller
         $podcasts = Podcast::where('status', true)
             ->latest()
             ->get()
-            ->map(fn (Podcast $podcast) => [
+            ->map(fn(Podcast $podcast) => [
                 'id' => $podcast->id,
                 'type' => 'podcast',
                 'title' => $podcast->title,
@@ -326,7 +329,7 @@ class HomeController extends Controller
             ->latest()
             ->limit(6)
             ->get()
-            ->map(fn (Podcast $item) => [
+            ->map(fn(Podcast $item) => [
                 'id' => $item->id,
                 'type' => 'podcast',
                 'title' => $item->title,
@@ -339,7 +342,7 @@ class HomeController extends Controller
                 'duration' => $item->duration,
                 'can_play' => true,
             ])
-            ->filter(fn (array $item) => $item['audio_url'] !== null)
+            ->filter(fn(array $item) => $item['audio_url'] !== null)
             ->values();
 
         return view('web.podcasts.show', [
