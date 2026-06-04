@@ -33,6 +33,9 @@ class SongController extends Controller
                 $q->where('title', 'like', '%' . $search . '%');
             });
         }
+        $randomSongs = Song::inRandomOrder()
+            ->take(2)
+            ->get();
 
         $monthlyListens = DB::table('listening_history')
             ->whereYear('listened_at', $selectedYear)
@@ -66,6 +69,7 @@ class SongController extends Controller
             'chartData' => $monthlyListens->pluck('total'),
             'selectedYear' => $selectedYear,
             'availableYears' => $availableYears,
+            'randomSongs' => $randomSongs,
         ]);
     }
 
