@@ -208,7 +208,9 @@ class HomeController extends Controller
             'topSongs' => $topSongs,
             'topArtists' => $topArtists,
             'featuredSong' => $topSongs->first(),
-            'userPlaylists' => $user->playlists()->orderBy('name')->get(),
+             'userPlaylists' => $user
+        ? $user->playlists()->orderBy('name')->get()
+        : collect(),
         ]);
     }
 
