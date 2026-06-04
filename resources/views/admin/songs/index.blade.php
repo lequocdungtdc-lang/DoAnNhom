@@ -2,7 +2,7 @@
 
 @section('content')
 <section class="py-4 md:py-6">
-     @if ($mostPopular)
+    @if ($mostPopular)
     <div class="mt-5 rounded-3xl border border-white/10 bg-white/[0.03] p-5">
 
         <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">
@@ -11,20 +11,20 @@
 
         <div class="mt-4 flex items-center gap-4">
 
-                {{-- <img
+            {{-- <img
                 src="{{ $mostPopular->thumbnail }}"
-                class="h-20 w-20 rounded-2xl object-cover border border-white/10"> --}}
+            class="h-20 w-20 rounded-2xl object-cover border border-white/10"> --}}
 
-                 @php
-                    $songImage = trim((string) $mostPopular->thumbnail);
-                    $songImageUrl = \App\Support\ImageUpload::url($songImage);
-                @endphp
+            @php
+            $songImage = trim((string) $mostPopular->thumbnail);
+            $songImageUrl = \App\Support\ImageUpload::url($songImage);
+            @endphp
 
-                @if ($songImageUrl)
-                    <img src="{{ $songImageUrl }}" alt="{{ $mostPopular->title }}" class="h-14 w-14 rounded-xl border border-white/10 object-cover">
-                @else
-                    <span class="inline-flex h-14 w-14 items-center justify-center rounded-xl border border-dashed border-white/10 text-xs text-[#8a93a3]">No img</span>
-                @endif
+            @if ($songImageUrl)
+            <img src="{{ $songImageUrl }}" alt="{{ $mostPopular->title }}" class="h-14 w-14 rounded-xl border border-white/10 object-cover">
+            @else
+            <span class="inline-flex h-14 w-14 items-center justify-center rounded-xl border border-dashed border-white/10 text-xs text-[#8a93a3]">No img</span>
+            @endif
 
             <div>
 
@@ -48,7 +48,7 @@
 
     @endif
     <div class="admin-card my-5">
-       <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
                 <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">
                     Bài hát
@@ -83,7 +83,7 @@
 
                 {{-- Export Excel --}}
                 <a href="{{ route('admin.songs.export') }}"
-                class="rounded-2xl bg-green-500 px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110">
+                    class="rounded-2xl bg-green-500 px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110">
                     Export Excel
                 </a>
 
@@ -99,7 +99,7 @@
 
                 {{-- Thêm bài hát --}}
                 <a href="{{ route('admin.songs.create') }}"
-                class="rounded-2xl bg-admin-primary px-4 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">
+                    class="rounded-2xl bg-admin-primary px-4 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">
                     Thêm bài hát
                 </a>
 
@@ -133,14 +133,14 @@
                         </td>
                         <td class="px-4 py-4">
                             @php
-                                $songImage = trim((string) $song->thumbnail);
-                                $songImageUrl = \App\Support\ImageUpload::url($songImage);
+                            $songImage = trim((string) $song->thumbnail);
+                            $songImageUrl = \App\Support\ImageUpload::url($songImage);
                             @endphp
 
                             @if ($songImageUrl)
-                                <img src="{{ $songImageUrl }}" alt="{{ $song->title }}" class="h-14 w-14 rounded-xl border border-white/10 object-cover">
+                            <img src="{{ $songImageUrl }}" alt="{{ $song->title }}" class="h-14 w-14 rounded-xl border border-white/10 object-cover">
                             @else
-                                <span class="inline-flex h-14 w-14 items-center justify-center rounded-xl border border-dashed border-white/10 text-xs text-[#8a93a3]">No img</span>
+                            <span class="inline-flex h-14 w-14 items-center justify-center rounded-xl border border-dashed border-white/10 text-xs text-[#8a93a3]">No img</span>
                             @endif
                         </td>
                         <td class="px-4 py-4">{{ $song->title }}</td>
@@ -150,23 +150,23 @@
                         <td class="px-4 py-4 text-[#a8b1bf]">{{ number_format((int) $song->listen_count) }}</td>
                         <td class="px-4 py-4 text-[#a8b1bf]">
                             @php
-                                $songAudio = trim((string) $song->audio_file);
-                                $songAudioUrl = \App\Support\AudioUpload::url($songAudio);
+                            $songAudio = trim((string) $song->audio_file);
+                            $songAudioUrl = \App\Support\AudioUpload::url($songAudio);
                             @endphp
 
                             @if ($songAudioUrl)
-                                <audio src="{{ $songAudioUrl }}" controls class="w-52"></audio>
+                            <audio src="{{ $songAudioUrl }}" controls class="w-52"></audio>
                             @elseif ($songAudio !== '')
-                                <span class="text-xs text-red-300">File không tồn tại</span>
+                            <span class="text-xs text-red-300">File không tồn tại</span>
                             @else
-                                Chưa có
+                            Chưa có
                             @endif
                         </td>
                         <td class="px-4 py-4">
                             @if ($song->is_vip)
-                                <span class="inline-flex items-center rounded-full bg-yellow-500/10 px-2.5 py-0.5 text-xs font-medium text-yellow-400">VIP</span>
+                            <span class="inline-flex items-center rounded-full bg-yellow-500/10 px-2.5 py-0.5 text-xs font-medium text-yellow-400">VIP</span>
                             @else
-                                <span class="inline-flex items-center rounded-full bg-white/5 px-2.5 py-0.5 text-xs font-medium text-[#8a93a3]">Thường</span>
+                            <span class="inline-flex items-center rounded-full bg-white/5 px-2.5 py-0.5 text-xs font-medium text-[#8a93a3]">Thường</span>
                             @endif
                         </td>
                         <td class="px-4 py-4">{{ $song->status ? 'Hiển thị' : 'Ẩn' }}</td>
@@ -199,7 +199,26 @@
             {{ $songs->links() }}
         </div>
     </div>
+    <div class="my-3 grid gap-4 md:grid-cols-2">
+        <article class="admin-card">
+            <p class="text-sm text-[#8a93a3]">
+                Tổng bài hát
+            </p>
 
+            <h3 class="mt-2 text-2xl font-bold text-white">
+                {{ $totalSongs }}
+            </h3>
+        </article>
+        <article class="admin-card">
+            <p class="text-sm text-[#8a93a3]">
+                Tổng lượt nghe
+            </p>
+
+            <h3 class="mt-2 text-2xl font-bold text-white">
+                {{ $totalListens }}
+            </h3>
+        </article>
+    </div>
     {{-- Thống kê lượt nghe theo tháng --}}
     <div class="admin-card mb-6">
 
@@ -217,13 +236,13 @@
 
             <form method="GET" action="{{ route('admin.songs.index') }}" class="flex items-center gap-2">
                 @if (request('search'))
-                    <input type="hidden" name="search" value="{{ request('search') }}">
+                <input type="hidden" name="search" value="{{ request('search') }}">
                 @endif
                 <label for="year" class="text-sm text-[#8a93a3]">Năm</label>
                 <select name="year" id="year" onchange="this.form.submit()"
                     class="rounded-2xl border border-white/10 bg-[#13161d] px-4 py-2 text-sm text-white outline-none focus:border-admin-primary">
                     @foreach ($availableYears as $year)
-                        <option value="{{ $year }}" @selected((int) $selectedYear === (int) $year)>{{ $year }}</option>
+                    <option value="{{ $year }}" @selected((int) $selectedYear===(int) $year)>{{ $year }}</option>
                     @endforeach
                 </select>
             </form>
@@ -244,14 +263,14 @@
                 </thead>
                 <tbody>
                     @forelse ($monthlyListens as $item)
-                        <tr class="border-t border-white/5 text-white">
-                            <td class="py-4">Tháng {{ $item->month }}</td>
-                            <td class="py-4 font-semibold text-admin-primary">{{ number_format($item->total) }}</td>
-                        </tr>
+                    <tr class="border-t border-white/5 text-white">
+                        <td class="py-4">Tháng {{ $item->month }}</td>
+                        <td class="py-4 font-semibold text-admin-primary">{{ number_format($item->total) }}</td>
+                    </tr>
                     @empty
-                        <tr>
-                            <td colspan="2" class="py-6 text-center text-sm text-[#7f8898]">Chưa có dữ liệu lượt nghe trong năm {{ $selectedYear }}.</td>
-                        </tr>
+                    <tr>
+                        <td colspan="2" class="py-6 text-center text-sm text-[#7f8898]">Chưa có dữ liệu lượt nghe trong năm {{ $selectedYear }}.</td>
+                    </tr>
                     @endforelse
                 </tbody>
             </table>
@@ -282,13 +301,19 @@
             maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    labels: { color: '#ffffff' }
+                    labels: {
+                        color: '#ffffff'
+                    }
                 }
             },
             scales: {
                 x: {
-                    ticks: { color: '#cfd5df' },
-                    grid: { color: 'rgba(255,255,255,0.05)' }
+                    ticks: {
+                        color: '#cfd5df'
+                    },
+                    grid: {
+                        color: 'rgba(255,255,255,0.05)'
+                    }
                 },
                 y: {
                     beginAtZero: true,
@@ -299,7 +324,9 @@
                             return value.toLocaleString();
                         }
                     },
-                    grid: { color: 'rgba(255,255,255,0.05)' }
+                    grid: {
+                        color: 'rgba(255,255,255,0.05)'
+                    }
                 }
             }
         }
