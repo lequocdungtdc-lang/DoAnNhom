@@ -22,6 +22,8 @@ class CategoriesController extends Controller
         }
         return view('admin.categories.index', [
             'categories' => $query->paginate(10)->withQueryString(),
+            'totalCategories' => Categories::count(),
+            'activeCategories' => Categories::where('status', true)->count(),
         ]);
     }
 

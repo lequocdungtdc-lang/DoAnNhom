@@ -7,7 +7,7 @@
 @section('content')
     <section class="mt-8 rounded-[2rem] border border-white/10 bg-white/[0.08] p-6 shadow-2xl shadow-violet-950/30 backdrop-blur-xl sm:p-8">
         <p class="text-xs font-bold uppercase tracking-[0.35em] text-fuchsia-200/80">Bảng xếp hạng</p>
-        <h1 class="mt-3 text-4xl font-extrabold leading-tight">Top bài hát 30 ngày gần đây</h1>
+        <h1 class="mt-3 text-4xl font-extrabold leading-tight">Top bài hát 12 ngày gần đây</h1>
         <p class="mt-3 max-w-2xl text-sm leading-6 text-violet-100/75">
             Những bài hát được nghe nhiều nhất kể từ khi mới đăng tải trong 30 ngày qua.
         </p>

@@ -44,7 +44,6 @@ class HomeController extends Controller
         } else {
             $songsQuery->latest();
         }
-
         $songs = $songsQuery->get()
             ->map(function (Song $song) use ($likedSongIds, $hasActiveSubscription) {
                 return [
@@ -64,7 +63,7 @@ class HomeController extends Controller
                     'can_play' => !$song->is_vip || $hasActiveSubscription,
                 ];
             })
-            ->filter(fn(array $song) => $song['audio_url'] !== null)
+            // ->filter(fn(array $song) => $song['audio_url'] !== null)
             ->values();
 
         $podcasts = Podcast::where('status', true)
@@ -83,7 +82,7 @@ class HomeController extends Controller
                 'duration' => $podcast->duration,
                 'can_play' => true,
             ])
-            ->filter(fn(array $podcast) => $podcast['audio_url'] !== null)
+            // ->filter(fn(array $podcast) => $podcast['audio_url'] !== null)
             ->values();
 
         $artists = Artist::withCount(['songs' => function ($query) {
@@ -209,7 +208,9 @@ class HomeController extends Controller
             'topSongs' => $topSongs,
             'topArtists' => $topArtists,
             'featuredSong' => $topSongs->first(),
-            'userPlaylists' => $user->playlists()->orderBy('name')->get(),
+             'userPlaylists' => $user
+        ? $user->playlists()->orderBy('name')->get()
+        : collect(),
         ]);
     }
 
