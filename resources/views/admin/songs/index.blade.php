@@ -1,0 +1,344 @@
+@extends('admin.master')
+
+@section('content')
+<section class="py-4 md:py-6">
+    @if ($mostPopular)
+    <div class="mt-5 rounded-3xl border border-white/10 bg-white/[0.03] p-5">
+
+        <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">
+            Bài hát nổi bật
+        </p>
+
+        <div class="mt-4 flex items-center gap-4">
+
+            {{-- <img
+                src="{{ $mostPopular->thumbnail }}"
+            class="h-20 w-20 rounded-2xl object-cover border border-white/10"> --}}
+
+            @php
+            $songImage = trim((string) $mostPopular->thumbnail);
+            $songImageUrl = \App\Support\ImageUpload::url($songImage);
+            @endphp
+
+            @if ($songImageUrl)
+            <img src="{{ $songImageUrl }}" alt="{{ $mostPopular->title }}" class="h-14 w-14 rounded-xl border border-white/10 object-cover">
+            @else
+            <span class="inline-flex h-14 w-14 items-center justify-center rounded-xl border border-dashed border-white/10 text-xs text-[#8a93a3]">No img</span>
+            @endif
+
+            <div>
+
+                <h3 class="text-lg font-semibold text-white">
+                    {{ $mostPopular->title }}
+                </h3>
+
+                <p class="mt-1 text-sm text-[#8a93a3]">
+                    {{ number_format($mostPopular->listen_count) }} lượt nghe
+                </p>
+
+                <p class="mt-2 text-sm text-[#cfd5df] line-clamp-2">
+                    {{ $mostPopular->artist?->name ?? 'N/A' }}
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    @endif
+    <div class="admin-card my-5">
+        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div>
+                <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">
+                    Bài hát
+                </p>
+
+                <h2 class="mt-2 text-2xl font-semibold text-white">
+                    Quản lý bài hát
+                </h2>
+            </div>
+
+            <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-end">
+
+                {{-- Import Excel --}}
+                <form action="{{ route('admin.songs.import') }}"
+                    method="POST"
+                    enctype="multipart/form-data"
+                    class="flex items-center gap-2">
+                    @csrf
+
+                    <input type="file"
+                        name="file"
+                        class="hidden"
+                        id="importExcel"
+                        accept=".xlsx,.xls,.csv"
+                        onchange="this.form.submit()">
+
+                    <label for="importExcel"
+                        class="cursor-pointer rounded-2xl bg-blue-500 px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110">
+                        Import Excel
+                    </label>
+                </form>
+
+                {{-- Export Excel --}}
+                <a href="{{ route('admin.songs.export') }}"
+                    class="rounded-2xl bg-green-500 px-4 py-3 text-sm font-semibold text-white transition hover:brightness-110">
+                    Export Excel
+                </a>
+
+                <form id="bulk-delete-songs-form" action="{{ route('admin.songs.bulk-delete') }}" method="POST" onsubmit="return confirm('Xóa các bài hát đã chọn?')">
+                    @csrf
+                    @method('DELETE')
+                </form>
+
+                <button type="submit" form="bulk-delete-songs-form"
+                    class="rounded-2xl border border-red-400/20 px-4 py-3 text-sm font-semibold text-red-200 transition hover:bg-red-500/10">
+                    Xóa đã chọn
+                </button>
+
+                {{-- Thêm bài hát --}}
+                <a href="{{ route('admin.songs.create') }}"
+                    class="rounded-2xl bg-admin-primary px-4 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110">
+                    Thêm bài hát
+                </a>
+
+            </div>
+        </div>
+
+        <div class="mt-6 overflow-hidden rounded-3xl border border-white/8">
+            <table class="min-w-full divide-y divide-white/8">
+                <thead class="bg-white/3">
+                    <tr class="text-left text-sm text-[#8a93a3]">
+                        <th class="px-4 py-3">
+                            <input type="checkbox" data-check-all="song_ids" class="h-4 w-4 rounded border-white/10 bg-white/5">
+                        </th>
+                        <th class="px-4 py-3">Ảnh</th>
+                        <th class="px-4 py-3">Tên bài hát</th>
+                        <th class="px-4 py-3">Nghệ sĩ</th>
+                        <th class="px-4 py-3">Thể loại</th>
+                        <th class="px-4 py-3">Album</th>
+                        <th class="px-4 py-3">Lượt nghe</th>
+                        <th class="px-4 py-3">Tệp âm thanh</th>
+                        <th class="px-4 py-3">VIP</th>
+                        <th class="px-4 py-3">Trạng thái</th>
+                        <th class="px-4 py-3 text-right">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-white/8 bg-[#11141b]">
+                    @forelse ($songs as $song)
+                    <tr class="text-sm text-white">
+                        <td class="px-4 py-4">
+                            <input form="bulk-delete-songs-form" type="checkbox" name="ids[]" value="{{ $song->id }}" data-check-item="song_ids" class="h-4 w-4 rounded border-white/10 bg-white/5">
+                        </td>
+                        <td class="px-4 py-4">
+                            @php
+                            $songImage = trim((string) $song->thumbnail);
+                            $songImageUrl = \App\Support\ImageUpload::url($songImage);
+                            @endphp
+
+                            @if ($songImageUrl)
+                            <img src="{{ $songImageUrl }}" alt="{{ $song->title }}" class="h-14 w-14 rounded-xl border border-white/10 object-cover">
+                            @else
+                            <span class="inline-flex h-14 w-14 items-center justify-center rounded-xl border border-dashed border-white/10 text-xs text-[#8a93a3]">No img</span>
+                            @endif
+                        </td>
+                        <td class="px-4 py-4">{{ $song->title }}</td>
+                        <td class="px-4 py-4 text-[#a8b1bf]">{{ $song->artist?->name ?: 'Chưa có' }}</td>
+                        <td class="px-4 py-4 text-[#a8b1bf]">{{ $song->category?->name ?: 'Chưa có' }}</td>
+                        <td class="px-4 py-4 text-[#a8b1bf]">{{ $song->album?->title ?: 'Chưa có' }}</td>
+                        <td class="px-4 py-4 text-[#a8b1bf]">{{ number_format((int) $song->listen_count) }}</td>
+                        <td class="px-4 py-4 text-[#a8b1bf]">
+                            @php
+                            $songAudio = trim((string) $song->audio_file);
+                            $songAudioUrl = \App\Support\AudioUpload::url($songAudio);
+                            @endphp
+
+                            @if ($songAudioUrl)
+                            <audio src="{{ $songAudioUrl }}" controls class="w-52"></audio>
+                            @elseif ($songAudio !== '')
+                            <span class="text-xs text-red-300">File không tồn tại</span>
+                            @else
+                            Chưa có
+                            @endif
+                        </td>
+                        <td class="px-4 py-4">
+                            @if ($song->is_vip)
+                            <span class="inline-flex items-center rounded-full bg-yellow-500/10 px-2.5 py-0.5 text-xs font-medium text-yellow-400">VIP</span>
+                            @else
+                            <span class="inline-flex items-center rounded-full bg-white/5 px-2.5 py-0.5 text-xs font-medium text-[#8a93a3]">Thường</span>
+                            @endif
+                        </td>
+                        <td class="px-4 py-4">{{ $song->status ? 'Hiển thị' : 'Ẩn' }}</td>
+                        <td class="px-4 py-4">
+                            <div class="flex justify-end gap-2">
+
+                                <a href="{{ route('admin.songs.edit', $song->id) }}"
+                                    class="rounded-xl border border-white/10 px-3 py-2 text-xs text-white transition hover:bg-white/5">
+                                    Sửa
+                                </a>
+
+                                <form action="{{ route('admin.songs.delete', $song->id) }}" method="POST" onsubmit="return confirm('Xóa bài hát này?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="rounded-xl border border-red-400/20 px-3 py-2 text-xs text-red-200 transition hover:bg-red-500/10">Xóa</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="10" class="px-4 py-10 text-center text-sm text-[#8a93a3]">Chưa có bài hát nào.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-4">
+            {{ $songs->links() }}
+        </div>
+    </div>
+    <div class="my-3 grid gap-4 md:grid-cols-2">
+        <article class="admin-card">
+            <p class="text-sm text-[#8a93a3]">
+                Tổng bài hát
+            </p>
+
+            <h3 class="mt-2 text-2xl font-bold text-white">
+                {{ $totalSongs }}
+            </h3>
+        </article>
+        <article class="admin-card">
+            <p class="text-sm text-[#8a93a3]">
+                Tổng lượt nghe
+            </p>
+
+            <h3 class="mt-2 text-2xl font-bold text-white">
+                {{ $totalListens }}
+            </h3>
+        </article>
+    </div>
+    {{-- Thống kê lượt nghe theo tháng --}}
+    <div class="admin-card mb-6">
+
+        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+
+            <div>
+                <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">
+                    Listen Analytics
+                </p>
+
+                <h2 class="mt-2 text-2xl font-semibold text-white">
+                    Thống kê lượt nghe theo tháng
+                </h2>
+            </div>
+
+            <form method="GET" action="{{ route('admin.songs.index') }}" class="flex items-center gap-2">
+                @if (request('search'))
+                <input type="hidden" name="search" value="{{ request('search') }}">
+                @endif
+                <label for="year" class="text-sm text-[#8a93a3]">Năm</label>
+                <select name="year" id="year" onchange="this.form.submit()"
+                    class="rounded-2xl border border-white/10 bg-[#13161d] px-4 py-2 text-sm text-white outline-none focus:border-admin-primary">
+                    @foreach ($availableYears as $year)
+                    <option value="{{ $year }}" @selected((int) $selectedYear===(int) $year)>{{ $year }}</option>
+                    @endforeach
+                </select>
+            </form>
+
+        </div>
+
+        <div class="mt-6 h-[400px]">
+            <canvas id="listenChart"></canvas>
+        </div>
+
+        <div class="mt-6 overflow-x-auto">
+            <table class="w-full">
+                <thead class="text-left text-sm text-[#7f8898]">
+                    <tr>
+                        <th class="py-3">Tháng</th>
+                        <th class="py-3">Lượt nghe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($monthlyListens as $item)
+                    <tr class="border-t border-white/5 text-white">
+                        <td class="py-4">Tháng {{ $item->month }}</td>
+                        <td class="py-4 font-semibold text-admin-primary">{{ number_format($item->total) }}</td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="2" class="py-6 text-center text-sm text-[#7f8898]">Chưa có dữ liệu lượt nghe trong năm {{ $selectedYear }}.</td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const listenCtx = document.getElementById('listenChart');
+
+    new Chart(listenCtx, {
+        type: 'bar',
+        data: {
+            labels: @json($chartLabels).map((m) => 'Tháng ' + m),
+            datasets: [{
+                label: 'Lượt nghe',
+                data: @json($chartData),
+                borderWidth: 2,
+                borderRadius: 12,
+                backgroundColor: 'rgba(16, 163, 127, 0.5)',
+                borderColor: '#10a37f',
+                hoverBackgroundColor: '#10a37f',
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#ffffff'
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: '#cfd5df'
+                    },
+                    grid: {
+                        color: 'rgba(255,255,255,0.05)'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: '#cfd5df',
+                        precision: 0,
+                        callback: function(value) {
+                            return value.toLocaleString();
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(255,255,255,0.05)'
+                    }
+                }
+            }
+        }
+    });
+</script>
+<script>
+    document.querySelectorAll('[data-check-all]').forEach((checkbox) => {
+        checkbox.addEventListener('change', () => {
+            document.querySelectorAll(`[data-check-item="${checkbox.dataset.checkAll}"]`).forEach((item) => {
+                item.checked = checkbox.checked;
+            });
+        });
+    });
+</script>
+@endsection

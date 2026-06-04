@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Album extends Model
+{
+     use HasFactory;
+
+    protected $fillable = [
+        'title',
+        'artist_name',
+        'cover_image',
+        'status',
+    ];
+
+    // Ép kiểu dữ liệu khi lấy ra từ DB (rất quan trọng cho Vue.js)
+    protected $casts = [
+        'status' => 'boolean',
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s',
+    ];
+}

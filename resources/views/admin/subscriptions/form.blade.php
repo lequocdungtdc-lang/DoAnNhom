@@ -1,0 +1,263 @@
+@extends('admin.master')
+
+@section('content')
+<section class="py-4 md:py-6">
+    <div class="mx-auto max-w-4xl admin-card">
+
+        <div class="flex items-center justify-between gap-4">
+            <div>
+                <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">
+                    Subscription
+                </p>
+
+                <h2 class="mt-2 text-2xl font-semibold text-white">
+                    {{ $isEdit ? 'Cập nhật subscription' : 'Tạo subscription mới' }}
+                </h2>
+            </div>
+
+            <a href="{{ route('admin.subscriptions.index') }}"
+               class="rounded-2xl border border-white/10 px-4 py-3 text-sm text-white transition hover:bg-white/5">
+                Quay lại
+            </a>
+        </div>
+
+        <form
+            action="{{ $isEdit
+                ? route('admin.subscriptions.update', $subscription->id)
+                : route('admin.subscriptions.store') }}"
+            method="POST"
+            class="mt-8 space-y-5"
+        >
+
+            @csrf
+
+            @if($isEdit)
+                @method('PUT')
+            @endif
+
+            <div class="grid gap-5 md:grid-cols-2">
+
+                {{-- USER --}}
+                <div>
+                    <label class="mb-2 block text-sm text-[#cfd5df]">
+                        Người dùng
+                    </label>
+
+                    <select
+                        name="user_id"
+                        class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-[#10a37f]"
+                    >
+
+                        <option value="">
+                            -- Chọn người dùng --
+                        </option>
+
+                        @foreach($users as $user)
+
+                            <option
+                                value="{{ $user->id }}"
+                                @selected(old('user_id', $subscription->user_id) == $user->id)
+                            >
+                                {{ $user->fullname }}
+                            </option>
+
+                        @endforeach
+
+                    </select>
+
+                    @error('user_id')
+                        <p class="mt-2 text-sm text-red-300">
+                            {{ $message }}
+                        </p>
+                    @enderror
+                </div>
+
+                {{-- PLAN --}}
+                <div>
+                    <label class="mb-2 block text-sm text-[#cfd5df]">
+                        Gói cước
+                    </label>
+
+                    <select
+                        name="plan_id"
+                        class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-[#10a37f]"
+                    >
+
+                        <option value="">
+                            -- Chọn gói --
+                        </option>
+
+                        @foreach($plans as $plan)
+
+                            <option
+                                value="{{ $plan->id }}"
+                                @selected(old('plan_id', $subscription->plan_id) == $plan->id)
+                            >
+                                {{ $plan->name }}
+                                ({{ $plan->duration_days }} ngày)
+                            </option>
+
+                        @endforeach
+
+                    </select>
+
+                    @error('plan_id')
+                        <p class="mt-2 text-sm text-red-300">
+                            {{ $message }}
+                        </p>
+                    @enderror
+                </div>
+
+            </div>
+
+            <div>
+                <label class="mb-2 block text-sm text-[#cfd5df]">
+                    Giá gói
+                </label>
+
+                <p
+                    id="plan-price"
+                    class="rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white"
+                >
+                    @php
+                        $selectedPlanId = old('plan_id', $subscription->plan_id);
+                        $selectedPlan = $plans->firstWhere('id', $selectedPlanId);
+                    @endphp
+
+                    {{ $selectedPlan ? number_format($selectedPlan->price, 0, ',', '.') . ' đ' : 'Chọn gói để xem giá' }}
+                </p>
+            </div>
+
+            {{-- START DATE --}}
+            <div>
+                <label class="mb-2 block text-sm text-[#cfd5df]">
+                    Ngày bắt đầu
+                </label>
+
+                <input
+                    type="datetime-local"
+                    name="starts_at"
+                    value="{{ old('starts_at',
+                        $subscription->starts_at
+                            ? \Carbon\Carbon::parse($subscription->starts_at)->format('Y-m-d\TH:i')
+                            : ''
+                    ) }}"
+                    class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#10a37f]"
+                >
+
+                @error('starts_at')
+                    <p class="mt-2 text-sm text-red-300">
+                        {{ $message }}
+                    </p>
+                @enderror
+            </div>
+
+            {{-- STATUS --}}
+            <div>
+                <label class="mb-2 block text-sm text-[#cfd5df]">
+                    Trạng thái
+                </label>
+
+                <select
+                    name="status"
+                    class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-[#10a37f]"
+                >
+                    <option
+                        value="1"
+                        @selected(old('status', $subscription->status ?? true))
+                    >
+                        Hoạt động
+                    </option>
+
+                    <option
+                        value="0"
+                        @selected(old('status', $subscription->status ?? false) == false)
+                    >
+                        Ngưng hoạt động
+                    </option>
+                </select>
+            </div>
+
+            {{-- PAYMENT METHOD --}}
+            <div>
+                <label class="mb-2 block text-sm text-[#cfd5df]">
+                    Hình thức thanh toán
+                </label>
+
+                <select
+                    name="payment_method"
+                    class="w-full rounded-2xl border border-white/10 bg-[#13161d] px-4 py-3 text-white outline-none focus:border-[#10a37f]"
+                >
+                    <option value="" @selected(empty(old('payment_method', $subscription->payment_method)))>
+                        -- Chọn hình thức --
+                    </option>
+                    <option value="qr" @selected(old('payment_method', $subscription->payment_method) == 'qr')>
+                        Quét mã QR
+                    </option>
+                    <option value="atm" @selected(old('payment_method', $subscription->payment_method) == 'atm')>
+                        Thẻ ATM / Internet Banking
+                    </option>
+                    <option value="credit" @selected(old('payment_method', $subscription->payment_method) == 'credit')>
+                        Thẻ quốc tế (Visa/Mastercard)
+                    </option>
+                    <option value="vnpay_wallet" @selected(old('payment_method', $subscription->payment_method) == 'vnpay_wallet')>
+                        Ví VNPay
+                    </option>
+                    <option value="cash" @selected(old('payment_method', $subscription->payment_method) == 'cash')>
+                        Tiền mặt
+                    </option>
+                    <option value="transfer" @selected(old('payment_method', $subscription->payment_method) == 'transfer')>
+                        Chuyển khoản
+                    </option>
+                </select>
+
+                @error('payment_method')
+                    <p class="mt-2 text-sm text-red-300">
+                        {{ $message }}
+                    </p>
+                @enderror
+            </div>
+
+            <button
+                type="submit"
+                class="rounded-2xl bg-[#10a37f] px-5 py-3 text-sm font-semibold text-[#08110d] transition hover:brightness-110"
+            >
+                {{ $isEdit ? 'Lưu thay đổi' : 'Tạo subscription' }}
+            </button>
+
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const planPrices = @json($plans->pluck('price', 'id'));
+            const planSelect = document.querySelector('select[name="plan_id"]');
+            const priceOutput = document.getElementById('plan-price');
+
+            function formatPrice(value) {
+                return new Intl.NumberFormat('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND',
+                    maximumFractionDigits: 0,
+                }).format(value);
+            }
+
+            function updatePrice() {
+                const selected = planSelect.value;
+
+                if (!selected || planPrices[selected] === undefined) {
+                    priceOutput.textContent = 'Chọn gói để xem giá';
+                    return;
+                }
+
+                priceOutput.textContent = formatPrice(planPrices[selected]);
+            }
+
+            if (planSelect && priceOutput) {
+                planSelect.addEventListener('change', updatePrice);
+                updatePrice();
+            }
+        });
+    </script>
+</section>
+@endsection
