@@ -95,7 +95,7 @@
             </p>
 
             <h3 class="mt-2 text-2xl font-bold text-white">
-                {{ $totalActiveArtists }}
+                {{ $activeArtists }}
             </h3>
         </article>
     </div>
