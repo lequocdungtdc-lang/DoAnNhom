@@ -43,10 +43,10 @@ class SubscriptionController extends Controller
             'status' => ['nullable', 'boolean'],
         ]);
 
-        // Lấy plan
+        
         $plan = Plan::findOrFail($validated['plan_id']);
 
-        // Tính ngày hết hạn
+  
         $validated['expires_at'] = now()
             ->parse($validated['starts_at'])
             ->addDays($plan->duration_days);
@@ -82,13 +82,13 @@ class SubscriptionController extends Controller
                 $q->where('fullname', 'like', '%' . $search . '%');
             });
         }
-        // Tổng subscription
+     
         $totalSubscriptions = Subscription::count();
 
-        // Tổng doanh thu
+      
         $totalRevenue = Subscription::join('plans', 'subscriptions.plan_id', '=', 'plans.id')
             ->sum('plans.price');
-        // Revenue theo tháng, dựa trên tháng bắt đầu của subscription
+     
         $monthlyRevenue = Subscription::join(
             'plans',
             'subscriptions.plan_id',
@@ -107,10 +107,10 @@ class SubscriptionController extends Controller
             ->orderBy('month')
             ->get();
 
-        // Labels chart
+    
         $chartLabels = $monthlyRevenue->pluck('month');
 
-        // Revenue chart
+
         $chartRevenue = $monthlyRevenue->pluck('revenue');
         return view('admin.subscriptions.index', [
             'subscriptions' => $query
@@ -132,19 +132,17 @@ class SubscriptionController extends Controller
             'status' => ['nullable', 'boolean'],
         ]);
 
-        // Lấy plan
+   
         $plan = Plan::findOrFail($validated['plan_id']);
 
-        // Tính lại ngày hết hạn
+       
         $validated['expires_at'] = Carbon::parse($validated['starts_at'])
             ->addDays($plan->duration_days);
 
         $validated['status'] = $request->boolean('status');
 
-        // Tìm subscription
-        $subscription = Subscription::findOrFail($id);
-
-        // Update
+       
+        $subscription = Subscription::findOrFail($id);  
         $subscription->update($validated);
         ActivityLog::create([
             'module' => 'Subscription',

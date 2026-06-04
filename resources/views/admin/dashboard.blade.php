@@ -99,7 +99,7 @@
             <div class="flex items-center justify-between gap-3">
                 <div>
                     <p class="text-xs uppercase tracking-[0.24em] text-[#7f8898]">Hoạt động gần đây</p>
-                    <h3 class="mt-2 text-xl font-semibold text-white">Bảng tin</h3>
+                    <h3 class="mt-2 text-xl font-semibold text-white">Bình luận</h3>
                 </div>
 
             </div>
