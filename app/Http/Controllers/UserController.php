@@ -15,6 +15,7 @@ class UserController extends Controller
         return view('admin.users.index', [
             'users' => User::latest()->paginate(10),
             'totalUsers' => User::count(),
+            'activeUsers' => User::where('status', 'active')->count(),
         ]);
     }
 
@@ -22,7 +23,6 @@ class UserController extends Controller
     {
         return view('admin.users.form', [
             'userItem' => new User(),
-            
             'isEdit' => false,
         ]);
     }

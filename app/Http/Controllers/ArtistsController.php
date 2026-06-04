@@ -29,6 +29,8 @@ class ArtistsController extends Controller
         // 4. Phân trang và giữ lại tham số tìm kiếm trên URL
         return view('admin.artists.index', [
             'artists' => $query->paginate(10)->withQueryString(),
+            'totalArtists' => Artist::count(),
+            'activeArtists' => Artist::where('status', true)->count(),
         ]);
     }
     public function create(): View
