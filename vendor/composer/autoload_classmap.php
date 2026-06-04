@@ -220,6 +220,7 @@ return array(
     'Database\\Seeders\\CategorySeeder' => $baseDir . '/database/seeders/CategorySeeder.php',
     'Database\\Seeders\\CommentSeeder' => $baseDir . '/database/seeders/CommentSeeder.php',
     'Database\\Seeders\\DatabaseSeeder' => $baseDir . '/database/seeders/DatabaseSeeder.php',
+    'Database\\Seeders\\ListeningHistorySeeder' => $baseDir . '/database/seeders/ListeningHistorySeeder.php',
     'Database\\Seeders\\NewsSeeder' => $baseDir . '/database/seeders/NewsSeeder.php',
     'Database\\Seeders\\PlanSeeder' => $baseDir . '/database/seeders/PlanSeeder.php',
     'Database\\Seeders\\PodcastSeeder' => $baseDir . '/database/seeders/PodcastSeeder.php',

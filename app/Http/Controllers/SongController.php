@@ -70,6 +70,8 @@ class SongController extends Controller
             'selectedYear' => $selectedYear,
             'availableYears' => $availableYears,
             'randomSongs' => $randomSongs,
+            'totalSongs' => Song::count(),
+            'totalListens' => Song::sum('listen_count'),
         ]);
     }
 

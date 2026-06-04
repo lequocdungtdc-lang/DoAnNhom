@@ -15,13 +15,12 @@ class PodcastController extends Controller
 {
     public function index(Request $request): View
     {
-        // Lấy từ khóa tìm kiếm
+       
         $search = $request->query('search');
 
-        // Query mặc định
+      
         $query = Podcast::latest();
 
-        // Search
         if (!empty($search) && mb_strlen($search) > 2) {
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', '%' . $search . '%');
@@ -30,11 +29,11 @@ class PodcastController extends Controller
 
         return view('admin.podcasts.index', [
             'podcasts' => $query->paginate(10)->withQueryString(),
-            // Tổng podcast đang hiển thị
+           
             'totalPodcasts' => Podcast::where('status', true)->count(),
-            // Tổng lượt nghe
+          
             'totalViews' => Podcast::sum('views'),
-            // Podcast nhiều view nhất
+          
             'mostViewedPodcast' => Podcast::where('status', true)
                 ->orderBy('views', 'desc')
                 ->first(),

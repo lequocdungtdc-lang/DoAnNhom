@@ -79,6 +79,29 @@
                 {{ $categories->links() }}
             </div>
         </div>
+        <div class="my-3 grid gap-4 md:grid-cols-2">
+
+        <article class="admin-card">
+            <p class="text-sm text-[#8a93a3]">
+                Tổng thể loại
+            </p>
+
+            <h3 class="mt-2 text-2xl font-bold text-white">
+                {{ $totalCategories }}
+            </h3>
+        </article>
+
+        <article class="admin-card">
+            <p class="text-sm text-[#8a93a3]">
+                Thể loại đang hoạt động
+            </p>
+
+            <h3 class="mt-2 text-2xl font-bold text-white">
+                {{ $activeCategories }}
+            </h3>
+        </article>
+
+    </div>
     </section>
     <script>
         document.querySelectorAll('[data-check-all]').forEach((checkbox) => {
